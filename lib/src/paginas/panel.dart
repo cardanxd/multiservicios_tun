@@ -9,80 +9,87 @@ class Panel extends StatefulWidget {
 }
 
 class _PanelState extends State<Panel> {
+  int _paginaActual = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.indigo,
-          title: Text('Multiservicios Tun')),
-      body: Center(
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-                color: Colors.grey,
-                padding: EdgeInsets.all(20.0),
-                child: Row(children: <Widget>[
-                  Image.asset(
-                    'images/cliente.png',
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  ),
-                  new Container(
-                      child: new Column(children: <Widget>[
-                    Text(
-                      "Registrar cliente",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white,
+        appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.indigo,
+            title: Text('Multiservicios Tun')),
+        body: Center(
+          child: ListView(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                  color: Colors.grey,
+                  padding: EdgeInsets.all(20.0),
+                  child: Row(children: <Widget>[
+                    Image.asset(
+                      'images/cliente.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                    new Container(
+                        child: new Column(children: <Widget>[
+                      Text(
+                        "Registrar cliente",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    ElevatedButton(
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      MaterialButton(
+                        minWidth: 150.0,
+                        height: 40.0,
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Rcliente()),
                           );
                         },
-                        style: ElevatedButton.styleFrom(primary: Colors.indigo),
-                        child: Text("Registrar"))
-                  ]))
-                ])),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-                color: Colors.grey[400],
-                padding: EdgeInsets.all(20.0),
-                child: Row(children: <Widget>[
-                  Image.asset(
-                    'images/vehiculo.png',
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  ),
-                  new Container(
-                      child: new Column(children: <Widget>[
-                    Text(
-                      "Registrar vehiculo",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white,
+                        color: Colors.indigo,
+                        child: Text('Registrar',
+                            style: TextStyle(color: Colors.white)),
+                      )
+                    ]))
+                  ])),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                  color: Colors.grey[400],
+                  padding: EdgeInsets.all(20.0),
+                  child: Row(children: <Widget>[
+                    Image.asset(
+                      'images/vehiculo.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                    new Container(
+                        child: new Column(children: <Widget>[
+                      Text(
+                        "Registrar vehiculo",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
+                      SizedBox(
+                        height: 20,
+                      ),
+                      MaterialButton(
+                        minWidth: 150.0,
+                        height: 40.0,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -90,50 +97,55 @@ class _PanelState extends State<Panel> {
                                 builder: (context) => Rvehiculo()),
                           );
                         },
-                        style: ElevatedButton.styleFrom(primary: Colors.indigo),
-                        child: Text("Registrar"))
-                  ]))
-                ])),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-                color: Colors.grey,
-                padding: EdgeInsets.all(20.0),
-                child: Row(children: <Widget>[
-                  Image.asset(
-                    'images/orden.png',
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                  ),
-                  new Container(
-                      child: new Column(children: <Widget>[
-                    Text(
-                      "Registrar orden",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white,
+                        color: Colors.indigo,
+                        child: Text('Registrar',
+                            style: TextStyle(color: Colors.white)),
+                      )
+                    ]))
+                  ])),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                  color: Colors.grey,
+                  padding: EdgeInsets.all(20.0),
+                  child: Row(children: <Widget>[
+                    Image.asset(
+                      'images/orden.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                    new Container(
+                        child: new Column(children: <Widget>[
+                      Text(
+                        "Registrar orden",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    ElevatedButton(
+                      SizedBox(
+                        height: 20,
+                      ),
+                      MaterialButton(
+                        minWidth: 150.0,
+                        height: 40.0,
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Rorden()),
                           );
                         },
-                        style: ElevatedButton.styleFrom(primary: Colors.indigo),
-                        child: Text("Registrar"))
-                  ]))
-                ])),
-          ],
-        ),
-      ),
-    );
+                        color: Colors.indigo,
+                        child: Text('Registrar',
+                            style: TextStyle(color: Colors.white)),
+                      )
+                    ]))
+                  ])),
+            ],
+          ),
+        ));
   }
 }

@@ -1,16 +1,9 @@
-# multiservicios_tun
+# Multiservicios Tun SA de CV
 
-A new Flutter project.
+Una aplicacion movil desarrollada exlclusivamente para la empresa Multiservicios Tun SA de CV.
 
-## Getting Started
+La creacion de la aplicacion mejora la calidad de servicio al momento de llevar a cabo una orden fuera de sus instalaciones, así mismo conlleva a tener una buena administracion y control de clientes y servicios.
 
-This project is a starting point for a Flutter application.
+## Tecnologia
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Aplicacion movil desarrollada con framework Flutter y Mysql como gestor de base de datos

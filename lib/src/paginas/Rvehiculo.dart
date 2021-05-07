@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multiservicios_tun/src/paginas/panel.dart';
 
 class Rvehiculo extends StatefulWidget{
   @override
@@ -21,20 +22,59 @@ class _RvehiculoState extends State<Rvehiculo>{
 
         child: ListView(
           children: <Widget>[
-            //Text Field 1
+            TextField(
+              enabled: false,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Nombre del cliente',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myController, 
+            ),
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Tipo',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myController, 
+            ),
             TextField(
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 labelText: 'Modelo',
                 prefixIcon: Icon(Icons.arrow_right_outlined),
               ),
-              //controller: myController, 
+              //controller: myControllernum2,
             ),
-            //Text Field 2
             TextField(
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 labelText: 'Color',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myControllernum2,
+            ),
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Placas',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myControllernum2,
+            ),
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Num. Serie',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myControllernum2,
+            ),
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Num. Economico',
                 prefixIcon: Icon(Icons.arrow_right_outlined),
               ),
               //controller: myControllernum2,
@@ -46,15 +86,9 @@ class _RvehiculoState extends State<Rvehiculo>{
               minWidth: 200.0,
               height: 40.0,
               onPressed: (){
-                /*int suma = int.parse(myController.text) + int.parse(myControllernum2.text);
-                return showDialog(
-                  context: context,
-                  builder: (context){
-                    return AlertDialog(
-                      content: Text(suma.toString()),
-                    );
-                  }
-                );*/
+                //Aqui van los metodos para el registro de vehiculo
+                //_mostrarAlerta(context);
+                Navigator.pop(context);
               },
               color: Colors.indigo,
               child: Text('Registrar vehiculo', style: TextStyle(color: Colors.white)),
@@ -64,4 +98,24 @@ class _RvehiculoState extends State<Rvehiculo>{
       ),
     );
   }
+}
+
+void _mostrarAlerta(BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => new AlertDialog(
+            title: Text("Aviso de confirmación"),
+            content: Text("¡Registro exitosamente!"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Panel()),
+                    );
+                  },
+                  child: Text("Aceptar"))
+            ],
+          ));
 }
