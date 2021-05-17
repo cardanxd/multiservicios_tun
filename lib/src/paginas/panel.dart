@@ -85,7 +85,7 @@ class _PanelState extends State<Panel> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10.0,
                       ),
                       MaterialButton(
                         minWidth: 150.0,
@@ -127,7 +127,7 @@ class _PanelState extends State<Panel> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10.0,
                       ),
                       MaterialButton(
                         minWidth: 150.0,

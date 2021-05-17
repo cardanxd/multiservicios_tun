@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multiservicios_tun/src/paginas/panel.dart';
 
+//marca
 class Rvehiculo extends StatefulWidget{
   @override
   State<StatefulWidget> createState() => _RvehiculoState();
@@ -23,10 +24,18 @@ class _RvehiculoState extends State<Rvehiculo>{
         child: ListView(
           children: <Widget>[
             TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Tipo de Equipo',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myController, 
+            ),
+            TextField(
               enabled: false,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                labelText: 'Nombre del cliente',
+                labelText: 'Clientes',
                 prefixIcon: Icon(Icons.arrow_right_outlined),
               ),
               //controller: myController, 
@@ -34,31 +43,15 @@ class _RvehiculoState extends State<Rvehiculo>{
             TextField(
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                labelText: 'Tipo',
+                labelText: 'Marca',
                 prefixIcon: Icon(Icons.arrow_right_outlined),
               ),
-              //controller: myController, 
+              //controller: myControllernum2,
             ),
             TextField(
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 labelText: 'Modelo',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
-              ),
-              //controller: myControllernum2,
-            ),
-            TextField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: 'Color',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
-              ),
-              //controller: myControllernum2,
-            ),
-            TextField(
-              keyboardType: TextInputType.text,
-              decoration: InputDecoration(
-                labelText: 'Placas',
                 prefixIcon: Icon(Icons.arrow_right_outlined),
               ),
               //controller: myControllernum2,
@@ -79,7 +72,14 @@ class _RvehiculoState extends State<Rvehiculo>{
               ),
               //controller: myControllernum2,
             ),
-            //Espacio entre el TextField y button
+            TextField(
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Placas',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myControllernum2,
+            ),
             SizedBox(height: 10,),
             //Button
             MaterialButton(

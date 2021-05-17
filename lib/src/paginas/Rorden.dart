@@ -158,6 +158,14 @@ class _RordenState extends State<Rorden> {
               ),
               //controller: myControllernum2,
             ),
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Cilindros',
+                prefixIcon: Icon(Icons.arrow_right_outlined),
+              ),
+              //controller: myControllernum2,
+            ),
             SizedBox(
               height: 10.0,
             ),
@@ -197,6 +205,7 @@ class _RordenState extends State<Rorden> {
             SizedBox(
               height: 10.0,
             ),
+            //Nombre del chofer
             Text(
               "Atencion:",
               style: TextStyle(
@@ -258,14 +267,7 @@ class _RordenState extends State<Rorden> {
                 fontSize: 12,
               ),
             ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Cilindros',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
-              ),
-              //controller: myControllernum2,
-            ),
+            
             SizedBox(
               height: 15.0,
             ),
