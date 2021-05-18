@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiservicios_tun/src/paginas/panel.dart';
 
 //marca
 class Rvehiculo extends StatefulWidget{
@@ -98,24 +97,4 @@ class _RvehiculoState extends State<Rvehiculo>{
       ),
     );
   }
-}
-
-void _mostrarAlerta(BuildContext context) {
-  showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => new AlertDialog(
-            title: Text("Aviso de confirmación"),
-            content: Text("¡Registro exitosamente!"),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Panel()),
-                    );
-                  },
-                  child: Text("Aceptar"))
-            ],
-          ));
 }

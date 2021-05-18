@@ -9,7 +9,6 @@ class Panel extends StatefulWidget {
 }
 
 class _PanelState extends State<Panel> {
-  int _paginaActual = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiservicios_tun/src/paginas/panel.dart';
 
 class Rorden extends StatefulWidget {
   @override
@@ -540,24 +539,4 @@ class _RordenState extends State<Rorden> {
       ),
     );
   }
-}
-
-void _mostrarAlerta(BuildContext context) {
-  showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => new AlertDialog(
-            title: Text("Aviso de confirmación"),
-            content: Text("¡Registro exitosamente!"),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Panel()),
-                    );
-                  },
-                  child: Text("Aceptar"))
-            ],
-          ));
 }
