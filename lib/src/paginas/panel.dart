@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:multiservicios_tun/src/paginas/Rcliente.dart';
-import 'package:multiservicios_tun/src/paginas/Rvehiculo.dart';
-import 'package:multiservicios_tun/src/paginas/Rorden.dart';
+import 'package:multiservicios_tun/src/widget/OrdenContainer.dart';
+import 'package:multiservicios_tun/src/widget/ClienteContainer.dart';
+import 'package:multiservicios_tun/src/widget/VehiculoContainer.dart';
 
 class Panel extends StatefulWidget {
   @override
@@ -16,135 +16,23 @@ class _PanelState extends State<Panel> {
             centerTitle: true,
             backgroundColor: Colors.indigo,
             title: Text('Multiservicios Tun')),
-        body: Center(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
+              ClienteContainer(),
               SizedBox(
                 height: 20,
               ),
-              Container(
-                  color: Colors.grey,
-                  padding: EdgeInsets.all(20.0),
-                  child: Row(children: <Widget>[
-                    Image.asset(
-                      'images/cliente.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                    new Container(
-                        child: new Column(children: <Widget>[
-                      Text(
-                        "Registrar cliente",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      MaterialButton(
-                        minWidth: 150.0,
-                        height: 40.0,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Rcliente()),
-                          );
-                        },
-                        color: Colors.indigo,
-                        child: Text('Registrar',
-                            style: TextStyle(color: Colors.white)),
-                      )
-                    ]))
-                  ])),
+              VehiculoContainer(),
               SizedBox(
                 height: 20,
               ),
-              Container(
-                  color: Colors.grey[400],
-                  padding: EdgeInsets.all(20.0),
-                  child: Row(children: <Widget>[
-                    Image.asset(
-                      'images/vehiculo.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                    new Container(
-                        child: new Column(children: <Widget>[
-                      Text(
-                        "Registrar vehiculo",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      MaterialButton(
-                        minWidth: 150.0,
-                        height: 40.0,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Rvehiculo()),
-                          );
-                        },
-                        color: Colors.indigo,
-                        child: Text('Registrar',
-                            style: TextStyle(color: Colors.white)),
-                      )
-                    ]))
-                  ])),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                  color: Colors.grey,
-                  padding: EdgeInsets.all(20.0),
-                  child: Row(children: <Widget>[
-                    Image.asset(
-                      'images/orden.png',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                    new Container(
-                        child: new Column(children: <Widget>[
-                      Text(
-                        "Registrar orden",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      MaterialButton(
-                        minWidth: 150.0,
-                        height: 40.0,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Rorden()),
-                          );
-                        },
-                        color: Colors.indigo,
-                        child: Text('Registrar',
-                            style: TextStyle(color: Colors.white)),
-                      )
-                    ]))
-                  ])),
+              OrdenContainer(),
             ],
           ),
         ));
   }
 }
+
+
