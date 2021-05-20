@@ -17,7 +17,7 @@ class _PanelState extends State<Panel> {
             backgroundColor: Colors.indigo,
             title: Text('Multiservicios Tun')),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(1.0),
           child: ListView(
             children: [
               ClienteContainer(),
