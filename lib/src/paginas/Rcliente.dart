@@ -12,6 +12,7 @@ class Rcliente extends StatefulWidget {
 }
 
 class _RclienteState extends State<Rcliente> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
