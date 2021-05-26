@@ -1,59 +1,88 @@
-class Cliente{
+class Cliente {
+  final int id;
+  final int sucursalId;
+  final int segmentoId;
+  final int giroId;
+  final String nombre;
+  final String razon;
+  final String rfc;
+  final String email;
+  final String calle;
+  final String exterior;
+  final String interior;
+  final String ecalle;
+  final String ycalle;
+  final String colonia;
+  final String postal;
+  final String ciudad;
+  final String estado;
+  final String pais;
+  final String particular;
+  final String oficina;
+  final String movil;
+  final String limiteCredito;
+  final String diasCredito;
+  final String diasBloqueo;
+  final String descuento;
+  final String birthday;
 
-  int id;
-  String nombre;
-  String razon;
-  String rfc;
-  String email;
-  String calle;
-  String exterior;
-  String interior;
-  String ecalle;
-  String ycalle;
-  String colonia;
-  String postal;
-  String ciudad;
-  String estado;
-  String pais;
-  String particular;
-  String oficina;
-  String movil;
-  double limitecredito;
-  int diascredito;
-  int diasbloqueo;
-  String descuento;
-  DateTime birthday;
-  int sucursal;
-  int segmento;
-  int giro;
-  
-  Cliente(id,nombre, razon, rfc, email, calle, exterior, interior, ecalle, ycalle, colonia, postal, ciudad, estado, pais, particular, oficina, movil, limitecredito, diascredito, diasbloqueo, descuento, birthday, sucursal, segmento, giro){
-    this.id = id;
-    this.nombre = nombre;
-    this.razon =razon;
-    this.rfc = rfc;
-    this.email = email;
-    this.calle = calle;
-    this.exterior = exterior;
-    this.interior = interior;
-    this.ecalle = ecalle;
-    this.ycalle = ycalle;
-    this.colonia = colonia;
-    this.postal = postal;
-    this.ciudad = ciudad;
-    this.estado = estado;
-    this.pais = pais;
-    this.particular = particular;
-    this.oficina = oficina;
-    this.movil = movil;
-    this.limitecredito = limitecredito;
-    this.diascredito = diascredito;
-    this.diasbloqueo = diasbloqueo;
-    this.descuento = descuento;
-    this.birthday = birthday;
-    this.sucursal = sucursal;
-    this.segmento = segmento;
-    this.giro = giro;
+  Cliente({
+    this.id,
+    this.sucursalId,
+    this.segmentoId,
+    this.giroId,
+    this.nombre,
+    this.razon,
+    this.rfc,
+    this.email,
+    this.calle,
+    this.exterior,
+    this.interior,
+    this.ecalle,
+    this.ycalle,
+    this.colonia,
+    this.postal,
+    this.ciudad,
+    this.estado,
+    this.pais,
+    this.particular,
+    this.oficina,
+    this.movil,
+    this.limiteCredito,
+    this.diasCredito,
+    this.diasBloqueo,
+    this.descuento,
+    this.birthday,
+  });
+
+  factory Cliente.fromJson(Map<String, dynamic> json) {
+    return Cliente(
+      id: json['id'],
+      sucursalId: json['sucursalId'],
+      segmentoId: json['segmentoId'],
+      giroId: json['giroId'],
+      nombre: json['nombre'],
+      razon: json['razon'],
+      rfc: json['rfc'],
+      email: json['email'],
+      calle: json['calle'],
+      exterior: json['exterior'],
+      interior: json['interior'],
+      ecalle: json['ecalle'],
+      ycalle: json['ycalle'],
+      colonia: json['colonia'],
+      postal: json['postal'],
+      ciudad: json['ciudad'],
+      estado: json['estado'],
+      pais: json['pais'],
+      particular: json['particular'],
+      oficina: json['oficina'],
+      movil: json['movil'],
+      limiteCredito: json['limiteCredito'],
+      diasCredito: json['diasCredito'],
+      diasBloqueo: json['diasBloqueo'],
+      descuento: json['descuento'],
+      birthday: json['birthday'],
+    );
   }
-
 }

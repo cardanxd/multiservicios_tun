@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NombreForm extends StatelessWidget {
-  const NombreForm({
+class ClienteForm extends StatelessWidget {
+  const ClienteForm({
     Key key,
   }) : super(key: key);
 
