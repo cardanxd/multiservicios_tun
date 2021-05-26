@@ -10,7 +10,7 @@ class VehiculoContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         color: Colors.grey[400],
-        height: 180,
+        height: 175,
         padding: EdgeInsets.all(20.0),
         child: Row(children: <Widget>[
           Image.asset(

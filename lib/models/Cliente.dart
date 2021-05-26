@@ -1,5 +1,6 @@
 class Cliente{
 
+  int id;
   String nombre;
   String razon;
   String rfc;
@@ -25,8 +26,9 @@ class Cliente{
   int sucursal;
   int segmento;
   int giro;
-
-  Cliente(nombre, razon, rfc, email, calle, exterior, interior, ecalle, ycalle, colonia, postal, ciudad, estado, pais, particular, oficina, movil, limitecredito, diascredito, diasbloqueo, descuento, birthday, sucursal, segmento, giro){
+  
+  Cliente(id,nombre, razon, rfc, email, calle, exterior, interior, ecalle, ycalle, colonia, postal, ciudad, estado, pais, particular, oficina, movil, limitecredito, diascredito, diasbloqueo, descuento, birthday, sucursal, segmento, giro){
+    this.id = id;
     this.nombre = nombre;
     this.razon =razon;
     this.rfc = rfc;
