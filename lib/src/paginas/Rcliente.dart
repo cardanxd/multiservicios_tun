@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:multiservicios_tun/models/Cliente.dart';
 import 'package:multiservicios_tun/models/Album.dart';
 
 class Rcliente extends StatefulWidget {
@@ -12,86 +11,97 @@ class Rcliente extends StatefulWidget {
 }
 
 class _RclienteState extends State<Rcliente> {
-  String url = 'https://jsonplaceholder.typicode.com/albums/1';
-  //String url = 'http://localhost/ApiTun/public/clientes/1';
+  final TextEditingController _controller = TextEditingController();
+  Future<Album> _futureAlbum;
 
-  Future<Album> futureAlbum;
+  Future<Album> createAlbum(String title) async {
+    final response = await http.post(
+      Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': title,
+      }),
+    );
 
-  Future<Album> fetchAlbum() async {
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
+    if (response.statusCode == 201) {
+      // If the server did return a 201 CREATED response,
       // then parse the JSON.
       return Album.fromJson(jsonDecode(response.body));
     } else {
-      // If the server did not return a 200 OK response,
+      // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Failed to create album.');
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    futureAlbum = fetchAlbum();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.indigo,
-          title: Text('Multiservicios Tun')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: FutureBuilder<Album>(
-            future: futureAlbum,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return new Container(
-                    child: new Column(children: <Widget>[
-                  Text(
-                    "Información Personal",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: snapshot.data.title,
-                      enabled: false,
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                    //controller: myController,
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  MaterialButton(
-                    minWidth: 200.0,
-                    height: 40.0,
-                    onPressed: () {
-                      //Aqui van los metodos para el registro de orden
-                      //_mostrarAlerta(context);
-                      Navigator.pop(context);
-                    },
-                    color: Colors.indigo,
-                    child: Text('Registrar orden',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ]));
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
+        appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.indigo,
+            title: Text('Multiservicios Tun')),
+        body: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(8.0),
+          child: (_futureAlbum == null) ? buildColumn() : buildFutureBuilder(),
+        ));
+  }
 
-              // By default, show a loading spinner.
-              return CircularProgressIndicator();
-            }),
-      ),
+  Column buildColumn() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        TextField(
+          controller: _controller,
+          decoration: InputDecoration(hintText: 'Enter Title'),
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        MaterialButton(
+          minWidth: 200.0,
+          height: 40.0,
+          onPressed: () {
+            setState(() {
+              _futureAlbum = createAlbum(_controller.text);
+            });
+            Navigator.pop(context);
+          },
+          color: Colors.indigo,
+          child:
+              Text('Registrar cliente', style: TextStyle(color: Colors.white)),
+        ),
+        SizedBox(
+          height: 20.0,
+        ),
+        MaterialButton(
+          minWidth: 200.0,
+          height: 40.0,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.indigo,
+          child: Text('Cancelar', style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    );
+  }
+
+  FutureBuilder<Album> buildFutureBuilder() {
+    return FutureBuilder<Album>(
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(snapshot.data.title);
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        return CircularProgressIndicator();
+      },
     );
   }
 }
