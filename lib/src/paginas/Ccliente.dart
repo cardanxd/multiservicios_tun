@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:multiservicios_tun/models/Album.dart';
+import 'package:multiservicios_tun/models/Cliente.dart';
 
 class Ccliente extends StatefulWidget {
   @override
@@ -11,29 +11,24 @@ class Ccliente extends StatefulWidget {
 }
 
 class _CclienteState extends State<Ccliente> {
-  String url = 'https://jsonplaceholder.typicode.com/albums/1';
-  //String url = 'http://localhost/ApiTun/public/clientes/1';
+  String url = 'https://apiserviciostunv1.000webhostapp.com/api/clientes/1';
 
-  Future<Album> futureAlbum;
+  Future<Cliente> futureCliente;
 
-  Future<Album> fetchAlbum() async {
+  Future<Cliente> fetchCliente() async {
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return Album.fromJson(jsonDecode(response.body));
+      return Cliente.fromJson(jsonDecode(response.body));
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('Fallo al cargar el Cliente');
     }
   }
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
+    futureCliente = fetchCliente();
   }
 
   @override
@@ -45,8 +40,8 @@ class _CclienteState extends State<Ccliente> {
           title: Text('Multiservicios Tun')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: FutureBuilder<Album>(
-            future: futureAlbum,
+        child: FutureBuilder<Cliente>(
+            future: futureCliente,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return new Container(
@@ -61,7 +56,7 @@ class _CclienteState extends State<Ccliente> {
                   TextField(
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                      labelText: snapshot.data.title,
+                      labelText: snapshot.data.nombre,
                       enabled: false,
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),

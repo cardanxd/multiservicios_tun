@@ -21,13 +21,13 @@ class ClienteContainer extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           SizedBox(
-              width: 20,
-            ),
+            width: 20,
+          ),
           new Container(
               child: new Column(children: <Widget>[
-               SizedBox(
+            SizedBox(
               height: 40.0,
-            ), 
+            ),
             Text(
               "Registrar cliente",
               style: TextStyle(
@@ -49,8 +49,7 @@ class ClienteContainer extends StatelessWidget {
                 );
               },
               color: Colors.indigo,
-              child: Text('Registrar',
-                  style: TextStyle(color: Colors.white)),
+              child: Text('Registrar', style: TextStyle(color: Colors.white)),
             )
           ]))
         ]));

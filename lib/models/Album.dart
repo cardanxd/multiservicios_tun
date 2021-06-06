@@ -11,6 +11,6 @@ class Album {
     return Album(
       id: json['id'],
       title: json['title'],
-    );  
+    );
   }
 }
