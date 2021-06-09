@@ -1,31 +1,14 @@
-class Cliente {
-  final int id;
-  final String nombre;
-  final String razon;
-  final String rfc;
-  final String email;
-  final String calle;
-  final String exterior;
-  final String interior;
-  final String ecalle;
-  final String ycalle;
-  final String colonia;
-  final String postal;
-  final String ciudad;
-  final String estado;
-  final String pais;
-  final String particular;
-  final String oficina;
-  final String movil;
-  final double limiteCredito;
-  final int diasCredito;
-  final int diasBloqueo;
-  final String descuento;
-  final DateTime birthday;
-  final int sucursal;
-  final int segmento;
-  final int giro;
+// To parse this JSON data, do
+//
+//     final cliente = clienteFromJson(jsonString);
 
+import 'dart:convert';
+
+Cliente clienteFromJson(String str) => Cliente.fromJson(json.decode(str));
+
+String clienteToJson(Cliente data) => json.encode(data.toJson());
+
+class Cliente {
   Cliente({
     this.id,
     this.nombre,
@@ -45,9 +28,9 @@ class Cliente {
     this.particular,
     this.oficina,
     this.movil,
-    this.limiteCredito,
-    this.diasCredito,
-    this.diasBloqueo,
+    this.limitecredito,
+    this.diascredito,
+    this.diasbloqueo,
     this.descuento,
     this.birthday,
     this.sucursal,
@@ -55,33 +38,89 @@ class Cliente {
     this.giro,
   });
 
-  factory Cliente.fromJson(Map<String, dynamic> json) {
-    return Cliente(
-        id: json['id'],
-        nombre: json['nombre'],
-        razon: json['razon'],
-        rfc: json['rfc'],
-        email: json['email'],
-        calle: json['calle'],
-        exterior: json['exterior'],
-        interior: json['interior'],
-        ecalle: json['ecalle'],
-        ycalle: json['ycalle'],
-        colonia: json['colonia'],
-        postal: json['postal'],
-        ciudad: json['ciudad'],
-        estado: json['estado'],
-        pais: json['pais'],
-        particular: json['particular'],
-        oficina: json['oficina'],
-        movil: json['movil'],
-        limiteCredito: json['limitecredito'],
-        diasCredito: json['diascredito'],
-        diasBloqueo: json['diasbloqueo'],
-        descuento: json['descuento'],
-        birthday: json['birthday'],
-        sucursal: json['sucursal'],
-        segmento: json['segmento'],
-        giro: json['giro']);
-  }
+  int id;
+  String nombre;
+  String razon;
+  String rfc;
+  String email;
+  String calle;
+  String exterior;
+  String interior;
+  String ecalle;
+  String ycalle;
+  String colonia;
+  String postal;
+  String ciudad;
+  String estado;
+  String pais;
+  String particular;
+  String oficina;
+  String movil;
+  double limitecredito;
+  int diascredito;
+  int diasbloqueo;
+  String descuento;
+  DateTime birthday;
+  int sucursal;
+  int segmento;
+  int giro;
+
+  factory Cliente.fromJson(Map<String, dynamic> json) => Cliente(
+        id: json["id"],
+        nombre: json["nombre"],
+        razon: json["razon"],
+        rfc: json["rfc"],
+        email: json["email"],
+        calle: json["calle"],
+        exterior: json["exterior"],
+        interior: json["interior"],
+        ecalle: json["ecalle"],
+        ycalle: json["ycalle"],
+        colonia: json["colonia"],
+        postal: json["postal"],
+        ciudad: json["ciudad"],
+        estado: json["estado"],
+        pais: json["pais"],
+        particular: json["particular"],
+        oficina: json["oficina"],
+        movil: json["movil"],
+        limitecredito: json["limitecredito"].toDouble(),
+        diascredito: json["diascredito"],
+        diasbloqueo: json["diasbloqueo"],
+        descuento: json["descuento"],
+        birthday: DateTime.parse(json["birthday"]),
+        sucursal: json["sucursal"],
+        segmento: json["segmento"],
+        giro: json["giro"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "nombre": nombre,
+        "razon": razon,
+        "rfc": rfc,
+        "email": email,
+        "calle": calle,
+        "exterior": exterior,
+        "interior": interior,
+        "ecalle": ecalle,
+        "ycalle": ycalle,
+        "colonia": colonia,
+        "postal": postal,
+        "ciudad": ciudad,
+        "estado": estado,
+        "pais": pais,
+        "particular": particular,
+        "oficina": oficina,
+        "movil": movil,
+        "limitecredito": limitecredito,
+        "diascredito": diascredito,
+        "diasbloqueo": diasbloqueo,
+        "descuento": descuento,
+        "birthday":
+            "${birthday.year.toString().padLeft(4, '0')}-${birthday.month.toString().padLeft(2, '0')}-${birthday.day.toString().padLeft(2, '0')}",
+        "sucursal": sucursal,
+        "segmento": segmento,
+        "giro": giro,
+      };
 }
