@@ -96,6 +96,22 @@ class _RclienteState extends State<Rcliente> {
   final TextEditingController _sucursal = TextEditingController();
   final TextEditingController _segmento = TextEditingController();
   final TextEditingController _giro = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+
+  _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1990),
+        lastDate: DateTime(2100));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        var date =
+            "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
+        _birthday.text = date;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,14 +167,22 @@ class _RclienteState extends State<Rcliente> {
               ),
               //controller: myControllernum2,
             ),
-            TextField(
-              keyboardType: TextInputType.datetime,
-              controller: _birthday,
-              decoration: InputDecoration(
-                labelText: 'Cumpleaños',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+            GestureDetector(
+              onTap: () => _selectDate(context),
+              child: AbsorbPointer(
+                child: TextFormField(
+                  controller: _birthday,
+                  decoration: InputDecoration(
+                    labelText: "Cumpleaños",
+                    prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty)
+                      return "Por favor selecciona la fecha de cumpleaños";
+                    return null;
+                  },
+                ),
               ),
-              //controller: myController,
             ),
             SizedBox(
               height: 16.0,
@@ -423,7 +447,7 @@ class _RclienteState extends State<Rcliente> {
           final int diascredito = _diasCredito.hashCode;
           final int diasbloqueo = _diasBloqueo.hashCode;
           final String descuento = _descuento.text;
-          final DateTime birthday = DateTime.utc(1989, 11, 9);
+          final DateTime birthday = DateTime(_birthday.hashCode);
           final int sucursal = _sucursal.hashCode;
           final int segmento = _segmento.hashCode;
           final int giro = _giro.hashCode;
