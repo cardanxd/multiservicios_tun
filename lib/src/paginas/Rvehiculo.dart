@@ -14,7 +14,7 @@ Future<Vehiculo> crearVehiculo(int cliente, String tipo, String marca,
   final String url =
       "https://apiserviciostunv1.000webhostapp.com/api/vehiculos";
   final response = await http.post(Uri.parse(url), body: {
-    "cliente": cliente,
+    "cliente": cliente.toString(),
     "tipo": tipo,
     "marca": marca,
     "modelo": modelo,
@@ -104,11 +104,22 @@ class _RvehiculoState extends State<Rvehiculo> {
             ),
             _vehiculo == null
                 ? Container()
-                : Text("El vehiculo fue creado satisfactoriamente")
+                : MaterialButton(
+                    minWidth: 200.0,
+                    height: 40.0,
+                    onPressed: () {
+                      //Aqui van los metodos para el registro de orden
+                      //_mostrarAlerta(context);
+                      Navigator.pop(context);
+                    },
+                    color: Colors.indigo,
+                    child: Text('Aceptar y continuar',
+                        style: TextStyle(color: Colors.white)),
+                  )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           //final cliente = int.parse(_cliente.text);
           final cliente = int.parse(_cliente.text);
@@ -126,7 +137,9 @@ class _RvehiculoState extends State<Rvehiculo> {
           });
         },
         tooltip: 'Registrar',
-        child: Icon(Icons.add),
+        backgroundColor: Colors.indigo,
+        label: const Text('Registrar'),
+        icon: const Icon(Icons.thumb_up),
       ),
     );
   }

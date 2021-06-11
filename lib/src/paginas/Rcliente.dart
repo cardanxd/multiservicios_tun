@@ -52,14 +52,14 @@ Future<Cliente> createCliente(
     "particular": particular,
     "oficina": oficina,
     "movil": movil,
-    "limitecredito": limitecredito,
-    "diascredito": diascredito,
-    "diasbloqueo": diasbloqueo,
+    "limitecredito": limitecredito.toString(),
+    "diascredito": diascredito.toString(),
+    "diasbloqueo": diasbloqueo.toString(),
     "descuento": descuento,
-    "birthday": birthday,
-    "sucursal": sucursal,
-    "segmento": segmento,
-    "giro": giro
+    "birthday": birthday.toString(),
+    "sucursal": sucursal.toString(),
+    "segmento": segmento.toString(),
+    "giro": giro.toString()
   });
   if (response.statusCode == 201) {
     final String responseString = response.body;
@@ -444,13 +444,13 @@ class _RclienteState extends State<Rcliente> {
           final String oficina = _oficina.text;
           final String movil = _movil.text;
           final double limitecredito = double.parse(_limiteCredito.text);
-          final int diascredito = _diasCredito.hashCode;
-          final int diasbloqueo = _diasBloqueo.hashCode;
+          final int diascredito = int.parse(_diasCredito.text);
+          final int diasbloqueo = int.parse(_diasBloqueo.text);
           final String descuento = _descuento.text;
-          final DateTime birthday = DateTime(_birthday.hashCode);
-          final int sucursal = _sucursal.hashCode;
-          final int segmento = _segmento.hashCode;
-          final int giro = _giro.hashCode;
+          final DateTime birthday = DateTime.parse(_birthday.text);
+          final int sucursal = int.parse(_diasBloqueo.text);
+          final int segmento = int.parse(_segmento.text);
+          final int giro = int.parse(_giro.text);
 
           final Cliente cliente = await createCliente(
               nombre,
