@@ -15,6 +15,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        primaryColor: Colors.indigo,
+        accentColor: Colors.indigo,
+        fontFamily: 'Georgia',
       ),
       home: Panel(),
     );

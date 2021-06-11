@@ -423,17 +423,22 @@ class _RordenState extends State<Rorden> {
             ),
             _orden == null
                 ? Container()
-                : MaterialButton(
-                    minWidth: 200.0,
-                    height: 40.0,
-                    onPressed: () {
-                      //Aqui van los metodos para el registro de orden
-                      //_mostrarAlerta(context);
-                      Navigator.pop(context);
-                    },
-                    color: Colors.indigo,
+                : ElevatedButton(
                     child: Text('Aceptar y continuar',
                         style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.indigo,
+                      onPrimary: Colors.grey[900],
+                      shadowColor: Colors.black,
+                      elevation: 10,
+                      minimumSize: Size(150, 40),
+                      alignment: Alignment.center,
+                      shape: StadiumBorder(),
+                      side: BorderSide(color: Colors.indigo[600], width: 2),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   )
           ],
         ),
@@ -513,6 +518,12 @@ class _RordenState extends State<Rorden> {
         label: const Text('Registrar'),
         icon: const Icon(Icons.thumb_up),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 50.0,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

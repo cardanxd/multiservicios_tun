@@ -419,12 +419,27 @@ class _RclienteState extends State<Rcliente> {
             ),
             _cliente == null
                 ? Container()
-                : Text(
-                    "El cliente ${_cliente.nombre} fue creado satisfactoriamente")
+                : ElevatedButton(
+                    child: Text('Aceptar y continuar',
+                        style: TextStyle(color: Colors.white)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.indigo,
+                      onPrimary: Colors.grey[900],
+                      shadowColor: Colors.black,
+                      elevation: 10,
+                      minimumSize: Size(150, 40),
+                      alignment: Alignment.center,
+                      shape: StadiumBorder(),
+                      side: BorderSide(color: Colors.indigo[600], width: 2),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final String nombre = _nombre.text;
           final String razon = _razon.text;
@@ -483,8 +498,16 @@ class _RclienteState extends State<Rcliente> {
           });
         },
         tooltip: 'Registrar',
-        child: Icon(Icons.add),
+        backgroundColor: Colors.indigo,
+        label: const Text('Registrar'),
+        icon: const Icon(Icons.thumb_up),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 50.0,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

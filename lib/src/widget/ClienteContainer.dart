@@ -9,8 +9,10 @@ class ClienteContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.grey,
-        height: 175,
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: Colors.grey),
         padding: EdgeInsets.all(20.0),
         child: Row(children: <Widget>[
           Image.asset(
@@ -18,6 +20,9 @@ class ClienteContainer extends StatelessWidget {
             width: 100,
             height: 100,
             fit: BoxFit.cover,
+            color: Colors.grey,
+            colorBlendMode: BlendMode.darken,
+            semanticLabel: '¿Desear realizar un nuevo registro?',
           ),
           SizedBox(
             width: 20,
@@ -38,18 +43,25 @@ class ClienteContainer extends StatelessWidget {
             SizedBox(
               height: 10.0,
             ),
-            MaterialButton(
-              minWidth: 150.0,
-              height: 40.0,
+            ElevatedButton(
+              child: Text('Registrar', style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.indigo,
+                onPrimary: Colors.grey[900],
+                shadowColor: Colors.black,
+                elevation: 10,
+                minimumSize: Size(150, 40),
+                alignment: Alignment.center,
+                shape: StadiumBorder(),
+                side: BorderSide(color: Colors.indigo[600], width: 2),
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Rcliente()),
                 );
               },
-              color: Colors.indigo,
-              child: Text('Registrar', style: TextStyle(color: Colors.white)),
-            )
+            ),
           ]))
         ]));
   }
