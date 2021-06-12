@@ -30,7 +30,6 @@ Future<Cliente> createCliente(
     int diascredito,
     int diasbloqueo,
     String descuento,
-    DateTime birthday,
     int sucursal,
     int segmento,
     int giro) async {
@@ -57,7 +56,6 @@ Future<Cliente> createCliente(
     "diascredito": diascredito.toString(),
     "diasbloqueo": diasbloqueo.toString(),
     "descuento": descuento,
-    "birthday": birthday.toString(),
     "sucursal": sucursal.toString(),
     "segmento": segmento.toString(),
     "giro": giro.toString()
@@ -93,26 +91,9 @@ class _RclienteState extends State<Rcliente> {
   final TextEditingController _diasCredito = TextEditingController();
   final TextEditingController _diasBloqueo = TextEditingController();
   final TextEditingController _descuento = TextEditingController();
-  final TextEditingController _birthday = TextEditingController();
   final TextEditingController _sucursal = TextEditingController();
   final TextEditingController _segmento = TextEditingController();
   final TextEditingController _giro = TextEditingController();
-  DateTime selectedDate = DateTime.now();
-
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1990),
-        lastDate: DateTime(2100));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        var date =
-            "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
-        _birthday.text = date;
-      });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,23 +148,6 @@ class _RclienteState extends State<Rcliente> {
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
                 //controller: myControllernum2,
-              ),
-              GestureDetector(
-                onTap: () => _selectDate(context),
-                child: AbsorbPointer(
-                  child: TextFormField(
-                    controller: _birthday,
-                    decoration: InputDecoration(
-                      labelText: "Cumpleaños",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty)
-                        return "Por favor selecciona la fecha de cumpleaños";
-                      return null;
-                    },
-                  ),
-                ),
               ),
               SizedBox(
                 height: 16.0,
@@ -467,7 +431,6 @@ class _RclienteState extends State<Rcliente> {
             final int diascredito = int.parse(_diasCredito.text);
             final int diasbloqueo = int.parse(_diasBloqueo.text);
             final String descuento = _descuento.text;
-            final DateTime birthday = DateTime.parse(_birthday.text);
             final int sucursal = int.parse(_diasBloqueo.text);
             final int segmento = int.parse(_segmento.text);
             final int giro = int.parse(_giro.text);
@@ -494,7 +457,6 @@ class _RclienteState extends State<Rcliente> {
                 diascredito,
                 diasbloqueo,
                 descuento,
-                birthday,
                 sucursal,
                 segmento,
                 giro);

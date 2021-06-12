@@ -117,8 +117,6 @@ class Cliente {
         "diascredito": diascredito,
         "diasbloqueo": diasbloqueo,
         "descuento": descuento,
-        "birthday":
-            "${birthday.year.toString().padLeft(4, '0')}-${birthday.month.toString().padLeft(2, '0')}-${birthday.day.toString().padLeft(2, '0')}",
         "sucursal": sucursal,
         "segmento": segmento,
         "giro": giro,
