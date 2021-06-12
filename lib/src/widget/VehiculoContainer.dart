@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:multiservicios_tun/src/paginas/Rvehiculo.dart';
 
 class VehiculoContainer extends StatelessWidget {
@@ -31,11 +32,20 @@ class VehiculoContainer extends StatelessWidget {
             SizedBox(
               height: 40.0,
             ),
+            /*SizedBox(
+              height: 25,
+              child: DefaultTextStyle(
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                  child: AnimatedTextKit(animatedTexts: [
+                    TypewriterAnimatedText('¡Registrar ahora!'),
+                    TypewriterAnimatedText('Registrar vehiculo'),
+                  ], isRepeatingAnimation: true, totalRepeatCount: 2)),
+            ),*/
             Text(
               "Registrar vehiculo",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 20,
                 color: Colors.white,
               ),
             ),
@@ -43,7 +53,12 @@ class VehiculoContainer extends StatelessWidget {
               height: 10.0,
             ),
             ElevatedButton(
-              child: Text('Registrar', style: TextStyle(color: Colors.white)),
+              child: DefaultTextStyle(
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                  child: AnimatedTextKit(
+                      animatedTexts: [TypewriterAnimatedText('Registrar')],
+                      isRepeatingAnimation: true,
+                      totalRepeatCount: 2)),
               style: ElevatedButton.styleFrom(
                 primary: Colors.indigo,
                 onPrimary: Colors.grey[900],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:http/http.dart' as http;
-
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:multiservicios_tun/models/Vehiculo.dart';
 
 class Rvehiculo extends StatefulWidget {
@@ -41,117 +40,114 @@ class _RvehiculoState extends State<Rvehiculo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.indigo,
-          title: Text('Multiservicios Tun')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: <Widget>[
-            TextField(
-              keyboardType: TextInputType.number,
-              controller: _cliente,
-              decoration: InputDecoration(
-                labelText: 'Cliente',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+        appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.indigo,
+            title: Text('Multiservicios Tun')),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: <Widget>[
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _cliente,
+                decoration: InputDecoration(
+                  labelText: 'Cliente',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
-            ),
-            TextField(
-              controller: _tipo,
-              decoration: InputDecoration(
-                labelText: 'Tipo de Equipo',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+              TextField(
+                controller: _tipo,
+                decoration: InputDecoration(
+                  labelText: 'Tipo de Equipo',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
-            ),
-            TextField(
-              controller: _marca,
-              decoration: InputDecoration(
-                labelText: 'Marca',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+              TextField(
+                controller: _marca,
+                decoration: InputDecoration(
+                  labelText: 'Marca',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
-            ),
-            TextField(
-              controller: _modelo,
-              decoration: InputDecoration(
-                labelText: 'Modelo',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+              TextField(
+                controller: _modelo,
+                decoration: InputDecoration(
+                  labelText: 'Modelo',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
-            ),
-            TextField(
-              controller: _serie,
-              decoration: InputDecoration(
-                labelText: 'Num. Serie',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+              TextField(
+                controller: _serie,
+                decoration: InputDecoration(
+                  labelText: 'Num. Serie',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
-            ),
-            TextField(
-              controller: _economico,
-              decoration: InputDecoration(
-                labelText: 'Num. Economico',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+              TextField(
+                controller: _economico,
+                decoration: InputDecoration(
+                  labelText: 'Num. Economico',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
-            ),
-            TextField(
-              controller: _placa,
-              decoration: InputDecoration(
-                labelText: 'Placas',
-                prefixIcon: Icon(Icons.arrow_right_outlined),
+              TextField(
+                controller: _placa,
+                decoration: InputDecoration(
+                  labelText: 'Placas',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            _vehiculo == null
-                ? Container()
-                : ElevatedButton(
-                    child: Text('Aceptar y continuar',
-                        style: TextStyle(color: Colors.white)),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.indigo,
-                      onPrimary: Colors.grey[900],
-                      shadowColor: Colors.black,
-                      elevation: 10,
-                      minimumSize: Size(150, 40),
-                      alignment: Alignment.center,
-                      shape: StadiumBorder(),
-                      side: BorderSide(color: Colors.indigo[600], width: 2),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  )
-          ],
+              SizedBox(
+                height: 16,
+              ),
+              _vehiculo == null
+                  ? Container()
+                  : ElevatedButton(
+                      child: DefaultTextStyle(
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 18),
+                          child: AnimatedTextKit(animatedTexts: [
+                            TypewriterAnimatedText('Aceptar y continuar')
+                          ], isRepeatingAnimation: true, totalRepeatCount: 2)),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.indigo,
+                        onPrimary: Colors.grey[900],
+                        shadowColor: Colors.black,
+                        elevation: 10,
+                        minimumSize: Size(150, 40),
+                        alignment: Alignment.center,
+                        shape: StadiumBorder(),
+                        side: BorderSide(color: Colors.indigo[600], width: 2),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          //final cliente = int.parse(_cliente.text);
-          final cliente = int.parse(_cliente.text);
-          final tipo = _tipo.text;
-          final marca = _marca.text;
-          final modelo = _modelo.text;
-          final serie = _serie.text;
-          final economico = _economico.text;
-          final placa = _placa.text;
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
+            //final cliente = int.parse(_cliente.text);
+            final cliente = int.parse(_cliente.text);
+            final tipo = _tipo.text;
+            final marca = _marca.text;
+            final modelo = _modelo.text;
+            final serie = _serie.text;
+            final economico = _economico.text;
+            final placa = _placa.text;
 
-          final Vehiculo vehiculo = await crearVehiculo(
-              cliente, tipo, marca, modelo, serie, economico, placa);
-          setState(() {
-            _vehiculo = vehiculo;
-          });
-        },
-        tooltip: 'Registrar',
-        backgroundColor: Colors.indigo,
-        label: const Text('Registrar'),
-        icon: const Icon(Icons.thumb_up),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 50.0,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
+            final Vehiculo vehiculo = await crearVehiculo(
+                cliente, tipo, marca, modelo, serie, economico, placa);
+            setState(() {
+              _vehiculo = vehiculo;
+            });
+          },
+          tooltip: 'Registrar',
+          backgroundColor: Colors.indigo,
+          label: const Text('Registrar'),
+          icon: const Icon(Icons.thumb_up),
+        ));
   }
 }

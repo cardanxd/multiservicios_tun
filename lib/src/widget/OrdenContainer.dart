@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:multiservicios_tun/src/paginas/Rorden.dart';
 
 class OrdenContainer extends StatelessWidget {
@@ -29,13 +30,22 @@ class OrdenContainer extends StatelessWidget {
           new Container(
               child: new Column(children: <Widget>[
             SizedBox(
-              height: 40.0,
+              height: 30,
             ),
+            /*SizedBox(
+              height: 25,
+              child: DefaultTextStyle(
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                  child: AnimatedTextKit(animatedTexts: [
+                    TypewriterAnimatedText('¡Registrar ahora!'),
+                    TypewriterAnimatedText('Registrar orden'),
+                  ], isRepeatingAnimation: true, totalRepeatCount: 2)),
+            ),*/
             Text(
               "Registrar orden",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18,
+                fontSize: 22,
                 color: Colors.white,
               ),
             ),
@@ -43,7 +53,12 @@ class OrdenContainer extends StatelessWidget {
               height: 10.0,
             ),
             ElevatedButton(
-              child: Text('Registrar', style: TextStyle(color: Colors.white)),
+              child: DefaultTextStyle(
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                  child: AnimatedTextKit(
+                      animatedTexts: [TypewriterAnimatedText('Registrar')],
+                      isRepeatingAnimation: true,
+                      totalRepeatCount: 2)),
               style: ElevatedButton.styleFrom(
                 primary: Colors.indigo,
                 onPrimary: Colors.grey[900],
