@@ -19,7 +19,7 @@ Future<Vehiculo> crearVehiculo(int cliente, String tipo, String marca,
     "modelo": modelo,
     "serie": serie,
     "economico": economico,
-    "placa": placa,
+    "placa": placa
   });
   if (response.statusCode == 201) {
     return vehiculoFromJson(response.body);
@@ -129,7 +129,6 @@ class _RvehiculoState extends State<Rvehiculo> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            //final cliente = int.parse(_cliente.text);
             final cliente = int.parse(_cliente.text);
             final tipo = _tipo.text;
             final marca = _marca.text;

@@ -9,44 +9,43 @@ class Rorden extends StatefulWidget {
 }
 
 Future<Orden> crearOrden(
-    DateTime fecha,
-    String vendedor,
-    int cliente,
-    int vehiculo,
-    String cilindros,
-    String condicionventa,
-    String urgenciainicial,
-    String atencion,
-    String comentarios,
-    String centrocosto,
-    String placa,
-    String ceniceros,
-    String cristalesRotos,
-    String quemacocos,
-    String espejoIzq,
-    String espejoDer,
-    String tapon,
-    String antena,
-    String tapetes,
-    String varilla,
-    String radio,
-    String espejoInt,
-    String gato,
-    String extinguidor,
-    String emblemas,
-    String encendedor,
-    String llanta,
-    double km,
-    double combustible,
-    String transmision,
-    String vestiduras) async {
+  String vendedor,
+  int cliente,
+  int vehiculo,
+  String cilindros,
+  String condicionventa,
+  String urgenciainicial,
+  String atencion,
+  String comentarios,
+  String centrocosto,
+  String placa,
+  String ceniceros,
+  String cristalesRotos,
+  String quemacocos,
+  String espejoIzq,
+  String espejoDer,
+  String tapon,
+  String antena,
+  String tapetes,
+  String varilla,
+  String radio,
+  String espejoInt,
+  String gato,
+  String extinguidor,
+  String emblemas,
+  String encendedor,
+  String llanta,
+  double km,
+  int combustible,
+  String transmision,
+  String vestiduras,
+  DateTime createdAt,
+) async {
   final String url = "https://apiserviciostunv1.000webhostapp.com/api/ordenes";
   final response = await http.post(Uri.parse(url), body: {
-    "fecha":
-        "${fecha.year.toString().padLeft(4, '0')}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}",
     "vendedor": vendedor,
-    "cliente": cliente,
-    "vehiculo": vehiculo,
+    "cliente": cliente.toString(),
+    "vehiculo": vehiculo.toString(),
     "cilindros": cilindros,
     "condicionventa": condicionventa,
     "urgenciainicial": urgenciainicial,
@@ -70,10 +69,11 @@ Future<Orden> crearOrden(
     "emblemas": emblemas,
     "encendedor": encendedor,
     "llanta": llanta,
-    "km": km,
-    "combustible": combustible,
+    "km": km.toString(),
+    "combustible": combustible.toString(),
     "transmision": transmision,
     "vestiduras": vestiduras,
+    "created_at": createdAt.toIso8601String(),
   });
   if (response.statusCode == 201) {
     return ordenFromJson(response.body);
@@ -85,26 +85,26 @@ Future<Orden> crearOrden(
 class _RordenState extends State<Rorden> {
   DateTime now = new DateTime.now();
   Orden _orden;
-  String placas = 'False';
-  String ceniceros = 'False';
-  String cristalesrotos = 'False';
-  String quemacocos = 'False';
-  String espejoizq = 'False';
-  String espejoder = 'False';
-  String espejosint = 'False';
-  String tapon = 'False';
-  String antena = 'False';
-  String tapetes = 'False';
-  String varilla = 'False';
-  String reloj = 'False';
-  String manija = 'False';
-  String radio = 'False';
-  String gato = 'False';
-  String extinguidor = 'False';
-  String emblemas = 'False';
-  String encendedor = 'False';
-  String llanta = 'False';
-  String valueveinte = 'False';
+  String urgenciainicial = 'baja';
+  String placas = 'false';
+  String ceniceros = 'false';
+  String cristalesrotos = 'false';
+  String quemacocos = 'false';
+  String espejoizq = 'false';
+  String espejoder = 'false';
+  String espejosint = 'false';
+  String tapon = 'false';
+  String antena = 'false';
+  String tapetes = 'false';
+  String varilla = 'false';
+  String reloj = 'false';
+  String manija = 'false';
+  String radio = 'false';
+  String gato = 'false';
+  String extinguidor = 'false';
+  String emblemas = 'false';
+  String encendedor = 'false';
+  String llanta = 'false';
 
   final _fecha = TextEditingController();
   final _vendedor = TextEditingController();
@@ -112,27 +112,9 @@ class _RordenState extends State<Rorden> {
   final _vehiculo = TextEditingController();
   final _cilindros = TextEditingController();
   final _condicionventa = TextEditingController();
-  final _urgenciainicial = TextEditingController();
   final _atencion = TextEditingController();
   final _comentarios = TextEditingController();
   final _centrocosto = TextEditingController();
-  final _placa = TextEditingController();
-  final _ceniceros = TextEditingController();
-  final _cristalesrotos = TextEditingController();
-  final _quemacocos = TextEditingController();
-  final _espejoizq = TextEditingController();
-  final _espejoder = TextEditingController();
-  final _tapon = TextEditingController();
-  final _antena = TextEditingController();
-  final _tapetes = TextEditingController();
-  final _varilla = TextEditingController();
-  final _radio = TextEditingController();
-  final _espejoint = TextEditingController();
-  final _gato = TextEditingController();
-  final _extinguidor = TextEditingController();
-  final _emblemas = TextEditingController();
-  final _encendedor = TextEditingController();
-  final _llanta = TextEditingController();
   final _km = TextEditingController();
   final _combustible = TextEditingController();
   final _transmision = TextEditingController();
@@ -198,7 +180,6 @@ class _RordenState extends State<Rorden> {
                 keyboardType: TextInputType.number,
                 controller: _cliente,
                 decoration: InputDecoration(
-                  enabled: false,
                   labelText: 'Nombre del cliente',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
@@ -215,11 +196,10 @@ class _RordenState extends State<Rorden> {
                 ),
               ),
               TextField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 controller: _vehiculo,
                 decoration: InputDecoration(
-                  enabled: false,
-                  labelText: 'Placas',
+                  labelText: 'Vehiculo',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
                 //controller: myControllernum2,
@@ -262,14 +242,27 @@ class _RordenState extends State<Rorden> {
                   fontSize: 12,
                 ),
               ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _urgenciainicial,
-                decoration: InputDecoration(
-                  labelText: 'Urgencia Inicial',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
+              DropdownButton<String>(
+                value: urgenciainicial,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
                 ),
-                //controller: myControllernum2,
+                onChanged: (String newValue) {
+                  setState(() {
+                    urgenciainicial = newValue;
+                  });
+                },
+                items: <String>['baja', 'media', 'alta']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
               SizedBox(
                 height: 10.0,
@@ -363,7 +356,529 @@ class _RordenState extends State<Rorden> {
                     placas = newValue;
                   });
                 },
-                items: <String>['False', 'True']
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Ceniceros",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: ceniceros,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    ceniceros = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Cristales rotos",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: cristalesrotos,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    cristalesrotos = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Quemacocos",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: quemacocos,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    quemacocos = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Espejo izquierdo",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: espejoizq,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    espejoizq = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Espejo derecho",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: espejoder,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    espejoder = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Espejo interior",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: espejosint,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    espejosint = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Tapon",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: tapon,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    tapon = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Antena",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: antena,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    antena = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Tapetes",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: tapetes,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    tapetes = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Varilla",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: varilla,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    varilla = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Reloj",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: reloj,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    reloj = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Manija",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: manija,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    manija = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Radio",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: radio,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    radio = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Gato",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: gato,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    gato = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Extinguidor",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: extinguidor,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    extinguidor = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Emblemas",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: emblemas,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    emblemas = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Encendedor",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: encendedor,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    encendedor = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              Text(
+                "Llanta",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+              DropdownButton<String>(
+                value: llanta,
+                icon: const Icon(Icons.arrow_drop_down),
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                  color: Colors.grey,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    llanta = newValue;
+                  });
+                },
+                items: <String>['false', 'true']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -448,70 +963,70 @@ class _RordenState extends State<Rorden> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            final fecha = DateTime.parse(_fecha.text);
             final vendedor = _vendedor.text;
             final cliente = int.parse(_cliente.text);
             final vehiculo = int.parse(_vehiculo.text);
             final cilindros = _cilindros.text;
             final condicionventa = _condicionventa.text;
-            final urgenciainicial = _urgenciainicial.text;
+            final urgenciainicial1 = urgenciainicial;
             final atencion = _atencion.text;
             final comentarios = _comentarios.text;
             final centrocosto = _centrocosto.text;
-            final placa = _placa.text;
-            final ceniceros = _ceniceros.text;
-            final cristalesRotos = _cristalesrotos.text;
-            final quemacocos = _quemacocos.text;
-            final espejoIzq = _espejoizq.text;
-            final espejoDer = _espejoder.text;
-            final tapon = _tapon.text;
-            final antena = _antena.text;
-            final tapetes = _tapetes.text;
-            final varilla = _varilla.text;
-            final radio = _radio.text;
-            final espejoInt = _espejoint.text;
-            final gato = _gato.text;
-            final extinguidor = _extinguidor.text;
-            final emblemas = _emblemas.text;
-            final encendedor = _encendedor.text;
-            final llanta = _llanta.text;
+            final placa1 = placas;
+            final ceniceros1 = ceniceros;
+            final cristalesRotos1 = cristalesrotos;
+            final quemacocos1 = quemacocos;
+            final espejoIzq1 = espejoizq;
+            final espejoDer1 = espejoder;
+            final tapon1 = tapon;
+            final antena1 = antena;
+            final tapetes1 = tapetes;
+            final varilla1 = varilla;
+            final radio1 = radio;
+            final espejoInt1 = espejosint;
+            final gato1 = gato;
+            final extinguidor1 = extinguidor;
+            final emblemas1 = emblemas;
+            final encendedor1 = encendedor;
+            final llanta1 = llanta;
             final km = double.parse(_km.text);
-            final combustible = double.parse(_combustible.text);
+            final combustible = int.parse(_combustible.text);
             final transmision = _transmision.text;
             final vestiduras = _vestiduras.text;
+            final createdAt = DateTime.now();
 
             final Orden orden = await crearOrden(
-                fecha,
                 vendedor,
                 cliente,
                 vehiculo,
                 cilindros,
                 condicionventa,
-                urgenciainicial,
+                urgenciainicial1,
                 atencion,
                 comentarios,
                 centrocosto,
-                placa,
-                ceniceros,
-                cristalesRotos,
-                quemacocos,
-                espejoIzq,
-                espejoDer,
-                tapon,
-                antena,
-                tapetes,
-                varilla,
-                radio,
-                espejoInt,
-                gato,
-                extinguidor,
-                emblemas,
-                encendedor,
-                llanta,
+                placa1,
+                ceniceros1,
+                cristalesRotos1,
+                quemacocos1,
+                espejoIzq1,
+                espejoDer1,
+                tapon1,
+                antena1,
+                tapetes1,
+                varilla1,
+                radio1,
+                espejoInt1,
+                gato1,
+                extinguidor1,
+                emblemas1,
+                encendedor1,
+                llanta1,
                 km,
                 combustible,
                 transmision,
-                vestiduras);
+                vestiduras,
+                createdAt);
             setState(() {
               _orden = orden;
             });

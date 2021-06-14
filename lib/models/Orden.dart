@@ -10,7 +10,6 @@ String ordenToJson(Orden data) => json.encode(data.toJson());
 
 class Orden {
   Orden({
-    this.fecha,
     this.vendedor,
     this.cliente,
     this.vehiculo,
@@ -41,9 +40,9 @@ class Orden {
     this.combustible,
     this.transmision,
     this.vestiduras,
+    this.createdAt,
   });
 
-  DateTime fecha;
   String vendedor;
   int cliente;
   int vehiculo;
@@ -71,47 +70,46 @@ class Orden {
   String encendedor;
   String llanta;
   double km;
-  double combustible;
+  int combustible;
   String transmision;
   String vestiduras;
+  DateTime createdAt;
 
   factory Orden.fromJson(Map<String, dynamic> json) => Orden(
-        fecha: DateTime.parse(json["fecha"]),
-        vendedor: json["vendedor"],
-        cliente: json["cliente"],
-        vehiculo: json["vehiculo"],
-        cilindros: json["cilindros"],
-        condicionventa: json["condicionventa"],
-        urgenciainicial: json["urgenciainicial"],
-        atencion: json["atencion"],
-        comentarios: json["comentarios"],
-        centrocosto: json["centrocosto"],
-        placa: json["placa"],
-        ceniceros: json["ceniceros"],
-        cristalesRotos: json["cristales_rotos"],
-        quemacocos: json["quemacocos"],
-        espejoIzq: json["espejo_izq"],
-        espejoDer: json["espejo_der"],
-        tapon: json["tapon"],
-        antena: json["antena"],
-        tapetes: json["tapetes"],
-        varilla: json["varilla"],
-        radio: json["radio"],
-        espejoInt: json["espejo_int"],
-        gato: json["gato"],
-        extinguidor: json["extinguidor"],
-        emblemas: json["emblemas"],
-        encendedor: json["encendedor"],
-        llanta: json["llanta"],
-        km: json["km"].toDouble(),
-        combustible: json["combustible"].toDouble(),
-        transmision: json["transmision"],
-        vestiduras: json["vestiduras"],
+        vendedor: json["vendedor"] as String,
+        cliente: json["cliente"] as int,
+        vehiculo: json["vehiculo"] as int,
+        cilindros: json["cilindros"] as String,
+        condicionventa: json["condicionventa"] as String,
+        urgenciainicial: json["urgenciainicial"] as String,
+        atencion: json["atencion"] as String,
+        comentarios: json["comentarios"] as String,
+        centrocosto: json["centrocosto"] as String,
+        placa: json["placa"] as String,
+        ceniceros: json["ceniceros"] as String,
+        cristalesRotos: json["cristales_rotos"] as String,
+        quemacocos: json["quemacocos"] as String,
+        espejoIzq: json["espejo_izq"] as String,
+        espejoDer: json["espejo_der"] as String,
+        tapon: json["tapon"] as String,
+        antena: json["antena"] as String,
+        tapetes: json["tapetes"] as String,
+        varilla: json["varilla"] as String,
+        radio: json["radio"] as String,
+        espejoInt: json["espejo_int"] as String,
+        gato: json["gato"] as String,
+        extinguidor: json["extinguidor"] as String,
+        emblemas: json["emblemas"] as String,
+        encendedor: json["encendedor"] as String,
+        llanta: json["llanta"] as String,
+        km: json["km"] as double,
+        combustible: json["combustible"] as int,
+        transmision: json["transmision"] as String,
+        vestiduras: json["vestiduras"] as String,
+        createdAt: json["created_at"] as DateTime,
       );
 
   Map<String, dynamic> toJson() => {
-        "fecha":
-            "${fecha.year.toString().padLeft(4, '0')}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}",
         "vendedor": vendedor,
         "cliente": cliente,
         "vehiculo": vehiculo,
@@ -142,5 +140,6 @@ class Orden {
         "combustible": combustible,
         "transmision": transmision,
         "vestiduras": vestiduras,
+        "created_at": createdAt,
       };
 }

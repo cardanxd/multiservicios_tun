@@ -30,6 +30,7 @@ Future<Cliente> createCliente(
     int diascredito,
     int diasbloqueo,
     String descuento,
+    DateTime birthday,
     int sucursal,
     int segmento,
     int giro) async {
@@ -56,9 +57,10 @@ Future<Cliente> createCliente(
     "diascredito": diascredito.toString(),
     "diasbloqueo": diasbloqueo.toString(),
     "descuento": descuento,
+    "birthday": birthday.toIso8601String(),
     "sucursal": sucursal.toString(),
     "segmento": segmento.toString(),
-    "giro": giro.toString()
+    "giro": giro.toString(),
   });
   if (response.statusCode == 201) {
     final String responseString = response.body;
@@ -70,30 +72,31 @@ Future<Cliente> createCliente(
 
 class _RclienteState extends State<Rcliente> {
   Cliente _cliente;
-  final TextEditingController _nombre = TextEditingController();
-  final TextEditingController _razon = TextEditingController();
-  final TextEditingController _rfc = TextEditingController();
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _calle = TextEditingController();
-  final TextEditingController _exterior = TextEditingController();
-  final TextEditingController _interior = TextEditingController();
-  final TextEditingController _ecalle = TextEditingController();
-  final TextEditingController _ycalle = TextEditingController();
-  final TextEditingController _colonia = TextEditingController();
-  final TextEditingController _postal = TextEditingController();
-  final TextEditingController _ciudad = TextEditingController();
-  final TextEditingController _estado = TextEditingController();
-  final TextEditingController _pais = TextEditingController();
-  final TextEditingController _particular = TextEditingController();
-  final TextEditingController _oficina = TextEditingController();
-  final TextEditingController _movil = TextEditingController();
-  final TextEditingController _limiteCredito = TextEditingController();
-  final TextEditingController _diasCredito = TextEditingController();
-  final TextEditingController _diasBloqueo = TextEditingController();
-  final TextEditingController _descuento = TextEditingController();
-  final TextEditingController _sucursal = TextEditingController();
-  final TextEditingController _segmento = TextEditingController();
-  final TextEditingController _giro = TextEditingController();
+  final _nombre = TextEditingController();
+  final _razon = TextEditingController();
+  final _rfc = TextEditingController();
+  final _email = TextEditingController();
+  final _calle = TextEditingController();
+  final _exterior = TextEditingController();
+  final _interior = TextEditingController();
+  final _ecalle = TextEditingController();
+  final _ycalle = TextEditingController();
+  final _colonia = TextEditingController();
+  final _postal = TextEditingController();
+  final _ciudad = TextEditingController();
+  final _estado = TextEditingController();
+  final _pais = TextEditingController();
+  final _particular = TextEditingController();
+  final _oficina = TextEditingController();
+  final _movil = TextEditingController();
+  final _limiteCredito = TextEditingController();
+  final _diasCredito = TextEditingController();
+  final _diasBloqueo = TextEditingController();
+  final _descuento = TextEditingController();
+  final _birthday = TextEditingController();
+  final _sucursal = TextEditingController();
+  final _segmento = TextEditingController();
+  final _giro = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +117,6 @@ class _RclienteState extends State<Rcliente> {
                 ),
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _nombre,
                 decoration: InputDecoration(
                   labelText: 'Nombre completo',
@@ -123,7 +125,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _razon,
                 decoration: InputDecoration(
                   labelText: 'Razón social',
@@ -132,7 +133,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _rfc,
                 decoration: InputDecoration(
                   labelText: 'RFC',
@@ -149,6 +149,14 @@ class _RclienteState extends State<Rcliente> {
                 ),
                 //controller: myControllernum2,
               ),
+              TextField(
+                controller: _birthday,
+                decoration: InputDecoration(
+                  labelText: 'Cumpleaños',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
+                //controller: myControllernum2,
+              ),
               SizedBox(
                 height: 16.0,
               ),
@@ -160,7 +168,6 @@ class _RclienteState extends State<Rcliente> {
                 ),
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _calle,
                 decoration: InputDecoration(
                   labelText: 'Calle',
@@ -169,7 +176,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _exterior,
                 decoration: InputDecoration(
                   labelText: 'No. Exterior',
@@ -178,7 +184,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _interior,
                 decoration: InputDecoration(
                   labelText: 'No. Interior',
@@ -187,7 +192,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _ecalle,
                 decoration: InputDecoration(
                   labelText: 'Entre calle',
@@ -196,7 +200,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _ycalle,
                 decoration: InputDecoration(
                   labelText: 'Y la calle',
@@ -205,7 +208,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _colonia,
                 decoration: InputDecoration(
                   labelText: 'Colonia',
@@ -214,7 +216,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _postal,
                 decoration: InputDecoration(
                   labelText: 'C. Postal',
@@ -223,7 +224,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _ciudad,
                 decoration: InputDecoration(
                   labelText: 'Ciudad',
@@ -232,7 +232,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _estado,
                 decoration: InputDecoration(
                   labelText: 'Estado',
@@ -241,7 +240,6 @@ class _RclienteState extends State<Rcliente> {
                 //controller: myController,
               ),
               TextField(
-                keyboardType: TextInputType.text,
                 controller: _pais,
                 decoration: InputDecoration(
                   labelText: 'País',
@@ -290,7 +288,7 @@ class _RclienteState extends State<Rcliente> {
                 height: 16.0,
               ),
               Text(
-                "Sucursal",
+                "Datos de la empresa",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -363,13 +361,6 @@ class _RclienteState extends State<Rcliente> {
               SizedBox(
                 height: 16.0,
               ),
-              Text(
-                "Descuento",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
               TextField(
                 keyboardType: TextInputType.number,
                 controller: _descuento,
@@ -410,30 +401,31 @@ class _RclienteState extends State<Rcliente> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            final String nombre = _nombre.text;
-            final String razon = _razon.text;
-            final String rfc = _rfc.text;
-            final String email = _email.text;
-            final String calle = _calle.text;
-            final String exterior = _exterior.text;
-            final String interior = _interior.text;
-            final String ecalle = _ecalle.text;
-            final String ycalle = _ycalle.text;
-            final String colonia = _colonia.text;
-            final String postal = _postal.text;
-            final String ciudad = _ciudad.text;
-            final String estado = _estado.text;
-            final String pais = _pais.text;
-            final String particular = _particular.text;
-            final String oficina = _oficina.text;
-            final String movil = _movil.text;
-            final double limitecredito = double.parse(_limiteCredito.text);
-            final int diascredito = int.parse(_diasCredito.text);
-            final int diasbloqueo = int.parse(_diasBloqueo.text);
-            final String descuento = _descuento.text;
-            final int sucursal = int.parse(_diasBloqueo.text);
-            final int segmento = int.parse(_segmento.text);
-            final int giro = int.parse(_giro.text);
+            final nombre = _nombre.text;
+            final razon = _razon.text;
+            final rfc = _rfc.text;
+            final email = _email.text;
+            final calle = _calle.text;
+            final exterior = _exterior.text;
+            final interior = _interior.text;
+            final ecalle = _ecalle.text;
+            final ycalle = _ycalle.text;
+            final colonia = _colonia.text;
+            final postal = _postal.text;
+            final ciudad = _ciudad.text;
+            final estado = _estado.text;
+            final pais = _pais.text;
+            final particular = _particular.text;
+            final oficina = _oficina.text;
+            final movil = _movil.text;
+            final limitecredito = double.parse(_limiteCredito.text);
+            final diascredito = int.parse(_diasCredito.text);
+            final diasbloqueo = int.parse(_diasBloqueo.text);
+            final descuento = _descuento.text;
+            final birthday = DateTime.parse(_birthday.text);
+            final sucursal = int.parse(_sucursal.text);
+            final segmento = int.parse(_segmento.text);
+            final giro = int.parse(_giro.text);
 
             final Cliente cliente = await createCliente(
                 nombre,
@@ -457,6 +449,7 @@ class _RclienteState extends State<Rcliente> {
                 diascredito,
                 diasbloqueo,
                 descuento,
+                birthday,
                 sucursal,
                 segmento,
                 giro);

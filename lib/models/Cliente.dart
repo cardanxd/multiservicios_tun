@@ -10,7 +10,6 @@ String clienteToJson(Cliente data) => json.encode(data.toJson());
 
 class Cliente {
   Cliente({
-    this.id,
     this.nombre,
     this.razon,
     this.rfc,
@@ -38,7 +37,6 @@ class Cliente {
     this.giro,
   });
 
-  int id;
   String nombre;
   String razon;
   String rfc;
@@ -66,36 +64,34 @@ class Cliente {
   int giro;
 
   factory Cliente.fromJson(Map<String, dynamic> json) => Cliente(
-        id: json["id"],
-        nombre: json["nombre"],
-        razon: json["razon"],
-        rfc: json["rfc"],
-        email: json["email"],
-        calle: json["calle"],
-        exterior: json["exterior"],
-        interior: json["interior"],
-        ecalle: json["ecalle"],
-        ycalle: json["ycalle"],
-        colonia: json["colonia"],
-        postal: json["postal"],
-        ciudad: json["ciudad"],
-        estado: json["estado"],
-        pais: json["pais"],
-        particular: json["particular"],
-        oficina: json["oficina"],
-        movil: json["movil"],
-        limitecredito: json["limitecredito"].toDouble(),
-        diascredito: json["diascredito"],
-        diasbloqueo: json["diasbloqueo"],
-        descuento: json["descuento"],
-        birthday: DateTime.parse(json["birthday"]),
-        sucursal: json["sucursal"],
-        segmento: json["segmento"],
-        giro: json["giro"],
+        nombre: json["nombre"] as String,
+        razon: json["razon"] as String,
+        rfc: json["rfc"] as String,
+        email: json["email"] as String,
+        calle: json["calle"] as String,
+        exterior: json["exterior"] as String,
+        interior: json["interior"] as String,
+        ecalle: json["ecalle"] as String,
+        ycalle: json["ycalle"] as String,
+        colonia: json["colonia"] as String,
+        postal: json["postal"] as String,
+        ciudad: json["ciudad"] as String,
+        estado: json["estado"] as String,
+        pais: json["pais"] as String,
+        particular: json["particular"] as String,
+        oficina: json["oficina"] as String,
+        movil: json["movil"] as String,
+        limitecredito: json["limitecredito"] as double,
+        diascredito: json["diascredito"] as int,
+        diasbloqueo: json["diasbloqueo"] as int,
+        descuento: json["descuento"] as String,
+        birthday: (json["birthday"]) as DateTime,
+        sucursal: json["sucursal"] as int,
+        segmento: json["segmento"] as int,
+        giro: json["giro"] as int,
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "nombre": nombre,
         "razon": razon,
         "rfc": rfc,
@@ -117,6 +113,7 @@ class Cliente {
         "diascredito": diascredito,
         "diasbloqueo": diasbloqueo,
         "descuento": descuento,
+        "birthday": birthday,
         "sucursal": sucursal,
         "segmento": segmento,
         "giro": giro,
