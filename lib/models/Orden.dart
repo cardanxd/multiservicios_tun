@@ -10,9 +10,10 @@ String ordenToJson(Orden data) => json.encode(data.toJson());
 
 class Orden {
   Orden({
+    this.fecha,
     this.vendedor,
-    this.cliente,
-    this.vehiculo,
+    this.clienteId,
+    this.vehiculoId,
     this.cilindros,
     this.condicionventa,
     this.urgenciainicial,
@@ -40,12 +41,12 @@ class Orden {
     this.combustible,
     this.transmision,
     this.vestiduras,
-    this.createdAt,
   });
 
+  DateTime fecha;
   String vendedor;
-  int cliente;
-  int vehiculo;
+  int clienteId;
+  int vehiculoId;
   String cilindros;
   String condicionventa;
   String urgenciainicial;
@@ -70,15 +71,15 @@ class Orden {
   String encendedor;
   String llanta;
   double km;
-  int combustible;
+  double combustible;
   String transmision;
   String vestiduras;
-  DateTime createdAt;
 
   factory Orden.fromJson(Map<String, dynamic> json) => Orden(
+        fecha: json["fecha"] as DateTime,
         vendedor: json["vendedor"] as String,
-        cliente: json["cliente"] as int,
-        vehiculo: json["vehiculo"] as int,
+        clienteId: json["cliente_id"] as int,
+        vehiculoId: json["vehiculo_id"] as int,
         cilindros: json["cilindros"] as String,
         condicionventa: json["condicionventa"] as String,
         urgenciainicial: json["urgenciainicial"] as String,
@@ -103,16 +104,16 @@ class Orden {
         encendedor: json["encendedor"] as String,
         llanta: json["llanta"] as String,
         km: json["km"] as double,
-        combustible: json["combustible"] as int,
+        combustible: json["combustible"] as double,
         transmision: json["transmision"] as String,
         vestiduras: json["vestiduras"] as String,
-        createdAt: json["created_at"] as DateTime,
       );
 
   Map<String, dynamic> toJson() => {
+        "fecha": fecha,
         "vendedor": vendedor,
-        "cliente": cliente,
-        "vehiculo": vehiculo,
+        "cliente_id": clienteId,
+        "vehiculo_id": vehiculoId,
         "cilindros": cilindros,
         "condicionventa": condicionventa,
         "urgenciainicial": urgenciainicial,
@@ -140,6 +141,5 @@ class Orden {
         "combustible": combustible,
         "transmision": transmision,
         "vestiduras": vestiduras,
-        "created_at": createdAt,
       };
 }

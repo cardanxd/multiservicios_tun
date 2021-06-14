@@ -32,9 +32,9 @@ class Cliente {
     this.diasbloqueo,
     this.descuento,
     this.birthday,
-    this.sucursal,
-    this.segmento,
-    this.giro,
+    this.sucursalId,
+    this.segmentoId,
+    this.giroId,
   });
 
   String nombre;
@@ -59,9 +59,9 @@ class Cliente {
   int diasbloqueo;
   String descuento;
   DateTime birthday;
-  int sucursal;
-  int segmento;
-  int giro;
+  int sucursalId;
+  int segmentoId;
+  int giroId;
 
   factory Cliente.fromJson(Map<String, dynamic> json) => Cliente(
         nombre: json["nombre"] as String,
@@ -85,10 +85,10 @@ class Cliente {
         diascredito: json["diascredito"] as int,
         diasbloqueo: json["diasbloqueo"] as int,
         descuento: json["descuento"] as String,
-        birthday: (json["birthday"]) as DateTime,
-        sucursal: json["sucursal"] as int,
-        segmento: json["segmento"] as int,
-        giro: json["giro"] as int,
+        birthday: json["birthday"] as DateTime,
+        sucursalId: json["sucursal_id"] as int,
+        segmentoId: json["segmento_id"] as int,
+        giroId: json["giro_id"] as int,
       );
 
   Map<String, dynamic> toJson() => {
@@ -114,8 +114,8 @@ class Cliente {
         "diasbloqueo": diasbloqueo,
         "descuento": descuento,
         "birthday": birthday,
-        "sucursal": sucursal,
-        "segmento": segmento,
-        "giro": giro,
+        "sucursal_id": sucursalId,
+        "segmento_id": segmentoId,
+        "giro_id": giroId,
       };
 }

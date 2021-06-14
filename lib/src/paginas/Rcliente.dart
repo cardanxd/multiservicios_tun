@@ -31,9 +31,9 @@ Future<Cliente> createCliente(
     int diasbloqueo,
     String descuento,
     DateTime birthday,
-    int sucursal,
-    int segmento,
-    int giro) async {
+    int sucursalId,
+    int segmentoId,
+    int giroId) async {
   final String url = "https://apiserviciostunv1.000webhostapp.com/api/clientes";
   final response = await http.post(Uri.parse(url), body: {
     "nombre": nombre,
@@ -58,9 +58,9 @@ Future<Cliente> createCliente(
     "diasbloqueo": diasbloqueo.toString(),
     "descuento": descuento,
     "birthday": birthday.toIso8601String(),
-    "sucursal": sucursal.toString(),
-    "segmento": segmento.toString(),
-    "giro": giro.toString(),
+    "sucursal_id": sucursalId.toString(),
+    "segmento_id": segmentoId.toString(),
+    "giro_id": giroId.toString(),
   });
   if (response.statusCode == 201) {
     final String responseString = response.body;
@@ -94,9 +94,9 @@ class _RclienteState extends State<Rcliente> {
   final _diasBloqueo = TextEditingController();
   final _descuento = TextEditingController();
   final _birthday = TextEditingController();
-  final _sucursal = TextEditingController();
-  final _segmento = TextEditingController();
-  final _giro = TextEditingController();
+  final _sucursalId = TextEditingController();
+  final _segmentoId = TextEditingController();
+  final _giroId = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +296,7 @@ class _RclienteState extends State<Rcliente> {
               ),
               TextField(
                 keyboardType: TextInputType.number,
-                controller: _sucursal,
+                controller: _sucursalId,
                 decoration: InputDecoration(
                   labelText: 'Sucursal',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
@@ -305,7 +305,7 @@ class _RclienteState extends State<Rcliente> {
               ),
               TextField(
                 keyboardType: TextInputType.number,
-                controller: _segmento,
+                controller: _segmentoId,
                 decoration: InputDecoration(
                   labelText: 'Segmento',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
@@ -314,7 +314,7 @@ class _RclienteState extends State<Rcliente> {
               ),
               TextField(
                 keyboardType: TextInputType.number,
-                controller: _giro,
+                controller: _giroId,
                 decoration: InputDecoration(
                   labelText: 'Giro comercial',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
@@ -423,9 +423,9 @@ class _RclienteState extends State<Rcliente> {
             final diasbloqueo = int.parse(_diasBloqueo.text);
             final descuento = _descuento.text;
             final birthday = DateTime.parse(_birthday.text);
-            final sucursal = int.parse(_sucursal.text);
-            final segmento = int.parse(_segmento.text);
-            final giro = int.parse(_giro.text);
+            final sucursalId = int.parse(_sucursalId.text);
+            final segmentoId = int.parse(_segmentoId.text);
+            final giroId = int.parse(_giroId.text);
 
             final Cliente cliente = await createCliente(
                 nombre,
@@ -450,9 +450,9 @@ class _RclienteState extends State<Rcliente> {
                 diasbloqueo,
                 descuento,
                 birthday,
-                sucursal,
-                segmento,
-                giro);
+                sucursalId,
+                segmentoId,
+                giroId);
             setState(() {
               _cliente = cliente;
             });

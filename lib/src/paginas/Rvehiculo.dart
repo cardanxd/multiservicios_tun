@@ -13,13 +13,13 @@ Future<Vehiculo> crearVehiculo(int cliente, String tipo, String marca,
   final String url =
       "https://apiserviciostunv1.000webhostapp.com/api/vehiculos";
   final response = await http.post(Uri.parse(url), body: {
-    "cliente": cliente.toString(),
+    "cliente_id": cliente.toString(),
     "tipo": tipo,
     "marca": marca,
     "modelo": modelo,
     "serie": serie,
     "economico": economico,
-    "placa": placa
+    "placa": placa,
   });
   if (response.statusCode == 201) {
     return vehiculoFromJson(response.body);

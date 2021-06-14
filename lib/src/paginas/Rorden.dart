@@ -9,9 +9,10 @@ class Rorden extends StatefulWidget {
 }
 
 Future<Orden> crearOrden(
+  DateTime fecha,
   String vendedor,
-  int cliente,
-  int vehiculo,
+  int clienteId,
+  int vehiculoId,
   String cilindros,
   String condicionventa,
   String urgenciainicial,
@@ -36,16 +37,16 @@ Future<Orden> crearOrden(
   String encendedor,
   String llanta,
   double km,
-  int combustible,
+  double combustible,
   String transmision,
   String vestiduras,
-  DateTime createdAt,
 ) async {
   final String url = "https://apiserviciostunv1.000webhostapp.com/api/ordenes";
   final response = await http.post(Uri.parse(url), body: {
+    "fecha": fecha.toIso8601String(),
     "vendedor": vendedor,
-    "cliente": cliente.toString(),
-    "vehiculo": vehiculo.toString(),
+    "cliente_id": clienteId.toString(),
+    "vehiculo_id": vehiculoId.toString(),
     "cilindros": cilindros,
     "condicionventa": condicionventa,
     "urgenciainicial": urgenciainicial,
@@ -73,7 +74,6 @@ Future<Orden> crearOrden(
     "combustible": combustible.toString(),
     "transmision": transmision,
     "vestiduras": vestiduras,
-    "created_at": createdAt.toIso8601String(),
   });
   if (response.statusCode == 201) {
     return ordenFromJson(response.body);
@@ -963,6 +963,7 @@ class _RordenState extends State<Rorden> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
+            final fecha = DateTime.now();
             final vendedor = _vendedor.text;
             final cliente = int.parse(_cliente.text);
             final vehiculo = int.parse(_vehiculo.text);
@@ -990,43 +991,43 @@ class _RordenState extends State<Rorden> {
             final encendedor1 = encendedor;
             final llanta1 = llanta;
             final km = double.parse(_km.text);
-            final combustible = int.parse(_combustible.text);
+            final combustible = double.parse(_combustible.text);
             final transmision = _transmision.text;
             final vestiduras = _vestiduras.text;
-            final createdAt = DateTime.now();
 
             final Orden orden = await crearOrden(
-                vendedor,
-                cliente,
-                vehiculo,
-                cilindros,
-                condicionventa,
-                urgenciainicial1,
-                atencion,
-                comentarios,
-                centrocosto,
-                placa1,
-                ceniceros1,
-                cristalesRotos1,
-                quemacocos1,
-                espejoIzq1,
-                espejoDer1,
-                tapon1,
-                antena1,
-                tapetes1,
-                varilla1,
-                radio1,
-                espejoInt1,
-                gato1,
-                extinguidor1,
-                emblemas1,
-                encendedor1,
-                llanta1,
-                km,
-                combustible,
-                transmision,
-                vestiduras,
-                createdAt);
+              fecha,
+              vendedor,
+              cliente,
+              vehiculo,
+              cilindros,
+              condicionventa,
+              urgenciainicial1,
+              atencion,
+              comentarios,
+              centrocosto,
+              placa1,
+              ceniceros1,
+              cristalesRotos1,
+              quemacocos1,
+              espejoIzq1,
+              espejoDer1,
+              tapon1,
+              antena1,
+              tapetes1,
+              varilla1,
+              radio1,
+              espejoInt1,
+              gato1,
+              extinguidor1,
+              emblemas1,
+              encendedor1,
+              llanta1,
+              km,
+              combustible,
+              transmision,
+              vestiduras,
+            );
             setState(() {
               _orden = orden;
             });
