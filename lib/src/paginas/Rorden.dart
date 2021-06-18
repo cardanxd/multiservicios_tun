@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:multiservicios_tun/models/Orden.dart';
 
 class Rorden extends StatefulWidget {
@@ -935,29 +934,6 @@ class _RordenState extends State<Rorden> {
               SizedBox(
                 height: 20.0,
               ),
-              _orden == null
-                  ? Container()
-                  : ElevatedButton(
-                      child: DefaultTextStyle(
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
-                          child: AnimatedTextKit(animatedTexts: [
-                            TypewriterAnimatedText('Aceptar y continuar')
-                          ], isRepeatingAnimation: true, totalRepeatCount: 2)),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.indigo,
-                        onPrimary: Colors.grey[900],
-                        shadowColor: Colors.black,
-                        elevation: 10,
-                        minimumSize: Size(150, 40),
-                        alignment: Alignment.center,
-                        shape: StadiumBorder(),
-                        side: BorderSide(color: Colors.indigo[600], width: 2),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
             ],
           ),
         ),
@@ -1031,6 +1007,11 @@ class _RordenState extends State<Rorden> {
             setState(() {
               _orden = orden;
             });
+            if (_orden == null) {
+              _showAlertError(context);
+            } else {
+              Navigator.pop(context);
+            }
           },
           tooltip: 'Registrar',
           backgroundColor: Colors.indigo,
@@ -1038,4 +1019,22 @@ class _RordenState extends State<Rorden> {
           icon: const Icon(Icons.thumb_up),
         ));
   }
+}
+
+void _showAlertError(BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => new AlertDialog(
+            title: Text('¡Problemas en el registro!'),
+            content: Text('Verifique que los campos estén llenos.'),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ));
 }

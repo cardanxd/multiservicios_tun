@@ -1,11 +1,39 @@
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:multiservicios_tun/models/Cliente.dart';
+
+class Sucursal {
+  final int id;
+  final String nombre;
+  Sucursal({
+    this.id,
+    this.nombre,
+  });
+}
 
 class Rcliente extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _RclienteState();
+}
+
+Future<List<Sucursal>> getRequest() async {
+  String urlGet = "https://apiserviciostunv1.000webhostapp.com/api/sucursales";
+  final response = await http.get(Uri.parse(urlGet));
+
+  var responseData = json.decode(response.body);
+
+  //Creating a list to store input data;
+  List<Sucursal> sucursales = [];
+  for (var singleUser in responseData["data"]) {
+    Sucursal sucursal =
+        Sucursal(id: singleUser["id"], nombre: singleUser["nombre"]);
+
+    //Adding user to the list.
+    sucursales.add(sucursal);
+  }
+  return sucursales;
 }
 
 Future<Cliente> createCliente(
@@ -373,29 +401,7 @@ class _RclienteState extends State<Rcliente> {
               SizedBox(
                 height: 16,
               ),
-              _cliente == null
-                  ? Container()
-                  : ElevatedButton(
-                      child: DefaultTextStyle(
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
-                          child: AnimatedTextKit(animatedTexts: [
-                            TypewriterAnimatedText('Aceptar y continuar')
-                          ], isRepeatingAnimation: true, totalRepeatCount: 2)),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.indigo,
-                        onPrimary: Colors.grey[900],
-                        shadowColor: Colors.black,
-                        elevation: 10,
-                        minimumSize: Size(150, 40),
-                        alignment: Alignment.center,
-                        shape: StadiumBorder(),
-                        side: BorderSide(color: Colors.indigo[600], width: 2),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
+              //_cliente == null ? Container() : _showAlert();
             ],
           ),
         ),
@@ -456,6 +462,11 @@ class _RclienteState extends State<Rcliente> {
             setState(() {
               _cliente = cliente;
             });
+            if (_cliente == null) {
+              _showAlertError(context);
+            } else {
+              Navigator.pop(context);
+            }
           },
           tooltip: 'Registrar',
           backgroundColor: Colors.indigo,
@@ -463,4 +474,22 @@ class _RclienteState extends State<Rcliente> {
           icon: const Icon(Icons.thumb_up),
         ));
   }
+}
+
+void _showAlertError(BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => new AlertDialog(
+            title: Text('¡Problemas en el registro!'),
+            content: Text('Verifique que los campos estén llenos.'),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ));
 }

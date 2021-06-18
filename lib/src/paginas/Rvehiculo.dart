@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:multiservicios_tun/models/Vehiculo.dart';
 
 class Rvehiculo extends StatefulWidget {
@@ -101,29 +100,6 @@ class _RvehiculoState extends State<Rvehiculo> {
               SizedBox(
                 height: 16,
               ),
-              _vehiculo == null
-                  ? Container()
-                  : ElevatedButton(
-                      child: DefaultTextStyle(
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
-                          child: AnimatedTextKit(animatedTexts: [
-                            TypewriterAnimatedText('Aceptar y continuar')
-                          ], isRepeatingAnimation: true, totalRepeatCount: 2)),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.indigo,
-                        onPrimary: Colors.grey[900],
-                        shadowColor: Colors.black,
-                        elevation: 10,
-                        minimumSize: Size(150, 40),
-                        alignment: Alignment.center,
-                        shape: StadiumBorder(),
-                        side: BorderSide(color: Colors.indigo[600], width: 2),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
             ],
           ),
         ),
@@ -142,6 +118,11 @@ class _RvehiculoState extends State<Rvehiculo> {
             setState(() {
               _vehiculo = vehiculo;
             });
+            if (_vehiculo == null) {
+              _showAlertError(context);
+            } else {
+              Navigator.pop(context);
+            }
           },
           tooltip: 'Registrar',
           backgroundColor: Colors.indigo,
@@ -149,4 +130,22 @@ class _RvehiculoState extends State<Rvehiculo> {
           icon: const Icon(Icons.thumb_up),
         ));
   }
+}
+
+void _showAlertError(BuildContext context) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => new AlertDialog(
+            title: Text('¡Problemas en el registro!'),
+            content: Text('Verifique que los campos estén llenos.'),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ));
 }
