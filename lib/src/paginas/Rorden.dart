@@ -144,7 +144,6 @@ class _RordenState extends State<Rorden> {
                   labelText: '$now',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               SizedBox(
                 height: 10.0,
@@ -163,7 +162,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Nombre del vendedor',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 10.0,
@@ -182,7 +180,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Nombre del cliente',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 10.0,
@@ -201,7 +198,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Vehiculo',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -210,7 +206,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Cilindros',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 10.0,
@@ -229,7 +224,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Condicion venta',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 10.0,
@@ -281,7 +275,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Atencion',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 10.0,
@@ -300,7 +293,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Comentarios',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 10.0,
@@ -319,7 +311,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Centro costo',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 16.0,
@@ -896,22 +887,20 @@ class _RordenState extends State<Rorden> {
                 ),
               ),
               TextField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 controller: _km,
                 decoration: InputDecoration(
                   labelText: 'Kilometraje',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               TextField(
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 controller: _combustible,
                 decoration: InputDecoration(
                   labelText: 'Nivel de combustible',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               TextField(
                 keyboardType: TextInputType.text,
@@ -920,7 +909,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Transmisión',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               TextField(
                 keyboardType: TextInputType.text,
@@ -929,7 +917,6 @@ class _RordenState extends State<Rorden> {
                   labelText: 'Vestiduras',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 20.0,
@@ -1027,7 +1014,8 @@ void _showAlertError(BuildContext context) {
       context: context,
       builder: (_) => new AlertDialog(
             title: Text('¡Problemas en el registro!'),
-            content: Text('Verifique que los campos estén llenos.'),
+            content:
+                Text('Verifique que los campos estén llenos o sean correctos.'),
             actions: [
               TextButton(
                 child: Text('Aceptar'),

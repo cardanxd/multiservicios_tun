@@ -138,7 +138,8 @@ void _showAlertError(BuildContext context) {
       context: context,
       builder: (_) => new AlertDialog(
             title: Text('¡Problemas en el registro!'),
-            content: Text('Verifique que los campos estén llenos.'),
+            content:
+                Text('Verifique que los campos estén llenos o sean correctos.'),
             actions: [
               TextButton(
                 child: Text('Aceptar'),

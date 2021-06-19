@@ -121,7 +121,9 @@ class _RclienteState extends State<Rcliente> {
   final _diasCredito = TextEditingController();
   final _diasBloqueo = TextEditingController();
   final _descuento = TextEditingController();
-  final _birthday = TextEditingController();
+  final _day = TextEditingController();
+  final _month = TextEditingController();
+  final _year = TextEditingController();
   final _sucursalId = TextEditingController();
   final _segmentoId = TextEditingController();
   final _giroId = TextEditingController();
@@ -150,7 +152,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Nombre completo',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _razon,
@@ -158,7 +159,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Razón social',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _rfc,
@@ -166,7 +166,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'RFC',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
@@ -175,15 +174,40 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Email',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
+              ),
+              SizedBox(
+                height: 16.0,
+              ),
+              Text(
+                "Fecha de cumpleaño",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
               ),
               TextField(
-                controller: _birthday,
+                keyboardType: TextInputType.number,
+                controller: _year,
                 decoration: InputDecoration(
-                  labelText: 'Cumpleaños',
+                  labelText: 'Año Ej: 2021',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _month,
+                decoration: InputDecoration(
+                  labelText: 'Mes Ej: 09',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
+              ),
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _day,
+                decoration: InputDecoration(
+                  labelText: 'Día Ej: 05',
+                  prefixIcon: Icon(Icons.arrow_right_outlined),
+                ),
               ),
               SizedBox(
                 height: 16.0,
@@ -201,7 +225,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Calle',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _exterior,
@@ -209,7 +232,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'No. Exterior',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _interior,
@@ -217,7 +239,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'No. Interior',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _ecalle,
@@ -225,7 +246,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Entre calle',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _ycalle,
@@ -233,7 +253,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Y la calle',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _colonia,
@@ -241,7 +260,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Colonia',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _postal,
@@ -249,7 +267,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'C. Postal',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _ciudad,
@@ -257,7 +274,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Ciudad',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _estado,
@@ -265,7 +281,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Estado',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 controller: _pais,
@@ -273,7 +288,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'País',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               SizedBox(
                 height: 16.0,
@@ -292,7 +306,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Particular',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -301,7 +314,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Oficina',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -310,7 +322,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Móvil',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myControllernum2,
               ),
               SizedBox(
                 height: 16.0,
@@ -329,7 +340,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Sucursal',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -338,7 +348,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Segmento',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -347,7 +356,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Giro comercial',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               SizedBox(
                 height: 16.0,
@@ -366,7 +374,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Límite de crédito',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -375,7 +382,6 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Días de crédito',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               TextField(
                 keyboardType: TextInputType.number,
@@ -384,24 +390,20 @@ class _RclienteState extends State<Rcliente> {
                   labelText: 'Días bloqueo',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               SizedBox(
                 height: 16.0,
               ),
               TextField(
-                keyboardType: TextInputType.number,
                 controller: _descuento,
                 decoration: InputDecoration(
                   labelText: 'Descuento',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
-                //controller: myController,
               ),
               SizedBox(
                 height: 16,
               ),
-              //_cliente == null ? Container() : _showAlert();
             ],
           ),
         ),
@@ -428,7 +430,14 @@ class _RclienteState extends State<Rcliente> {
             final diascredito = int.parse(_diasCredito.text);
             final diasbloqueo = int.parse(_diasBloqueo.text);
             final descuento = _descuento.text;
-            final birthday = DateTime.parse(_birthday.text);
+            final date = _year.text +
+                "-" +
+                _month.text +
+                "-" +
+                _day.text +
+                " " +
+                "00:00:00";
+            final birthday = DateTime.parse(date);
             final sucursalId = int.parse(_sucursalId.text);
             final segmentoId = int.parse(_segmentoId.text);
             final giroId = int.parse(_giroId.text);
@@ -482,7 +491,8 @@ void _showAlertError(BuildContext context) {
       context: context,
       builder: (_) => new AlertDialog(
             title: Text('¡Problemas en el registro!'),
-            content: Text('Verifique que los campos estén llenos.'),
+            content:
+                Text('Verifique que los campos estén llenos o sean correctos.'),
             actions: [
               TextButton(
                 child: Text('Aceptar'),
