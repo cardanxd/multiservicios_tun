@@ -15,6 +15,9 @@ dependencies:
   http: ^0.13.3
   animated_text_kit: ^4.2.1
   intl: ^0.17.0
+  pdf: ^3.4.2
+  path_provider: ^2.0.2
+  flutter_full_pdf_viewer: ^1.0.6
 
 dev_dependencies:
   flutter_test:
