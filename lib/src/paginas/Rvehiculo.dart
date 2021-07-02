@@ -53,7 +53,6 @@ class _RvehiculoState extends State<Rvehiculo> {
 
   Vehiculo _vehiculo;
   final _cliente = TextEditingController();
-  final _tipo = TextEditingController();
   TextEditingController _tipov;
   final _marca = TextEditingController();
   final _modelo = TextEditingController();
@@ -82,24 +81,6 @@ class _RvehiculoState extends State<Rvehiculo> {
                 padding: const EdgeInsets.all(16.0),
                 child: ListView(
                   children: <Widget>[
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _cliente,
-                      decoration: InputDecoration(
-                        labelText: 'Cliente',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
-                      ),
-                    ),
-                    TextField(
-                      controller: _tipo,
-                      decoration: InputDecoration(
-                        labelText: 'Tipo de Equipo',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
                     Autocomplete(
                       optionsBuilder: (TextEditingValue textEditingValue) {
                         if (textEditingValue.text.isEmpty) {
@@ -166,6 +147,14 @@ class _RvehiculoState extends State<Rvehiculo> {
                           ),
                         );
                       },
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: _cliente,
+                      decoration: InputDecoration(
+                        labelText: 'Cliente',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
                     ),
                     TextField(
                       controller: _marca,
