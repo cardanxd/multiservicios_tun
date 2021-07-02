@@ -84,6 +84,7 @@ Future<Orden> crearOrden(
 class _RordenState extends State<Rorden> {
   DateTime now = new DateTime.now();
   Orden _orden;
+  String _condicionv = 'CONTADO';
   String urgenciainicial = 'baja';
   String placas = 'false';
   String ceniceros = 'false';
@@ -221,7 +222,8 @@ class _RordenState extends State<Rorden> {
                 keyboardType: TextInputType.text,
                 controller: _condicionventa,
                 decoration: InputDecoration(
-                  labelText: 'Condicion venta',
+                  enabled: false,
+                  labelText: 'CONTADO',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
               ),
@@ -931,7 +933,8 @@ class _RordenState extends State<Rorden> {
             final cliente = int.parse(_cliente.text);
             final vehiculo = int.parse(_vehiculo.text);
             final cilindros = _cilindros.text;
-            final condicionventa = _condicionventa.text;
+            //final condicionventa = _condicionventa.text;
+            final condicionventa = _condicionv;
             final urgenciainicial1 = urgenciainicial;
             final atencion = _atencion.text;
             final comentarios = _comentarios.text;
