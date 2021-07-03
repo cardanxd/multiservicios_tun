@@ -34,7 +34,6 @@ Future<Vehiculo> crearVehiculo(int cliente, String tipo, String marca,
 class _RvehiculoState extends State<Rvehiculo> {
   bool isLoading = false;
   List<String> autoCompleteData;
-
   Future<List<Segmento>> getRequest() async {
     String url = "https://apiserviciostunv1.000webhostapp.com/api/segmentos";
     final response = await http.get(Uri.parse(url));
@@ -43,8 +42,7 @@ class _RvehiculoState extends State<Rvehiculo> {
 
     List<Segmento> segmentos = [];
     for (var singleSegmento in responseData["data"]) {
-      Segmento segmento =
-          Segmento(id: singleSegmento["id"], nombre: singleSegmento["nombre"]);
+      Segmento segmento = Segmento(nombre: singleSegmento["nombre"]);
       segmentos.add(segmento);
     }
     return segmentos;
