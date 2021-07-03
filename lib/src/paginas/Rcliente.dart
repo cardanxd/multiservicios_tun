@@ -131,10 +131,8 @@ class _RclienteState extends State<Rcliente> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.indigo,
-            title: Text('Multiservicios Tun')),
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(centerTitle: true, title: Text('Registro de cliente')),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(

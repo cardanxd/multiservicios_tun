@@ -122,10 +122,8 @@ class _RordenState extends State<Rorden> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.indigo,
-            title: Text('Multiservicios Tun')),
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(centerTitle: true, title: Text('Registro de orden')),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: ListView(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiservicios_tun/models/Vehiculo.dart';
+import 'package:multiservicios_tun/models/Segmento.dart';
 
 class Rvehiculo extends StatefulWidget {
   @override
@@ -33,6 +34,21 @@ Future<Vehiculo> crearVehiculo(int cliente, String tipo, String marca,
 class _RvehiculoState extends State<Rvehiculo> {
   bool isLoading = false;
   List<String> autoCompleteData;
+
+  Future<List<Segmento>> getRequest() async {
+    String url = "https://apiserviciostunv1.000webhostapp.com/api/segmentos";
+    final response = await http.get(Uri.parse(url));
+
+    var responseData = json.decode(response.body);
+
+    List<Segmento> segmentos = [];
+    for (var singleSegmento in responseData["data"]) {
+      Segmento segmento =
+          Segmento(id: singleSegmento["id"], nombre: singleSegmento["nombre"]);
+      segmentos.add(segmento);
+    }
+    return segmentos;
+  }
 
   Future fetchAutoCompleteData() async {
     setState(() {
@@ -64,15 +80,14 @@ class _RvehiculoState extends State<Rvehiculo> {
   void initState() {
     super.initState();
     fetchAutoCompleteData();
+    getRequest();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.indigo,
-            title: Text('Multiservicios Tun')),
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(centerTitle: true, title: Text('Registro de vehiculo')),
         body: isLoading
             ? Center(
                 child: CircularProgressIndicator(),
