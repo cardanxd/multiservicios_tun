@@ -177,7 +177,7 @@ class _RclienteState extends State<Rcliente> {
                 height: 16.0,
               ),
               Text(
-                "Fecha de cumpleaño",
+                "Fecha de cumpleaños",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -335,7 +335,8 @@ class _RclienteState extends State<Rcliente> {
                 keyboardType: TextInputType.number,
                 controller: _sucursalId,
                 decoration: InputDecoration(
-                  labelText: 'Sucursal',
+                  enabled: false,
+                  labelText: 'Sucursal San Damian',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
               ),
@@ -343,7 +344,8 @@ class _RclienteState extends State<Rcliente> {
                 keyboardType: TextInputType.number,
                 controller: _segmentoId,
                 decoration: InputDecoration(
-                  labelText: 'Segmento',
+                  enabled: false,
+                  labelText: 'Sin segmento',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
               ),
@@ -351,7 +353,8 @@ class _RclienteState extends State<Rcliente> {
                 keyboardType: TextInputType.number,
                 controller: _giroId,
                 decoration: InputDecoration(
-                  labelText: 'Giro comercial',
+                  enabled: false,
+                  labelText: 'Sin giro comercial',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
               ),
@@ -395,7 +398,8 @@ class _RclienteState extends State<Rcliente> {
               TextField(
                 controller: _descuento,
                 decoration: InputDecoration(
-                  labelText: 'Descuento',
+                  enabled: false,
+                  labelText: 'Sin descuento',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
               ),
@@ -427,7 +431,7 @@ class _RclienteState extends State<Rcliente> {
             final limitecredito = double.parse(_limiteCredito.text);
             final diascredito = int.parse(_diasCredito.text);
             final diasbloqueo = int.parse(_diasBloqueo.text);
-            final descuento = _descuento.text;
+            final descuento = "Sin descuento";
             final date = _year.text +
                 "-" +
                 _month.text +
@@ -436,9 +440,9 @@ class _RclienteState extends State<Rcliente> {
                 " " +
                 "00:00:00";
             final birthday = DateTime.parse(date);
-            final sucursalId = int.parse(_sucursalId.text);
-            final segmentoId = int.parse(_segmentoId.text);
-            final giroId = int.parse(_giroId.text);
+            final sucursalId = 1;
+            final segmentoId = 1;
+            final giroId = 1;
 
             final Cliente cliente = await createCliente(
                 nombre,

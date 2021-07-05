@@ -221,7 +221,7 @@ class _RordenState extends State<Rorden> {
                 controller: _condicionventa,
                 decoration: InputDecoration(
                   enabled: false,
-                  labelText: 'CONTADO',
+                  labelText: 'Contado',
                   prefixIcon: Icon(Icons.arrow_right_outlined),
                 ),
               ),
@@ -240,6 +240,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -337,6 +338,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -366,6 +368,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -395,6 +398,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -424,6 +428,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -453,6 +458,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -482,6 +488,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -511,6 +518,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -540,6 +548,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -569,6 +578,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -598,6 +608,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -627,6 +638,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -656,6 +668,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -685,6 +698,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -714,6 +728,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -743,6 +758,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -772,6 +788,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -801,6 +818,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -830,6 +848,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
@@ -859,6 +878,7 @@ class _RordenState extends State<Rorden> {
                 icon: const Icon(Icons.arrow_drop_down),
                 iconSize: 24,
                 elevation: 16,
+                isExpanded: true,
                 underline: Container(
                   height: 2,
                   color: Colors.grey,
