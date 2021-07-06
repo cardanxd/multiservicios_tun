@@ -1,23 +1,24 @@
 import 'dart:convert';
+import 'package:multiservicios_tun/models/ClienteGet.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiservicios_tun/models/Vehiculo.dart';
-import 'package:multiservicios_tun/models/Segmento.dart';
+import 'package:multiservicios_tun/models/Equipo.dart';
 
 class Rvehiculo extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _RvehiculoState();
 }
 
-Future<Vehiculo> crearVehiculo(int cliente, String tipo, String marca,
+Future<Vehiculo> crearVehiculo(int clienteId, int equipoId, String marca,
     String modelo, String serie, String economico, String placa) async {
-  final String url =
-      "https://apiserviciostunv1.000webhostapp.com/api/vehiculos";
-  final response = await http.post(Uri.parse(url), body: {
-    "cliente_id": cliente.toString(),
-    "tipo": tipo,
+  final Uri url =
+      Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/vehiculos");
+  final response = await http.post(url, body: {
+    "cliente_id": clienteId.toString(),
+    "equipo_id": equipoId.toString(),
     "marca": marca,
     "modelo": modelo,
     "serie": serie,
@@ -34,21 +35,55 @@ Future<Vehiculo> crearVehiculo(int cliente, String tipo, String marca,
 class _RvehiculoState extends State<Rvehiculo> {
   bool isLoading = false;
   List<String> autoCompleteData;
-  Future<List<Segmento>> getRequest() async {
-    String url = "https://apiserviciostunv1.000webhostapp.com/api/segmentos";
-    final response = await http.get(Uri.parse(url));
+  List<Equipo> equipos = [];
+  Future<bool> getRequest() async {
+    final Uri url =
+        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/equipos");
+    final response = await http.get(url);
 
-    var responseData = json.decode(response.body);
-
-    List<Segmento> segmentos = [];
-    for (var singleSegmento in responseData["data"]) {
-      Segmento segmento = Segmento(nombre: singleSegmento["nombre"]);
-      segmentos.add(segmento);
+    if (response.statusCode == 200) {
+      final result = equipoDataFromJson(response.body);
+      equipos = result.data;
+      return true;
+    } else {
+      return false;
     }
-    return segmentos;
+  }
+
+  List<String> autoCompleteClient;
+  List<Cliente> clientes = [];
+  Future<bool> getRequestClient() async {
+    final Uri url =
+        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/clientes");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final result = clienteGetDataFromJson(response.body);
+      clientes = result.data;
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future fetchAutoCompleteData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final String stringData = await rootBundle.loadString("assets/data.json");
+
+    final List<dynamic> json = jsonDecode(stringData);
+
+    final List<String> jsonStringData = json.cast<String>();
+
+    setState(() {
+      isLoading = false;
+      autoCompleteClient = jsonStringData;
+    });
+  }
+
+  Future fetchAutoCompleteClient() async {
     setState(() {
       isLoading = true;
     });
@@ -66,7 +101,7 @@ class _RvehiculoState extends State<Rvehiculo> {
   }
 
   Vehiculo _vehiculo;
-  final _cliente = TextEditingController();
+  TextEditingController _cliente;
   TextEditingController _tipov;
   final _marca = TextEditingController();
   final _modelo = TextEditingController();
@@ -78,7 +113,9 @@ class _RvehiculoState extends State<Rvehiculo> {
   void initState() {
     super.initState();
     fetchAutoCompleteData();
+    fetchAutoCompleteClient();
     getRequest();
+    getRequestClient();
   }
 
   @override
@@ -111,23 +148,23 @@ class _RvehiculoState extends State<Rvehiculo> {
                           child: ListView.separated(
                             padding: EdgeInsets.zero,
                             itemBuilder: (context, index) {
-                              final option = options.elementAt(index);
+                              final equipo = equipos[index];
                               return ListTile(
                                 //title: Text(option.toString()),
                                 title: SubstringHighlight(
-                                  text: option.toString(),
+                                  text: equipo.descripcion,
                                   term: _tipov.text,
                                   textStyleHighlight:
                                       TextStyle(fontWeight: FontWeight.w700),
                                 ),
-                                subtitle: Text("Esto es un subtitulo"),
+                                //subtitle: Text("Esto es un subtitulo"),
                                 onTap: () {
-                                  onSelected(option.toString());
+                                  onSelected(equipo.id.toString());
                                 },
                               );
                             },
                             separatorBuilder: (context, index) => Divider(),
-                            itemCount: options.length,
+                            itemCount: equipos.length,
                           ),
                         );
                       },
@@ -161,13 +198,80 @@ class _RvehiculoState extends State<Rvehiculo> {
                         );
                       },
                     ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _cliente,
-                      decoration: InputDecoration(
-                        labelText: 'Cliente',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
-                      ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteClient.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final cliente = clientes[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: cliente.nombre,
+                                  term: _tipov.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: SubstringHighlight(
+                                  text: cliente.email,
+                                  term: _tipov.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(cliente.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: clientes.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._cliente = controller;
+
+                        return TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            hintText: "Seleccione el cliente",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
                     ),
                     TextField(
                       controller: _marca,
@@ -213,8 +317,7 @@ class _RvehiculoState extends State<Rvehiculo> {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
             final cliente = int.parse(_cliente.text);
-            final tipov = _tipov.text;
-            //final tipo = _tipo.text;
+            final tipov = int.parse(_tipov.text);
             final marca = _marca.text;
             final modelo = _modelo.text;
             final serie = _serie.text;

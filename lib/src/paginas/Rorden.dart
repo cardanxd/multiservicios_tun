@@ -1,6 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:multiservicios_tun/models/CentroCosto.dart';
+import 'package:multiservicios_tun/models/Condicion.dart';
+import 'package:substring_highlight/substring_highlight.dart';
+import 'package:multiservicios_tun/models/ClienteGet.dart';
 import 'package:multiservicios_tun/models/Orden.dart';
+import 'package:multiservicios_tun/models/VehiculoGet.dart';
 
 class Rorden extends StatefulWidget {
   @override
@@ -13,11 +21,11 @@ Future<Orden> crearOrden(
   int clienteId,
   int vehiculoId,
   String cilindros,
-  String condicionventa,
+  int condicionventaId,
   String urgenciainicial,
   String atencion,
   String comentarios,
-  String centrocosto,
+  int centrocostoId,
   String placa,
   String ceniceros,
   String cristalesRotos,
@@ -47,11 +55,11 @@ Future<Orden> crearOrden(
     "cliente_id": clienteId.toString(),
     "vehiculo_id": vehiculoId.toString(),
     "cilindros": cilindros,
-    "condicionventa": condicionventa,
+    "condicionventa_id": condicionventaId.toString(),
     "urgenciainicial": urgenciainicial,
     "atencion": atencion,
     "comentarios": comentarios,
-    "centrocosto": centrocosto,
+    "centrocosto_id": centrocostoId.toString(),
     "placa": placa,
     "ceniceros": ceniceros,
     "cristales_rotos": cristalesRotos,
@@ -82,10 +90,142 @@ Future<Orden> crearOrden(
 }
 
 class _RordenState extends State<Rorden> {
+  bool isLoading = false;
+  List<String> autoCompleteClient;
+  List<Cliente> clientes = [];
+  Future<bool> getRequestClient() async {
+    final Uri url =
+        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/clientes");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final result = clienteGetDataFromJson(response.body);
+      clientes = result.data;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  List<String> autoCompleteVehiculo;
+  List<Vehiculo> vehiculos = [];
+  Future<bool> getRequestVehiculo() async {
+    final Uri url =
+        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/vehiculos");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final result = vehiculoDataGetFromJson(response.body);
+      vehiculos = result.data;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  List<String> autoCompleteCosto;
+  List<CentroCosto> costos = [];
+  Future<bool> getRequestCosto() async {
+    final Uri url = Uri.parse(
+        "https://apiserviciostunv1.000webhostapp.com/api/centrocostos");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final result = centrocostoFromJson(response.body);
+      costos = result.data;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  List<String> autoCompleteCondicion;
+  List<Condicion> condiciones = [];
+  Future<bool> getRequestCondicion() async {
+    final Uri url = Uri.parse(
+        "https://apiserviciostunv1.000webhostapp.com/api/condiciones");
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      final result = condicionDataFromJson(response.body);
+      condiciones = result.data;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future fetchAutoCompleteClient() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final String stringData = await rootBundle.loadString("assets/data.json");
+
+    final List<dynamic> json = jsonDecode(stringData);
+
+    final List<String> jsonStringData = json.cast<String>();
+
+    setState(() {
+      isLoading = false;
+      autoCompleteClient = jsonStringData;
+    });
+  }
+
+  Future fetchAutoCompleteVehiculo() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final String stringData = await rootBundle.loadString("assets/data.json");
+
+    final List<dynamic> json = jsonDecode(stringData);
+
+    final List<String> jsonStringData = json.cast<String>();
+
+    setState(() {
+      isLoading = false;
+      autoCompleteVehiculo = jsonStringData;
+    });
+  }
+
+  Future fetchAutoCompleteCosto() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final String stringData = await rootBundle.loadString("assets/data.json");
+
+    final List<dynamic> json = jsonDecode(stringData);
+
+    final List<String> jsonStringData = json.cast<String>();
+
+    setState(() {
+      isLoading = false;
+      autoCompleteCosto = jsonStringData;
+    });
+  }
+
+  Future fetchAutoCompleteCondiciones() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final String stringData = await rootBundle.loadString("assets/data.json");
+
+    final List<dynamic> json = jsonDecode(stringData);
+
+    final List<String> jsonStringData = json.cast<String>();
+
+    setState(() {
+      isLoading = false;
+      autoCompleteCondicion = jsonStringData;
+    });
+  }
+
   DateTime now = new DateTime.now();
   Orden _orden;
-  String _condicionv = 'CONTADO';
-  String urgenciainicial = 'baja';
+  String urgenciainicial = 'Baja';
   String placas = 'false';
   String ceniceros = 'false';
   String cristalesrotos = 'false';
@@ -108,842 +248,1072 @@ class _RordenState extends State<Rorden> {
 
   final _fecha = TextEditingController();
   final _vendedor = TextEditingController();
-  final _cliente = TextEditingController();
-  final _vehiculo = TextEditingController();
+  TextEditingController _cliente;
+  TextEditingController _vehiculo;
   final _cilindros = TextEditingController();
-  final _condicionventa = TextEditingController();
+  TextEditingController _condicionventa;
   final _atencion = TextEditingController();
   final _comentarios = TextEditingController();
-  final _centrocosto = TextEditingController();
+  TextEditingController _centrocosto;
   final _km = TextEditingController();
   final _combustible = TextEditingController();
   final _transmision = TextEditingController();
   final _vestiduras = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAutoCompleteClient();
+    fetchAutoCompleteVehiculo();
+    fetchAutoCompleteCosto();
+    fetchAutoCompleteCondiciones();
+    getRequestClient();
+    getRequestVehiculo();
+    getRequestCosto();
+    getRequestCondicion();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(centerTitle: true, title: Text('Registro de orden')),
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ListView(
-            children: <Widget>[
-              Text(
-                "Fecha:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ListView(
+                  children: <Widget>[
+                    Text(
+                      "Fecha:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _fecha,
+                      decoration: InputDecoration(
+                        enabled: false,
+                        labelText: '$now',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      "Vendedor:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _vendedor,
+                      decoration: InputDecoration(
+                        labelText: 'Nombre del vendedor',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteClient.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final cliente = clientes[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: cliente.nombre,
+                                  term: _cliente.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                //subtitle: Text("Esto es un subtitulo"),
+                                onTap: () {
+                                  onSelected(cliente.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: clientes.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._cliente = controller;
+
+                        return TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            hintText: "Seleccione el cliente",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteVehiculo.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final vehiculo = vehiculos[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: vehiculo.marca,
+                                  term: _vehiculo.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: SubstringHighlight(
+                                  text: "Cliente: " +
+                                      vehiculo.clienteId.toString(),
+                                  term: _vehiculo.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(vehiculo.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: vehiculos.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._vehiculo = controller;
+
+                        return TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            hintText: "Seleccione el vehiculo",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: _cilindros,
+                      decoration: InputDecoration(
+                        labelText: 'Cilindros',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteCondicion.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final condicion = condiciones[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: condicion.descripcion,
+                                  term: _condicionventa.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                //subtitle: Text("Esto es un subtitulo"),
+                                onTap: () {
+                                  onSelected(condicion.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: condiciones.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._condicionventa = controller;
+
+                        return TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            hintText: "Seleccione la condicion de venta",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    Text(
+                      "Urgencia Inicial:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: urgenciainicial,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          urgenciainicial = newValue;
+                        });
+                      },
+                      items: <String>['Baja', 'Media', 'Alta']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    //Nombre del chofer
+                    Text(
+                      "Atencion:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _atencion,
+                      decoration: InputDecoration(
+                        labelText: 'Atencion',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      "Comentarios:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _comentarios,
+                      decoration: InputDecoration(
+                        labelText: 'Comentarios',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteCosto.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final costo = costos[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: costo.descripcion,
+                                  term: _centrocosto.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(costo.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: costos.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._centrocosto = controller;
+
+                        return TextField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            hintText: "Seleccione el centro costo",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    Text(
+                      "Inventario del vehiculo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      "Placas",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: placas,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          placas = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Ceniceros",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: ceniceros,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          ceniceros = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Cristales rotos",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: cristalesrotos,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          cristalesrotos = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Quemacocos",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: quemacocos,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          quemacocos = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Espejo izquierdo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: espejoizq,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          espejoizq = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Espejo derecho",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: espejoder,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          espejoder = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Espejo interior",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: espejosint,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          espejosint = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Tapon",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: tapon,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          tapon = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Antena",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: antena,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          antena = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Tapetes",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: tapetes,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          tapetes = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Varilla",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: varilla,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          varilla = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Reloj",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: reloj,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          reloj = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Manija",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: manija,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          manija = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Radio",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: radio,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          radio = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Gato",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: gato,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          gato = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Extinguidor",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: extinguidor,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          extinguidor = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Emblemas",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: emblemas,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          emblemas = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Encendedor",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: encendedor,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          encendedor = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    Text(
+                      "Llanta",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: llanta,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          llanta = newValue;
+                        });
+                      },
+                      items: <String>['false', 'true']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      "Estado del vehiculo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: _km,
+                      decoration: InputDecoration(
+                        labelText: 'Kilometraje',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      controller: _combustible,
+                      decoration: InputDecoration(
+                        labelText: 'Nivel de combustible',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _transmision,
+                      decoration: InputDecoration(
+                        labelText: 'Transmisión',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.text,
+                      controller: _vestiduras,
+                      decoration: InputDecoration(
+                        labelText: 'Vestiduras',
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                  ],
                 ),
               ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _fecha,
-                decoration: InputDecoration(
-                  enabled: false,
-                  labelText: '$now',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Vendedor:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _vendedor,
-                decoration: InputDecoration(
-                  labelText: 'Nombre del vendedor',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Cliente:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _cliente,
-                decoration: InputDecoration(
-                  labelText: 'Nombre del cliente',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Info. Vehiculo:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _vehiculo,
-                decoration: InputDecoration(
-                  labelText: 'Vehiculo',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _cilindros,
-                decoration: InputDecoration(
-                  labelText: 'Cilindros',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Condicion Venta:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _condicionventa,
-                decoration: InputDecoration(
-                  enabled: false,
-                  labelText: 'Contado',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Urgencia Inicial:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: urgenciainicial,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    urgenciainicial = newValue;
-                  });
-                },
-                items: <String>['baja', 'media', 'alta']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              //Nombre del chofer
-              Text(
-                "Atencion:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _atencion,
-                decoration: InputDecoration(
-                  labelText: 'Atencion',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Comentarios:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _comentarios,
-                decoration: InputDecoration(
-                  labelText: 'Comentarios',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Centro Costo:",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _centrocosto,
-                decoration: InputDecoration(
-                  labelText: 'Centro costo',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 16.0,
-              ),
-              Text(
-                "Inventario del vehiculo",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Placas",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: placas,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    placas = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Ceniceros",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: ceniceros,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    ceniceros = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Cristales rotos",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: cristalesrotos,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    cristalesrotos = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Quemacocos",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: quemacocos,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    quemacocos = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Espejo izquierdo",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: espejoizq,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    espejoizq = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Espejo derecho",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: espejoder,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    espejoder = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Espejo interior",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: espejosint,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    espejosint = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Tapon",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: tapon,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    tapon = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Antena",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: antena,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    antena = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Tapetes",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: tapetes,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    tapetes = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Varilla",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: varilla,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    varilla = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Reloj",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: reloj,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    reloj = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Manija",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: manija,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    manija = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Radio",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: radio,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    radio = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Gato",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: gato,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    gato = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Extinguidor",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: extinguidor,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    extinguidor = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Emblemas",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: emblemas,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    emblemas = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Encendedor",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: encendedor,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    encendedor = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              Text(
-                "Llanta",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              DropdownButton<String>(
-                value: llanta,
-                icon: const Icon(Icons.arrow_drop_down),
-                iconSize: 24,
-                elevation: 16,
-                isExpanded: true,
-                underline: Container(
-                  height: 2,
-                  color: Colors.grey,
-                ),
-                onChanged: (String newValue) {
-                  setState(() {
-                    llanta = newValue;
-                  });
-                },
-                items: <String>['false', 'true']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                "Estado del vehiculo",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _km,
-                decoration: InputDecoration(
-                  labelText: 'Kilometraje',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                controller: _combustible,
-                decoration: InputDecoration(
-                  labelText: 'Nivel de combustible',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _transmision,
-                decoration: InputDecoration(
-                  labelText: 'Transmisión',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              TextField(
-                keyboardType: TextInputType.text,
-                controller: _vestiduras,
-                decoration: InputDecoration(
-                  labelText: 'Vestiduras',
-                  prefixIcon: Icon(Icons.arrow_right_outlined),
-                ),
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-            ],
-          ),
-        ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
             final fecha = DateTime.now();
@@ -951,12 +1321,11 @@ class _RordenState extends State<Rorden> {
             final cliente = int.parse(_cliente.text);
             final vehiculo = int.parse(_vehiculo.text);
             final cilindros = _cilindros.text;
-            //final condicionventa = _condicionventa.text;
-            final condicionventa = _condicionv;
+            final condicionventa = int.parse(_condicionventa.text);
             final urgenciainicial1 = urgenciainicial;
             final atencion = _atencion.text;
             final comentarios = _comentarios.text;
-            final centrocosto = _centrocosto.text;
+            final centrocosto = int.parse(_centrocosto.text);
             final placa1 = placas;
             final ceniceros1 = ceniceros;
             final cristalesRotos1 = cristalesrotos;

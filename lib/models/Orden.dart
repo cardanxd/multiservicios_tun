@@ -10,16 +10,17 @@ String ordenToJson(Orden data) => json.encode(data.toJson());
 
 class Orden {
   Orden({
+    this.id,
     this.fecha,
     this.vendedor,
     this.clienteId,
     this.vehiculoId,
     this.cilindros,
-    this.condicionventa,
+    this.condicionventaId,
     this.urgenciainicial,
     this.atencion,
     this.comentarios,
-    this.centrocosto,
+    this.centrocostoId,
     this.placa,
     this.ceniceros,
     this.cristalesRotos,
@@ -43,16 +44,17 @@ class Orden {
     this.vestiduras,
   });
 
+  int id;
   DateTime fecha;
   String vendedor;
   int clienteId;
   int vehiculoId;
   String cilindros;
-  String condicionventa;
+  int condicionventaId;
   String urgenciainicial;
   String atencion;
   String comentarios;
-  String centrocosto;
+  int centrocostoId;
   String placa;
   String ceniceros;
   String cristalesRotos;
@@ -76,16 +78,17 @@ class Orden {
   String vestiduras;
 
   factory Orden.fromJson(Map<String, dynamic> json) => Orden(
+        id: json["id"],
         fecha: json["fecha"] as DateTime,
         vendedor: json["vendedor"] as String,
         clienteId: json["cliente_id"] as int,
         vehiculoId: json["vehiculo_id"] as int,
         cilindros: json["cilindros"] as String,
-        condicionventa: json["condicionventa"] as String,
+        condicionventaId: json["condicionventa_id"] as int,
         urgenciainicial: json["urgenciainicial"] as String,
         atencion: json["atencion"] as String,
         comentarios: json["comentarios"] as String,
-        centrocosto: json["centrocosto"] as String,
+        centrocostoId: json["centrocosto_id"] as int,
         placa: json["placa"] as String,
         ceniceros: json["ceniceros"] as String,
         cristalesRotos: json["cristales_rotos"] as String,
@@ -110,16 +113,17 @@ class Orden {
       );
 
   Map<String, dynamic> toJson() => {
-        "fecha": fecha,
+        "id": id,
+        "fecha": fecha.toIso8601String(),
         "vendedor": vendedor,
         "cliente_id": clienteId,
         "vehiculo_id": vehiculoId,
         "cilindros": cilindros,
-        "condicionventa": condicionventa,
+        "condicionventa_id": condicionventaId,
         "urgenciainicial": urgenciainicial,
         "atencion": atencion,
         "comentarios": comentarios,
-        "centrocosto": centrocosto,
+        "centrocosto_id": centrocostoId,
         "placa": placa,
         "ceniceros": ceniceros,
         "cristales_rotos": cristalesRotos,

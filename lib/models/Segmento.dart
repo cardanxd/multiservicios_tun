@@ -1,25 +1,51 @@
 // To parse this JSON data, do
 //
-//     final segmento = segmentoFromJson(jsonString);
+//     final segmentoData = segmentoDataFromJson(jsonString);
 
 import 'dart:convert';
 
-Segmento segmentoFromJson(String str) => Segmento.fromJson(json.decode(str));
+SegmentoData segmentoDataFromJson(String str) =>
+    SegmentoData.fromJson(json.decode(str));
 
-String segmentoToJson(Segmento data) => json.encode(data.toJson());
+String segmentoDataToJson(SegmentoData data) => json.encode(data.toJson());
 
-class Segmento {
-  Segmento({
-    this.nombre,
+class SegmentoData {
+  SegmentoData({
+    this.data,
   });
 
-  String nombre;
+  List<Segmento> data;
 
-  factory Segmento.fromJson(Map<String, dynamic> json) => Segmento(
-        nombre: json["nombre"],
+  factory SegmentoData.fromJson(Map<String, dynamic> json) => SegmentoData(
+        data:
+            List<Segmento>.from(json["data"].map((x) => Segmento.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "nombre": nombre,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
+}
+
+class Segmento {
+  Segmento({
+    this.id,
+    this.descripcion,
+    this.estado,
+  });
+
+  int id;
+  String descripcion;
+  String estado;
+
+  factory Segmento.fromJson(Map<String, dynamic> json) => Segmento(
+        id: json["id"],
+        descripcion: json["descripcion"],
+        estado: json["estado"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "descripcion": descripcion,
+        "estado": estado,
       };
 }

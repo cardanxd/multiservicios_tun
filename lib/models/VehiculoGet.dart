@@ -1,12 +1,30 @@
 // To parse this JSON data, do
 //
-//     final vehiculo = vehiculoFromJson(jsonString);
+//     final vehiculoData = vehiculoDataFromJson(jsonString);
 
 import 'dart:convert';
 
-Vehiculo vehiculoFromJson(String str) => Vehiculo.fromJson(json.decode(str));
+VehiculoData vehiculoDataGetFromJson(String str) =>
+    VehiculoData.fromJson(json.decode(str));
 
-String vehiculoToJson(Vehiculo data) => json.encode(data.toJson());
+String vehiculoDataToJson(VehiculoData data) => json.encode(data.toJson());
+
+class VehiculoData {
+  VehiculoData({
+    this.data,
+  });
+
+  List<Vehiculo> data;
+
+  factory VehiculoData.fromJson(Map<String, dynamic> json) => VehiculoData(
+        data:
+            List<Vehiculo>.from(json["data"].map((x) => Vehiculo.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
+}
 
 class Vehiculo {
   Vehiculo({
