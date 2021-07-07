@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multiservicios_tun/models/ClienteGet.dart';
 import 'package:substring_highlight/substring_highlight.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class Rvehiculo extends StatefulWidget {
   State<StatefulWidget> createState() => _RvehiculoState();
 }
 
+//Método para crear el vehiculo
 Future<Vehiculo> crearVehiculo(int clienteId, int equipoId, String marca,
     String modelo, String serie, String economico, String placa) async {
   final Uri url =
@@ -34,6 +36,7 @@ Future<Vehiculo> crearVehiculo(int clienteId, int equipoId, String marca,
 
 class _RvehiculoState extends State<Rvehiculo> {
   bool isLoading = false;
+  //Método para consultar los equipos
   List<String> autoCompleteData;
   List<Equipo> equipos = [];
   Future<bool> getRequest() async {
@@ -50,6 +53,7 @@ class _RvehiculoState extends State<Rvehiculo> {
     }
   }
 
+  //Método para consultar los clientes
   List<String> autoCompleteClient;
   List<Cliente> clientes = [];
   Future<bool> getRequestClient() async {
@@ -66,24 +70,8 @@ class _RvehiculoState extends State<Rvehiculo> {
     }
   }
 
+  //Método para autocompletar los vehiculos
   Future fetchAutoCompleteData() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final String stringData = await rootBundle.loadString("assets/data.json");
-
-    final List<dynamic> json = jsonDecode(stringData);
-
-    final List<String> jsonStringData = json.cast<String>();
-
-    setState(() {
-      isLoading = false;
-      autoCompleteClient = jsonStringData;
-    });
-  }
-
-  Future fetchAutoCompleteClient() async {
     setState(() {
       isLoading = true;
     });
@@ -100,6 +88,25 @@ class _RvehiculoState extends State<Rvehiculo> {
     });
   }
 
+  //Método para autocompletar los clientes
+  Future fetchAutoCompleteClient() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    final String stringData = await rootBundle.loadString("assets/data.json");
+
+    final List<dynamic> json = jsonDecode(stringData);
+
+    final List<String> jsonStringData = json.cast<String>();
+
+    setState(() {
+      isLoading = false;
+      autoCompleteClient = jsonStringData;
+    });
+  }
+
+  //Controladores
   Vehiculo _vehiculo;
   TextEditingController _cliente;
   TextEditingController _tipov;
@@ -121,225 +128,312 @@ class _RvehiculoState extends State<Rvehiculo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(centerTitle: true, title: Text('Registro de vehiculo')),
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ListView(
-                  children: <Widget>[
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteData.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final equipo = equipos[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: equipo.descripcion,
-                                  term: _tipov.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                //subtitle: Text("Esto es un subtitulo"),
-                                onTap: () {
-                                  onSelected(equipo.id.toString());
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: equipos.length,
-                          ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._tipov = controller;
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(centerTitle: true, title: Text('Registro de vehiculo')),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ListView(
+                children: <Widget>[
+                  Autocomplete(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<String>.empty();
+                      } else {
+                        return autoCompleteData.where((word) => word
+                            .toLowerCase()
+                            .contains(textEditingValue.text.toLowerCase()));
+                      }
+                    },
+                    optionsViewBuilder:
+                        (context, Function(String) onSelected, options) {
+                      return Material(
+                        elevation: 4,
+                        child: ListView.separated(
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            final equipo = equipos[index];
+                            return ListTile(
+                              //title: Text(option.toString()),
+                              title: SubstringHighlight(
+                                text: equipo.descripcion,
+                                term: _tipov.text,
+                                textStyleHighlight:
+                                    TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              //subtitle: Text("Esto es un subtitulo"),
+                              onTap: () {
+                                onSelected(equipo.id.toString());
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(),
+                          itemCount: equipos.length,
+                        ),
+                      );
+                    },
+                    onSelected: (selectedString) {
+                      print(selectedString);
+                    },
+                    fieldViewBuilder:
+                        (context, controller, focusNode, onEditingComplete) {
+                      this._tipov = controller;
 
-                        return TextField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            hintText: "Seleccione el tipo de equipo",
-                            prefixIcon: Icon(Icons.search),
+                      return TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        onEditingComplete: onEditingComplete,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteClient.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final cliente = clientes[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: cliente.nombre,
-                                  term: _tipov.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                subtitle: SubstringHighlight(
-                                  text: cliente.email,
-                                  term: _tipov.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                onTap: () {
-                                  onSelected(cliente.id.toString());
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: clientes.length,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._cliente = controller;
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
+                          ),
+                          hintText: "Seleccione el tipo de equipo",
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Autocomplete(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<String>.empty();
+                      } else {
+                        return autoCompleteClient.where((word) => word
+                            .toLowerCase()
+                            .contains(textEditingValue.text.toLowerCase()));
+                      }
+                    },
+                    optionsViewBuilder:
+                        (context, Function(String) onSelected, options) {
+                      return Material(
+                        elevation: 4,
+                        child: ListView.separated(
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            final cliente = clientes[index];
+                            return ListTile(
+                              title: SubstringHighlight(
+                                text: cliente.nombre,
+                                term: _cliente.text,
+                                textStyleHighlight:
+                                    TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              subtitle: SubstringHighlight(
+                                text: cliente.email,
+                                term: _cliente.text,
+                                textStyleHighlight:
+                                    TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              onTap: () {
+                                onSelected(cliente.id.toString());
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(),
+                          itemCount: clientes.length,
+                        ),
+                      );
+                    },
+                    onSelected: (selectedString) {
+                      print(selectedString);
+                    },
+                    fieldViewBuilder:
+                        (context, controller, focusNode, onEditingComplete) {
+                      this._cliente = controller;
 
-                        return TextField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            hintText: "Seleccione el cliente",
-                            prefixIcon: Icon(Icons.search),
+                      return TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        onEditingComplete: onEditingComplete,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
-                    ),
-                    TextField(
-                      controller: _marca,
-                      decoration: InputDecoration(
-                        labelText: 'Marca',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
+                          ),
+                          hintText: "Seleccione el cliente",
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _marca,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _modelo,
-                      decoration: InputDecoration(
-                        labelText: 'Modelo',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _serie,
-                      decoration: InputDecoration(
-                        labelText: 'Num. Serie',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Marca",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      controller: _economico,
-                      decoration: InputDecoration(
-                        labelText: 'Num. Economico',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _modelo,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _placa,
-                      decoration: InputDecoration(
-                        labelText: 'Placas',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Modelo",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    SizedBox(
-                      height: 16,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _serie,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Número de serie",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _economico,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Número económico",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _placa,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Placas",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  ElevatedButton(
+                    child: Text('Registrar vehiculo',
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.indigo,
+                      onPrimary: Colors.grey[900],
+                      shadowColor: Colors.black,
+                      elevation: 5,
+                      minimumSize: Size(150, 40),
+                      alignment: Alignment.center,
+                      shape: StadiumBorder(),
+                      side: BorderSide(color: Colors.indigo[600], width: 2),
+                    ),
+                    onPressed: () async {
+                      await Future.delayed(Duration(seconds: 1));
+                      Fluttertoast.showToast(msg: "Registro en proceso...");
+                      final cliente = int.parse(_cliente.text);
+                      final tipov = int.parse(_tipov.text);
+                      final marca = _marca.text;
+                      final modelo = _modelo.text;
+                      final serie = _serie.text;
+                      final economico = _economico.text;
+                      final placa = _placa.text;
+
+                      final Vehiculo vehiculo = await crearVehiculo(cliente,
+                          tipov, marca, modelo, serie, economico, placa);
+                      setState(() {
+                        _vehiculo = vehiculo;
+                      });
+                      if (_vehiculo == null) {
+                        _showAlertError(context);
+                      } else {
+                        await Future.delayed(Duration(seconds: 1));
+                        Fluttertoast.showToast(msg: "Registro exitosamente");
+                        Navigator.pop(context);
+                      }
+                    },
+                  )
+                ],
               ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final cliente = int.parse(_cliente.text);
-            final tipov = int.parse(_tipov.text);
-            final marca = _marca.text;
-            final modelo = _modelo.text;
-            final serie = _serie.text;
-            final economico = _economico.text;
-            final placa = _placa.text;
-
-            final Vehiculo vehiculo = await crearVehiculo(
-                cliente, tipov, marca, modelo, serie, economico, placa);
-            setState(() {
-              _vehiculo = vehiculo;
-            });
-            if (_vehiculo == null) {
-              _showAlertError(context);
-            } else {
-              Navigator.pop(context);
-            }
-          },
-          tooltip: 'Registrar',
-          backgroundColor: Colors.indigo,
-          label: const Text('Registrar'),
-          icon: const Icon(Icons.thumb_up),
-        ));
+            ),
+    );
   }
 }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:multiservicios_tun/models/Giro_comercial.dart';
 import 'package:multiservicios_tun/models/Sucursal.dart';
 import 'package:substring_highlight/substring_highlight.dart';
@@ -220,550 +221,923 @@ class _RclienteState extends State<Rcliente> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(centerTitle: true, title: Text('Registro de cliente')),
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ListView(
-                  children: <Widget>[
-                    Text(
-                      "Información Personal",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(centerTitle: true, title: Text('Registro de cliente')),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: <Widget>[
+                  Text(
+                    "Información Personal",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _nombre,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _nombre,
-                      decoration: InputDecoration(
-                        labelText: 'Nombre completo',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _razon,
-                      decoration: InputDecoration(
-                        labelText: 'Razón social',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Nombre completo",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      controller: _rfc,
-                      decoration: InputDecoration(
-                        labelText: 'RFC',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _razon,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _email,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Text(
-                      "Fecha de cumpleaños",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Razón social",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _year,
-                      decoration: InputDecoration(
-                        labelText: 'Año Ej: 2021',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _rfc,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _month,
-                      decoration: InputDecoration(
-                        labelText: 'Mes Ej: 09',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _day,
-                      decoration: InputDecoration(
-                        labelText: 'Día Ej: 05',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "RFC",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Text(
-                      "Dirección",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _email,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _calle,
-                      decoration: InputDecoration(
-                        labelText: 'Calle',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _exterior,
-                      decoration: InputDecoration(
-                        labelText: 'No. Exterior',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Correo electrónico",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      controller: _interior,
-                      decoration: InputDecoration(
-                        labelText: 'No. Interior',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Text(
+                    "Fecha de cumpleaños",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _year,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _ecalle,
-                      decoration: InputDecoration(
-                        labelText: 'Entre calle',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _ycalle,
-                      decoration: InputDecoration(
-                        labelText: 'Y la calle',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Seleccione el año (2021)",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      controller: _colonia,
-                      decoration: InputDecoration(
-                        labelText: 'Colonia',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _month,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _postal,
-                      decoration: InputDecoration(
-                        labelText: 'C. Postal',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _ciudad,
-                      decoration: InputDecoration(
-                        labelText: 'Ciudad',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Seleccione el mes (05)",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      controller: _estado,
-                      decoration: InputDecoration(
-                        labelText: 'Estado',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _day,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      controller: _pais,
-                      decoration: InputDecoration(
-                        labelText: 'País',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Text(
-                      "Teléfonos",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Seleccione el día (04)",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _particular,
-                      decoration: InputDecoration(
-                        labelText: 'Particular',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Text(
+                    "Dirección",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _calle,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _oficina,
-                      decoration: InputDecoration(
-                        labelText: 'Oficina',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _movil,
-                      decoration: InputDecoration(
-                        labelText: 'Móvil',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Calle",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Text(
-                      "Datos de la empresa",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _exterior,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Número exterior",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    SizedBox(
-                      height: 16.0,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _interior,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Número interior",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteSucursal.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final sucursal = sucursales[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: sucursal.descripcion,
-                                  term: _sucursalId.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                subtitle: SubstringHighlight(
-                                  text: sucursal.empresa,
-                                  term: _sucursalId.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                onTap: () {
-                                  onSelected(sucursal.id.toString());
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: sucursales.length,
-                          ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._sucursalId = controller;
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _ecalle,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Entre calle",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _ycalle,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Y la calle",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _colonia,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Colonia",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _postal,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Código postal",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _ciudad,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Ciudad",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _estado,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Estado",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _pais,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "País",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Text(
+                    "Teléfonos",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _particular,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Número particular",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _oficina,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Número de oficina",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _movil,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Número móvil",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Text(
+                    "Datos de la empresa",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Autocomplete(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<String>.empty();
+                      } else {
+                        return autoCompleteSucursal.where((word) => word
+                            .toLowerCase()
+                            .contains(textEditingValue.text.toLowerCase()));
+                      }
+                    },
+                    optionsViewBuilder:
+                        (context, Function(String) onSelected, options) {
+                      return Material(
+                        elevation: 4,
+                        child: ListView.separated(
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            final sucursal = sucursales[index];
+                            return ListTile(
+                              //title: Text(option.toString()),
+                              title: SubstringHighlight(
+                                text: sucursal.descripcion,
+                                term: _sucursalId.text,
+                                textStyleHighlight:
+                                    TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              subtitle: SubstringHighlight(
+                                text: sucursal.empresa,
+                                term: _sucursalId.text,
+                                textStyleHighlight:
+                                    TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              onTap: () {
+                                onSelected(sucursal.id.toString());
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(),
+                          itemCount: sucursales.length,
+                        ),
+                      );
+                    },
+                    onSelected: (selectedString) {
+                      print(selectedString);
+                    },
+                    fieldViewBuilder:
+                        (context, controller, focusNode, onEditingComplete) {
+                      this._sucursalId = controller;
 
-                        return TextField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            hintText: "Seleccione la sucursal",
-                            prefixIcon: Icon(Icons.search),
+                      return TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        onEditingComplete: onEditingComplete,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteSegmento.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final segmento = segmentos[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: segmento.descripcion,
-                                  term: _segmentoId.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                //subtitle: Text("Esto es un subtitulo"),
-                                onTap: () {
-                                  onSelected(segmento.id.toString());
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: segmentos.length,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._segmentoId = controller;
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
+                          ),
+                          hintText: "Seleccione la sucursal",
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Autocomplete(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<String>.empty();
+                      } else {
+                        return autoCompleteSegmento.where((word) => word
+                            .toLowerCase()
+                            .contains(textEditingValue.text.toLowerCase()));
+                      }
+                    },
+                    optionsViewBuilder:
+                        (context, Function(String) onSelected, options) {
+                      return Material(
+                        elevation: 4,
+                        child: ListView.separated(
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            final segmento = segmentos[index];
+                            return ListTile(
+                              //title: Text(option.toString()),
+                              title: SubstringHighlight(
+                                text: segmento.descripcion,
+                                term: _segmentoId.text,
+                                textStyleHighlight:
+                                    TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              //subtitle: Text("Esto es un subtitulo"),
+                              onTap: () {
+                                onSelected(segmento.id.toString());
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(),
+                          itemCount: segmentos.length,
+                        ),
+                      );
+                    },
+                    onSelected: (selectedString) {
+                      print(selectedString);
+                    },
+                    fieldViewBuilder:
+                        (context, controller, focusNode, onEditingComplete) {
+                      this._segmentoId = controller;
 
-                        return TextField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            hintText: "Seleccione el segmento",
-                            prefixIcon: Icon(Icons.search),
+                      return TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        onEditingComplete: onEditingComplete,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteGiro.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final giro = giros[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: giro.descripcion,
-                                  term: _giroId.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                onTap: () {
-                                  onSelected(giro.id.toString());
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: giros.length,
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._giroId = controller;
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
+                          ),
+                          hintText: "Seleccione el segmento",
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Autocomplete(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text.isEmpty) {
+                        return const Iterable<String>.empty();
+                      } else {
+                        return autoCompleteGiro.where((word) => word
+                            .toLowerCase()
+                            .contains(textEditingValue.text.toLowerCase()));
+                      }
+                    },
+                    optionsViewBuilder:
+                        (context, Function(String) onSelected, options) {
+                      return Material(
+                        elevation: 4,
+                        child: ListView.separated(
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            final giro = giros[index];
+                            return ListTile(
+                              //title: Text(option.toString()),
+                              title: SubstringHighlight(
+                                text: giro.descripcion,
+                                term: _giroId.text,
+                                textStyleHighlight:
+                                    TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              onTap: () {
+                                onSelected(giro.id.toString());
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(),
+                          itemCount: giros.length,
+                        ),
+                      );
+                    },
+                    onSelected: (selectedString) {
+                      print(selectedString);
+                    },
+                    fieldViewBuilder:
+                        (context, controller, focusNode, onEditingComplete) {
+                      this._giroId = controller;
 
-                        return TextField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            hintText: "Seleccione el giro comercial",
-                            prefixIcon: Icon(Icons.search),
+                      return TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        onEditingComplete: onEditingComplete,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
                           ),
-                        );
-                      },
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]),
+                          ),
+                          hintText: "Seleccione el giro comercial",
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  Text(
+                    "Crédito",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Text(
-                      "Crédito",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _limiteCredito,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _limiteCredito,
-                      decoration: InputDecoration(
-                        labelText: 'Límite de crédito',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _diasCredito,
-                      decoration: InputDecoration(
-                        labelText: 'Días de crédito',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      hintText: "Límite de crédito",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: _diasBloqueo,
-                      decoration: InputDecoration(
-                        labelText: 'Días bloqueo',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _diasCredito,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                    ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    TextField(
-                      controller: _descuento,
-                      decoration: InputDecoration(
-                        enabled: false,
-                        labelText: 'Sin descuento',
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Días de crédito",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                    SizedBox(
-                      height: 16,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    keyboardType: TextInputType.number,
+                    controller: _diasBloqueo,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Días de bloqueo",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _descuento,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Sin descuento",
+                      enabled: false,
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  ElevatedButton(
+                    child: Text('Registrar cliente',
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.indigo,
+                      onPrimary: Colors.grey[900],
+                      shadowColor: Colors.black,
+                      elevation: 5,
+                      minimumSize: Size(150, 40),
+                      alignment: Alignment.center,
+                      shape: StadiumBorder(),
+                      side: BorderSide(color: Colors.indigo[600], width: 2),
+                    ),
+                    onPressed: () async {
+                      await Future.delayed(Duration(seconds: 1));
+                      Fluttertoast.showToast(msg: "Registro en proceso...");
+                      final nombre = _nombre.text;
+                      final razon = _razon.text;
+                      final rfc = _rfc.text;
+                      final email = _email.text;
+                      final calle = _calle.text;
+                      final exterior = _exterior.text;
+                      final interior = _interior.text;
+                      final ecalle = _ecalle.text;
+                      final ycalle = _ycalle.text;
+                      final colonia = _colonia.text;
+                      final postal = _postal.text;
+                      final ciudad = _ciudad.text;
+                      final estado = _estado.text;
+                      final pais = _pais.text;
+                      final particular = _particular.text;
+                      final oficina = _oficina.text;
+                      final movil = _movil.text;
+                      final limitecredito = double.parse(_limiteCredito.text);
+                      final diascredito = int.parse(_diasCredito.text);
+                      final diasbloqueo = int.parse(_diasBloqueo.text);
+                      final descuento = "Sin descuento";
+                      final date = _year.text +
+                          "-" +
+                          _month.text +
+                          "-" +
+                          _day.text +
+                          " " +
+                          "00:00:00";
+                      final birthday = DateTime.parse(date);
+                      final sucursalId = int.parse(_sucursalId.text);
+                      final segmentoId = int.parse(_segmentoId.text);
+                      final giroId = int.parse(_giroId.text);
+
+                      final Cliente cliente = await createCliente(
+                          nombre,
+                          razon,
+                          rfc,
+                          email,
+                          calle,
+                          exterior,
+                          interior,
+                          ecalle,
+                          ycalle,
+                          colonia,
+                          postal,
+                          ciudad,
+                          estado,
+                          pais,
+                          particular,
+                          oficina,
+                          movil,
+                          limitecredito,
+                          diascredito,
+                          diasbloqueo,
+                          descuento,
+                          birthday,
+                          sucursalId,
+                          segmentoId,
+                          giroId);
+                      setState(() {
+                        _cliente = cliente;
+                      });
+                      if (_cliente == null) {
+                        _showAlertError(context);
+                      } else {
+                        await Future.delayed(Duration(seconds: 1));
+                        Fluttertoast.showToast(msg: "Registro exitosamente");
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                ],
               ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final nombre = _nombre.text;
-            final razon = _razon.text;
-            final rfc = _rfc.text;
-            final email = _email.text;
-            final calle = _calle.text;
-            final exterior = _exterior.text;
-            final interior = _interior.text;
-            final ecalle = _ecalle.text;
-            final ycalle = _ycalle.text;
-            final colonia = _colonia.text;
-            final postal = _postal.text;
-            final ciudad = _ciudad.text;
-            final estado = _estado.text;
-            final pais = _pais.text;
-            final particular = _particular.text;
-            final oficina = _oficina.text;
-            final movil = _movil.text;
-            final limitecredito = double.parse(_limiteCredito.text);
-            final diascredito = int.parse(_diasCredito.text);
-            final diasbloqueo = int.parse(_diasBloqueo.text);
-            final descuento = "Sin descuento";
-            final date = _year.text +
-                "-" +
-                _month.text +
-                "-" +
-                _day.text +
-                " " +
-                "00:00:00";
-            final birthday = DateTime.parse(date);
-            final sucursalId = int.parse(_sucursalId.text);
-            final segmentoId = int.parse(_segmentoId.text);
-            final giroId = int.parse(_giroId.text);
-
-            final Cliente cliente = await createCliente(
-                nombre,
-                razon,
-                rfc,
-                email,
-                calle,
-                exterior,
-                interior,
-                ecalle,
-                ycalle,
-                colonia,
-                postal,
-                ciudad,
-                estado,
-                pais,
-                particular,
-                oficina,
-                movil,
-                limitecredito,
-                diascredito,
-                diasbloqueo,
-                descuento,
-                birthday,
-                sucursalId,
-                segmentoId,
-                giroId);
-            setState(() {
-              _cliente = cliente;
-            });
-            if (_cliente == null) {
-              _showAlertError(context);
-            } else {
-              Navigator.pop(context);
-            }
-          },
-          tooltip: 'Registrar',
-          backgroundColor: Colors.indigo,
-          label: const Text('Registrar'),
-          icon: const Icon(Icons.thumb_up),
-        ));
+            ),
+    );
   }
 }
 

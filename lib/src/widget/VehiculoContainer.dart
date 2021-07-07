@@ -9,10 +9,13 @@ class VehiculoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 175,
+        width: double.infinity,
+        height: 200,
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.all(30.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10), color: Colors.grey[400]),
-        padding: EdgeInsets.all(20.0),
         child: Row(children: <Widget>[
           Image.asset(
             'images/vehiculo.png',
@@ -23,14 +26,10 @@ class VehiculoContainer extends StatelessWidget {
             colorBlendMode: BlendMode.darken,
             semanticLabel: '¿Desear realizar un nuevo registro?',
           ),
-          SizedBox(
-            width: 20,
-          ),
+          Divider(endIndent: 50.0),
           new Container(
               child: new Column(children: <Widget>[
-            SizedBox(
-              height: 40.0,
-            ),
+            Divider(height: 40),
             Text(
               "Registrar vehiculo",
               style: TextStyle(
@@ -39,9 +38,7 @@ class VehiculoContainer extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            SizedBox(
-              height: 10.0,
-            ),
+            Divider(height: 20),
             ElevatedButton(
               child: Text('Registrar',
                   style: TextStyle(color: Colors.white, fontSize: 18)),

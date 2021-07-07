@@ -20,18 +20,13 @@ class _PanelState extends State<Panel> {
           padding: const EdgeInsets.all(1.0),
           child: ListView(
             children: [
-              SizedBox(
-                height: 20.0,
-              ),
+              Divider(height: 20.0),
               ClienteContainer(),
-              SizedBox(
-                height: 20.0,
-              ),
+              Divider(height: 20.0),
               VehiculoContainer(),
-              SizedBox(
-                height: 20.0,
-              ),
+              Divider(height: 20.0),
               OrdenContainer(),
+              Divider(height: 20.0),
             ],
           ),
         ));

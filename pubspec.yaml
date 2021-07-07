@@ -16,6 +16,7 @@ dependencies:
   animated_text_kit: ^4.2.1
   intl: ^0.17.0
   substring_highlight: ^1.0.33
+  fluttertoast: ^8.0.7
 
 dev_dependencies:
   flutter_test:
