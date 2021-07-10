@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiservicios_tun/models/Vehiculo.dart';
-import 'package:multiservicios_tun/models/Equipo.dart';
 
 class Rvehiculo extends StatefulWidget {
   @override
@@ -14,13 +13,13 @@ class Rvehiculo extends StatefulWidget {
 }
 
 //Método para crear el vehiculo
-Future<Vehiculo> crearVehiculo(int clienteId, int equipoId, String marca,
+Future<Vehiculo> crearVehiculo(int clienteId, String equipo, String marca,
     String modelo, String serie, String economico, String placa) async {
   final Uri url =
       Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/vehiculos");
   final response = await http.post(url, body: {
     "cliente_id": clienteId.toString(),
-    "equipo_id": equipoId.toString(),
+    "equipo": equipo,
     "marca": marca,
     "modelo": modelo,
     "serie": serie,
@@ -36,27 +35,13 @@ Future<Vehiculo> crearVehiculo(int clienteId, int equipoId, String marca,
 
 class _RvehiculoState extends State<Rvehiculo> {
   bool isLoading = false;
-  //Método para consultar los equipos
-  List<String> autoCompleteData;
-  List<Equipo> equipos = [];
-  Future<bool> getRequest() async {
-    final Uri url =
-        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/equipos");
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final result = equipoDataFromJson(response.body);
-      equipos = result.data;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   //Método para consultar los clientes
   List<String> autoCompleteClient;
   List<Cliente> clientes = [];
   Future<bool> getRequestClient() async {
+    setState(() {
+      isLoading = true;
+    });
     final Uri url =
         Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/clientes");
     final response = await http.get(url);
@@ -64,35 +49,18 @@ class _RvehiculoState extends State<Rvehiculo> {
     if (response.statusCode == 200) {
       final result = clienteGetDataFromJson(response.body);
       clientes = result.data;
+      setState(() {
+        isLoading = false;
+      });
       return true;
     } else {
       return false;
     }
   }
 
-  //Método para autocompletar los vehiculos
-  Future fetchAutoCompleteData() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final String stringData = await rootBundle.loadString("assets/data.json");
-
-    final List<dynamic> json = jsonDecode(stringData);
-
-    final List<String> jsonStringData = json.cast<String>();
-
-    setState(() {
-      isLoading = false;
-      autoCompleteData = jsonStringData;
-    });
-  }
-
   //Método para autocompletar los clientes
   Future fetchAutoCompleteClient() async {
-    setState(() {
-      isLoading = true;
-    });
+    isLoading = true;
 
     final String stringData = await rootBundle.loadString("assets/data.json");
 
@@ -109,7 +77,7 @@ class _RvehiculoState extends State<Rvehiculo> {
   //Controladores
   Vehiculo _vehiculo;
   TextEditingController _cliente;
-  TextEditingController _tipov;
+  final _equipo = TextEditingController();
   final _marca = TextEditingController();
   final _modelo = TextEditingController();
   final _serie = TextEditingController();
@@ -119,9 +87,7 @@ class _RvehiculoState extends State<Rvehiculo> {
   @override
   void initState() {
     super.initState();
-    fetchAutoCompleteData();
     fetchAutoCompleteClient();
-    getRequest();
     getRequestClient();
   }
 
@@ -143,76 +109,6 @@ class _RvehiculoState extends State<Rvehiculo> {
                       if (textEditingValue.text.isEmpty) {
                         return const Iterable<String>.empty();
                       } else {
-                        return autoCompleteData.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final equipo = equipos[index];
-                            return ListTile(
-                              //title: Text(option.toString()),
-                              title: SubstringHighlight(
-                                text: equipo.descripcion,
-                                term: _tipov.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              //subtitle: Text("Esto es un subtitulo"),
-                              onTap: () {
-                                onSelected(equipo.id.toString());
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(),
-                          itemCount: equipos.length,
-                        ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._tipov = controller;
-
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione el tipo de equipo",
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
                         return autoCompleteClient.where((word) => word
                             .toLowerCase()
                             .contains(textEditingValue.text.toLowerCase()));
@@ -222,7 +118,7 @@ class _RvehiculoState extends State<Rvehiculo> {
                         (context, Function(String) onSelected, options) {
                       return Material(
                         elevation: 4,
-                        child: ListView.separated(
+                        child: ListView.builder(
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             final cliente = clientes[index];
@@ -244,7 +140,6 @@ class _RvehiculoState extends State<Rvehiculo> {
                               },
                             );
                           },
-                          separatorBuilder: (context, index) => Divider(),
                           itemCount: clientes.length,
                         ),
                       );
@@ -278,6 +173,28 @@ class _RvehiculoState extends State<Rvehiculo> {
                         ),
                       );
                     },
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextField(
+                    controller: _equipo,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey[300]),
+                      ),
+                      hintText: "Tipo de equipo",
+                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    ),
                   ),
                   SizedBox(
                     height: 10.0,
@@ -406,10 +323,13 @@ class _RvehiculoState extends State<Rvehiculo> {
                       side: BorderSide(color: Colors.indigo[600], width: 2),
                     ),
                     onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
                       await Future.delayed(Duration(seconds: 1));
                       Fluttertoast.showToast(msg: "Registro en proceso...");
                       final cliente = int.parse(_cliente.text);
-                      final tipov = int.parse(_tipov.text);
+                      final equipo = _equipo.text;
                       final marca = _marca.text;
                       final modelo = _modelo.text;
                       final serie = _serie.text;
@@ -417,11 +337,12 @@ class _RvehiculoState extends State<Rvehiculo> {
                       final placa = _placa.text;
 
                       final Vehiculo vehiculo = await crearVehiculo(cliente,
-                          tipov, marca, modelo, serie, economico, placa);
+                          equipo, marca, modelo, serie, economico, placa);
                       setState(() {
                         _vehiculo = vehiculo;
                       });
                       if (_vehiculo == null) {
+                        isLoading = false;
                         _showAlertError(context);
                       } else {
                         await Future.delayed(Duration(seconds: 1));

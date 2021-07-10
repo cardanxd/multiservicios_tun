@@ -10,6 +10,7 @@ String clienteToJson(Cliente data) => json.encode(data.toJson());
 
 class Cliente {
   Cliente({
+    this.id,
     this.nombre,
     this.razon,
     this.rfc,
@@ -27,16 +28,10 @@ class Cliente {
     this.particular,
     this.oficina,
     this.movil,
-    this.limitecredito,
-    this.diascredito,
-    this.diasbloqueo,
-    this.descuento,
     this.birthday,
-    this.sucursalId,
-    this.segmentoId,
-    this.giroId,
   });
 
+  int id;
   String nombre;
   String razon;
   String rfc;
@@ -54,16 +49,10 @@ class Cliente {
   String particular;
   String oficina;
   String movil;
-  double limitecredito;
-  int diascredito;
-  int diasbloqueo;
-  String descuento;
   DateTime birthday;
-  int sucursalId;
-  int segmentoId;
-  int giroId;
 
   factory Cliente.fromJson(Map<String, dynamic> json) => Cliente(
+        id: json["id"] as int,
         nombre: json["nombre"] as String,
         razon: json["razon"] as String,
         rfc: json["rfc"] as String,
@@ -81,17 +70,11 @@ class Cliente {
         particular: json["particular"] as String,
         oficina: json["oficina"] as String,
         movil: json["movil"] as String,
-        limitecredito: json["limitecredito"] as double,
-        diascredito: json["diascredito"] as int,
-        diasbloqueo: json["diasbloqueo"] as int,
-        descuento: json["descuento"] as String,
         birthday: json["birthday"] as DateTime,
-        sucursalId: json["sucursal_id"] as int,
-        segmentoId: json["segmento_id"] as int,
-        giroId: json["giro_id"] as int,
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "nombre": nombre,
         "razon": razon,
         "rfc": rfc,
@@ -109,13 +92,6 @@ class Cliente {
         "particular": particular,
         "oficina": oficina,
         "movil": movil,
-        "limitecredito": limitecredito,
-        "diascredito": diascredito,
-        "diasbloqueo": diasbloqueo,
-        "descuento": descuento,
-        "birthday": birthday,
-        "sucursal_id": sucursalId,
-        "segmento_id": segmentoId,
-        "giro_id": giroId,
+        "birthday": birthday.toIso8601String(),
       };
 }

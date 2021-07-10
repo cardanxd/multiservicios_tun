@@ -1,14 +1,9 @@
-import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:multiservicios_tun/models/Giro_comercial.dart';
-import 'package:multiservicios_tun/models/Sucursal.dart';
-import 'package:substring_highlight/substring_highlight.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiservicios_tun/models/Cliente.dart';
-import 'package:multiservicios_tun/models/Segmento.dart';
 
 class Rcliente extends StatefulWidget {
   @override
@@ -33,16 +28,10 @@ Future<Cliente> createCliente(
     String particular,
     String oficina,
     String movil,
-    double limitecredito,
-    int diascredito,
-    int diasbloqueo,
-    String descuento,
-    DateTime birthday,
-    int sucursalId,
-    int segmentoId,
-    int giroId) async {
-  final String url = "https://apiserviciostunv1.000webhostapp.com/api/clientes";
-  final response = await http.post(Uri.parse(url), body: {
+    DateTime birthday) async {
+  final Uri url =
+      Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/clientes");
+  final response = await http.post(url, body: {
     "nombre": nombre,
     "razon": razon,
     "rfc": rfc,
@@ -60,14 +49,7 @@ Future<Cliente> createCliente(
     "particular": particular,
     "oficina": oficina,
     "movil": movil,
-    "limitecredito": limitecredito.toString(),
-    "diascredito": diascredito.toString(),
-    "diasbloqueo": diasbloqueo.toString(),
-    "descuento": descuento,
     "birthday": birthday.toIso8601String(),
-    "sucursal_id": sucursalId.toString(),
-    "segmento_id": segmentoId.toString(),
-    "giro_id": giroId.toString(),
   });
   if (response.statusCode == 201) {
     final String responseString = response.body;
@@ -79,105 +61,6 @@ Future<Cliente> createCliente(
 
 class _RclienteState extends State<Rcliente> {
   bool isLoading = false;
-  List<String> autoCompleteSegmento;
-  List<Segmento> segmentos = [];
-  Future<bool> getRequestSegmentos() async {
-    final Uri url =
-        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/segmentos");
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final result = segmentoDataFromJson(response.body);
-      segmentos = result.data;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  List<String> autoCompleteGiro;
-  List<Giro> giros = [];
-  Future<bool> getRequestGiro() async {
-    final Uri url =
-        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/giros");
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final result = giroDataFromJson(response.body);
-      giros = result.data;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  List<String> autoCompleteSucursal;
-  List<Sucursal> sucursales = [];
-  Future<bool> getRequestSucursal() async {
-    final Uri url =
-        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/sucursales");
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      final result = sucursalDataFromJson(response.body);
-      sucursales = result.data;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future fetchAutoCompleteSegmento() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final String stringData = await rootBundle.loadString("assets/data.json");
-
-    final List<dynamic> json = jsonDecode(stringData);
-
-    final List<String> jsonStringData = json.cast<String>();
-
-    setState(() {
-      isLoading = false;
-      autoCompleteSegmento = jsonStringData;
-    });
-  }
-
-  Future fetchAutoCompleteGiro() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final String stringData = await rootBundle.loadString("assets/data.json");
-
-    final List<dynamic> json = jsonDecode(stringData);
-
-    final List<String> jsonStringData = json.cast<String>();
-
-    setState(() {
-      isLoading = false;
-      autoCompleteGiro = jsonStringData;
-    });
-  }
-
-  Future fetchAutoCompleteSucursal() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final String stringData = await rootBundle.loadString("assets/data.json");
-
-    final List<dynamic> json = jsonDecode(stringData);
-
-    final List<String> jsonStringData = json.cast<String>();
-
-    setState(() {
-      isLoading = false;
-      autoCompleteSucursal = jsonStringData;
-    });
-  }
-
   Cliente _cliente;
   final _nombre = TextEditingController();
   final _razon = TextEditingController();
@@ -196,27 +79,9 @@ class _RclienteState extends State<Rcliente> {
   final _particular = TextEditingController();
   final _oficina = TextEditingController();
   final _movil = TextEditingController();
-  final _limiteCredito = TextEditingController();
-  final _diasCredito = TextEditingController();
-  final _diasBloqueo = TextEditingController();
-  final _descuento = TextEditingController();
   final _day = TextEditingController();
   final _month = TextEditingController();
   final _year = TextEditingController();
-  TextEditingController _sucursalId;
-  TextEditingController _segmentoId;
-  TextEditingController _giroId;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchAutoCompleteSegmento();
-    fetchAutoCompleteGiro();
-    fetchAutoCompleteSucursal();
-    getRequestSegmentos();
-    getRequestGiro();
-    getRequestSucursal();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -716,333 +581,7 @@ class _RclienteState extends State<Rcliente> {
                     ),
                   ),
                   SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Datos de la empresa",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteSucursal.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final sucursal = sucursales[index];
-                            return ListTile(
-                              //title: Text(option.toString()),
-                              title: SubstringHighlight(
-                                text: sucursal.descripcion,
-                                term: _sucursalId.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              subtitle: SubstringHighlight(
-                                text: sucursal.empresa,
-                                term: _sucursalId.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              onTap: () {
-                                onSelected(sucursal.id.toString());
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(),
-                          itemCount: sucursales.length,
-                        ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._sucursalId = controller;
-
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione la sucursal",
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteSegmento.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final segmento = segmentos[index];
-                            return ListTile(
-                              //title: Text(option.toString()),
-                              title: SubstringHighlight(
-                                text: segmento.descripcion,
-                                term: _segmentoId.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              //subtitle: Text("Esto es un subtitulo"),
-                              onTap: () {
-                                onSelected(segmento.id.toString());
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(),
-                          itemCount: segmentos.length,
-                        ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._segmentoId = controller;
-
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione el segmento",
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteGiro.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final giro = giros[index];
-                            return ListTile(
-                              //title: Text(option.toString()),
-                              title: SubstringHighlight(
-                                text: giro.descripcion,
-                                term: _giroId.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              onTap: () {
-                                onSelected(giro.id.toString());
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(),
-                          itemCount: giros.length,
-                        ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._giroId = controller;
-
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione el giro comercial",
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Crédito",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _limiteCredito,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Límite de crédito",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _diasCredito,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Días de crédito",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _diasBloqueo,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Días de bloqueo",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    controller: _descuento,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Sin descuento",
-                      enabled: false,
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
+                    height: 20,
                   ),
                   ElevatedButton(
                     child: Text('Registrar cliente',
@@ -1058,8 +597,13 @@ class _RclienteState extends State<Rcliente> {
                       side: BorderSide(color: Colors.indigo[600], width: 2),
                     ),
                     onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+
                       await Future.delayed(Duration(seconds: 1));
-                      Fluttertoast.showToast(msg: "Registro en proceso...");
+                      Fluttertoast.showToast(msg: "Registro en proceso");
+
                       final nombre = _nombre.text;
                       final razon = _razon.text;
                       final rfc = _rfc.text;
@@ -1077,10 +621,6 @@ class _RclienteState extends State<Rcliente> {
                       final particular = _particular.text;
                       final oficina = _oficina.text;
                       final movil = _movil.text;
-                      final limitecredito = double.parse(_limiteCredito.text);
-                      final diascredito = int.parse(_diasCredito.text);
-                      final diasbloqueo = int.parse(_diasBloqueo.text);
-                      final descuento = "Sin descuento";
                       final date = _year.text +
                           "-" +
                           _month.text +
@@ -1089,9 +629,6 @@ class _RclienteState extends State<Rcliente> {
                           " " +
                           "00:00:00";
                       final birthday = DateTime.parse(date);
-                      final sucursalId = int.parse(_sucursalId.text);
-                      final segmentoId = int.parse(_segmentoId.text);
-                      final giroId = int.parse(_giroId.text);
 
                       final Cliente cliente = await createCliente(
                           nombre,
@@ -1111,18 +648,12 @@ class _RclienteState extends State<Rcliente> {
                           particular,
                           oficina,
                           movil,
-                          limitecredito,
-                          diascredito,
-                          diasbloqueo,
-                          descuento,
-                          birthday,
-                          sucursalId,
-                          segmentoId,
-                          giroId);
+                          birthday);
                       setState(() {
                         _cliente = cliente;
                       });
                       if (_cliente == null) {
+                        isLoading = false;
                         _showAlertError(context);
                       } else {
                         await Future.delayed(Duration(seconds: 1));
@@ -1130,9 +661,6 @@ class _RclienteState extends State<Rcliente> {
                         Navigator.pop(context);
                       }
                     },
-                  ),
-                  SizedBox(
-                    height: 50,
                   ),
                 ],
               ),

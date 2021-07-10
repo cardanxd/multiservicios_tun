@@ -12,14 +12,14 @@ class Orden {
   Orden({
     this.id,
     this.fecha,
-    this.vendedor,
+    this.tecnico,
     this.clienteId,
     this.vehiculoId,
     this.cilindros,
     this.condicionventaId,
     this.urgenciainicial,
     this.atencion,
-    this.comentarios,
+    this.trabajo,
     this.centrocostoId,
     this.placa,
     this.ceniceros,
@@ -46,14 +46,14 @@ class Orden {
 
   int id;
   DateTime fecha;
-  String vendedor;
+  String tecnico;
   int clienteId;
   int vehiculoId;
   String cilindros;
   int condicionventaId;
   String urgenciainicial;
-  String atencion;
-  String comentarios;
+  dynamic atencion;
+  String trabajo;
   int centrocostoId;
   String placa;
   String ceniceros;
@@ -78,16 +78,16 @@ class Orden {
   String vestiduras;
 
   factory Orden.fromJson(Map<String, dynamic> json) => Orden(
-        id: json["id"],
+        id: json["id"] as int,
         fecha: json["fecha"] as DateTime,
-        vendedor: json["vendedor"] as String,
+        tecnico: json["tecnico"] as String,
         clienteId: json["cliente_id"] as int,
         vehiculoId: json["vehiculo_id"] as int,
         cilindros: json["cilindros"] as String,
         condicionventaId: json["condicionventa_id"] as int,
         urgenciainicial: json["urgenciainicial"] as String,
         atencion: json["atencion"] as String,
-        comentarios: json["comentarios"] as String,
+        trabajo: json["trabajo"] as String,
         centrocostoId: json["centrocosto_id"] as int,
         placa: json["placa"] as String,
         ceniceros: json["ceniceros"] as String,
@@ -115,14 +115,14 @@ class Orden {
   Map<String, dynamic> toJson() => {
         "id": id,
         "fecha": fecha.toIso8601String(),
-        "vendedor": vendedor,
+        "tecnico": tecnico,
         "cliente_id": clienteId,
         "vehiculo_id": vehiculoId,
         "cilindros": cilindros,
         "condicionventa_id": condicionventaId,
         "urgenciainicial": urgenciainicial,
         "atencion": atencion,
-        "comentarios": comentarios,
+        "trabajo": trabajo,
         "centrocosto_id": centrocostoId,
         "placa": placa,
         "ceniceros": ceniceros,

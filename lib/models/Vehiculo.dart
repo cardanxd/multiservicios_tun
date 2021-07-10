@@ -12,7 +12,7 @@ class Vehiculo {
   Vehiculo({
     this.id,
     this.clienteId,
-    this.equipoId,
+    this.equipo,
     this.marca,
     this.modelo,
     this.serie,
@@ -22,7 +22,7 @@ class Vehiculo {
 
   int id;
   int clienteId;
-  int equipoId;
+  String equipo;
   String marca;
   String modelo;
   String serie;
@@ -30,20 +30,20 @@ class Vehiculo {
   String placa;
 
   factory Vehiculo.fromJson(Map<String, dynamic> json) => Vehiculo(
-        id: json["id"],
-        clienteId: json["cliente_id"],
-        equipoId: json["equipo_id"],
-        marca: json["marca"],
-        modelo: json["modelo"],
-        serie: json["serie"],
-        economico: json["economico"],
-        placa: json["placa"],
+        id: json["id"] as int,
+        clienteId: json["cliente_id"] as int,
+        equipo: json["equipo"] as String,
+        marca: json["marca"] as String,
+        modelo: json["modelo"] as String,
+        serie: json["serie"] as String,
+        economico: json["economico"] as String,
+        placa: json["placa"] as String,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "cliente_id": clienteId,
-        "equipo_id": equipoId,
+        "equipo": equipo,
         "marca": marca,
         "modelo": modelo,
         "serie": serie,

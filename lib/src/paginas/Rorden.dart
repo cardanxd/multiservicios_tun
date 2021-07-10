@@ -17,49 +17,49 @@ class Rorden extends StatefulWidget {
 }
 
 Future<Orden> crearOrden(
-  DateTime fecha,
-  String vendedor,
-  int clienteId,
-  int vehiculoId,
-  String cilindros,
-  int condicionventaId,
-  String urgenciainicial,
-  String atencion,
-  String comentarios,
-  int centrocostoId,
-  String placa,
-  String ceniceros,
-  String cristalesRotos,
-  String quemacocos,
-  String espejoIzq,
-  String espejoDer,
-  String tapon,
-  String antena,
-  String tapetes,
-  String varilla,
-  String radio,
-  String espejoInt,
-  String gato,
-  String extinguidor,
-  String emblemas,
-  String encendedor,
-  String llanta,
-  double km,
-  double combustible,
-  String transmision,
-  String vestiduras,
-) async {
-  final String url = "https://apiserviciostunv1.000webhostapp.com/api/ordenes";
-  final response = await http.post(Uri.parse(url), body: {
+    DateTime fecha,
+    String tecnico,
+    int clienteId,
+    int vehiculoId,
+    String cilindros,
+    int condicionventaId,
+    String urgenciainicial,
+    dynamic atencion,
+    String trabajo,
+    int centrocostoId,
+    String placa,
+    String ceniceros,
+    String cristalesRotos,
+    String quemacocos,
+    String espejoIzq,
+    String espejoDer,
+    String tapon,
+    String antena,
+    String tapetes,
+    String varilla,
+    String radio,
+    String espejoInt,
+    String gato,
+    String extinguidor,
+    String emblemas,
+    String encendedor,
+    String llanta,
+    double km,
+    double combustible,
+    String transmision,
+    String vestiduras) async {
+  final Uri url =
+      Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/ordenes");
+  final response = await http.post(url, body: {
     "fecha": fecha.toIso8601String(),
-    "vendedor": vendedor,
+    "tecnico": tecnico,
     "cliente_id": clienteId.toString(),
     "vehiculo_id": vehiculoId.toString(),
     "cilindros": cilindros,
     "condicionventa_id": condicionventaId.toString(),
     "urgenciainicial": urgenciainicial,
     "atencion": atencion,
-    "comentarios": comentarios,
+    "trabajo": trabajo,
     "centrocosto_id": centrocostoId.toString(),
     "placa": placa,
     "ceniceros": ceniceros,
@@ -92,6 +92,8 @@ Future<Orden> crearOrden(
 
 class _RordenState extends State<Rorden> {
   bool isLoading = false;
+  bool isLoadingCliente = false;
+
   List<String> autoCompleteClient;
   List<Cliente> clientes = [];
   Future<bool> getRequestClient() async {
@@ -111,8 +113,8 @@ class _RordenState extends State<Rorden> {
   List<String> autoCompleteVehiculo;
   List<Vehiculo> vehiculos = [];
   Future<bool> getRequestVehiculo() async {
-    final Uri url =
-        Uri.parse("https://apiserviciostunv1.000webhostapp.com/api/vehiculos");
+    final Uri url = Uri.parse(
+        "https://apiserviciostunv1.000webhostapp.com/api/clientes/vehiculos/$clienteId");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -249,13 +251,14 @@ class _RordenState extends State<Rorden> {
   bool llanta = false;
 
   final _fecha = TextEditingController();
-  final _vendedor = TextEditingController();
+  final _tecnico = TextEditingController();
   TextEditingController _cliente;
   TextEditingController _vehiculo;
+  String clienteId;
   final _cilindros = TextEditingController();
   TextEditingController _condicionventa;
   final _atencion = TextEditingController();
-  final _comentarios = TextEditingController();
+  final _trabajo = TextEditingController();
   TextEditingController _centrocosto;
   final _km = TextEditingController();
   final _combustible = TextEditingController();
@@ -266,11 +269,9 @@ class _RordenState extends State<Rorden> {
   void initState() {
     super.initState();
     fetchAutoCompleteClient();
-    fetchAutoCompleteVehiculo();
     fetchAutoCompleteCosto();
     fetchAutoCompleteCondiciones();
     getRequestClient();
-    getRequestVehiculo();
     getRequestCosto();
     getRequestCondicion();
   }
@@ -323,7 +324,7 @@ class _RordenState extends State<Rorden> {
                     height: 30.0,
                   ),
                   Text(
-                    "Vendedor:",
+                    "Técnico:",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -334,7 +335,7 @@ class _RordenState extends State<Rorden> {
                   ),
                   TextField(
                     keyboardType: TextInputType.text,
-                    controller: _vendedor,
+                    controller: _tecnico,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -348,7 +349,7 @@ class _RordenState extends State<Rorden> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Nombre del vendedor",
+                      hintText: "Nombre del técnico",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -369,7 +370,7 @@ class _RordenState extends State<Rorden> {
                         (context, Function(String) onSelected, options) {
                       return Material(
                         elevation: 4,
-                        child: ListView.separated(
+                        child: ListView.builder(
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             final cliente = clientes[index];
@@ -388,11 +389,15 @@ class _RordenState extends State<Rorden> {
                                     TextStyle(fontWeight: FontWeight.w700),
                               ),
                               onTap: () {
+                                setState(() {
+                                  clienteId = cliente.id.toString();
+                                  fetchAutoCompleteVehiculo();
+                                  getRequestVehiculo();
+                                });
                                 onSelected(cliente.id.toString());
                               },
                             );
                           },
-                          separatorBuilder: (context, index) => Divider(),
                           itemCount: clientes.length,
                         ),
                       );
@@ -444,20 +449,19 @@ class _RordenState extends State<Rorden> {
                         (context, Function(String) onSelected, options) {
                       return Material(
                         elevation: 4,
-                        child: ListView.separated(
+                        child: ListView.builder(
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             final vehiculo = vehiculos[index];
                             return ListTile(
                               title: SubstringHighlight(
-                                text: vehiculo.marca,
+                                text: "Vehículo: " + vehiculo.equipo,
                                 term: _vehiculo.text,
                                 textStyleHighlight:
                                     TextStyle(fontWeight: FontWeight.w700),
                               ),
                               subtitle: SubstringHighlight(
-                                text:
-                                    "Cliente: " + vehiculo.clienteId.toString(),
+                                text: "Serie: " + vehiculo.serie,
                                 term: _vehiculo.text,
                                 textStyleHighlight:
                                     TextStyle(fontWeight: FontWeight.w700),
@@ -467,7 +471,6 @@ class _RordenState extends State<Rorden> {
                               },
                             );
                           },
-                          separatorBuilder: (context, index) => Divider(),
                           itemCount: vehiculos.length,
                         ),
                       );
@@ -669,7 +672,7 @@ class _RordenState extends State<Rorden> {
                     height: 30.0,
                   ),
                   Text(
-                    "Comentarios:",
+                    "Trabajo realizado:",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -680,7 +683,7 @@ class _RordenState extends State<Rorden> {
                   ),
                   TextField(
                     keyboardType: TextInputType.text,
-                    controller: _comentarios,
+                    controller: _trabajo,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -694,7 +697,7 @@ class _RordenState extends State<Rorden> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Comentarios",
+                      hintText: "Trabajo realizado",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -1282,7 +1285,7 @@ class _RordenState extends State<Rorden> {
                     ),
                   ),
                   SizedBox(
-                    height: 50.0,
+                    height: 20.0,
                   ),
                   ElevatedButton(
                     child: Text('Registrar orden',
@@ -1298,17 +1301,21 @@ class _RordenState extends State<Rorden> {
                       side: BorderSide(color: Colors.indigo[600], width: 2),
                     ),
                     onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+
                       await Future.delayed(Duration(seconds: 1));
                       Fluttertoast.showToast(msg: "Registro en proceso...");
                       final fecha = DateTime.now();
-                      final vendedor = _vendedor.text;
+                      final vendedor = _tecnico.text;
                       final cliente = int.parse(_cliente.text);
                       final vehiculo = int.parse(_vehiculo.text);
                       final cilindros = _cilindros.text;
                       final condicionventa = int.parse(_condicionventa.text);
                       final urgenciainicial1 = urgenciainicial;
                       final atencion = _atencion.text;
-                      final comentarios = _comentarios.text;
+                      final trabajo = _trabajo.text;
                       final centrocosto = int.parse(_centrocosto.text);
                       final placa1 = placas.toString();
                       final ceniceros1 = ceniceros.toString();
@@ -1341,7 +1348,7 @@ class _RordenState extends State<Rorden> {
                         condicionventa,
                         urgenciainicial1,
                         atencion,
-                        comentarios,
+                        trabajo,
                         centrocosto,
                         placa1,
                         ceniceros1,
@@ -1369,6 +1376,7 @@ class _RordenState extends State<Rorden> {
                         _orden = orden;
                       });
                       if (_orden == null) {
+                        isLoading = false;
                         _showAlertError(context);
                       } else {
                         await Future.delayed(Duration(seconds: 1));
@@ -1376,9 +1384,6 @@ class _RordenState extends State<Rorden> {
                         Navigator.pop(context);
                       }
                     },
-                  ),
-                  SizedBox(
-                    height: 50,
                   ),
                 ],
               ),
