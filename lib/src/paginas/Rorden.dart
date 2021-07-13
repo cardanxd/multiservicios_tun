@@ -264,6 +264,7 @@ class _RordenState extends State<Rorden> {
   final _combustible = TextEditingController();
   final _transmision = TextEditingController();
   final _vestiduras = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -287,1119 +288,1240 @@ class _RordenState extends State<Rorden> {
             )
           : Padding(
               padding: const EdgeInsets.all(20.0),
-              child: ListView(
-                children: <Widget>[
-                  Text(
-                    "Fecha:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: <Widget>[
+                    Text(
+                      "Fecha:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    controller: _fecha,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "$now",
-                      enabled: false,
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    SizedBox(
+                      height: 10.0,
                     ),
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Técnico:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    controller: _tecnico,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Nombre del técnico",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteClient.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final cliente = clientes[index];
-                            return ListTile(
-                              //title: Text(option.toString()),
-                              title: SubstringHighlight(
-                                text: cliente.nombre,
-                                term: _cliente.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              subtitle: SubstringHighlight(
-                                text: cliente.email,
-                                term: _cliente.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  clienteId = cliente.id.toString();
-                                  fetchAutoCompleteVehiculo();
-                                  getRequestVehiculo();
-                                });
-                                onSelected(cliente.id.toString());
-                              },
-                            );
-                          },
-                          itemCount: clientes.length,
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: _fecha,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
                         ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._cliente = controller;
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "$now",
+                        enabled: false,
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Text(
+                      "Técnico:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: _tecnico,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Nombre del técnico",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteClient.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final cliente = clientes[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: cliente.nombre,
+                                  term: _cliente.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: SubstringHighlight(
+                                  text: cliente.email,
+                                  term: _cliente.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    clienteId = cliente.id.toString();
+                                    fetchAutoCompleteVehiculo();
+                                    getRequestVehiculo();
+                                  });
+                                  onSelected(cliente.id.toString());
+                                },
+                              );
+                            },
+                            itemCount: clientes.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._cliente = controller;
 
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione el cliente",
+                            prefixIcon: Icon(Icons.search),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteVehiculo.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final vehiculo = vehiculos[index];
+                              return ListTile(
+                                title: SubstringHighlight(
+                                  text: "Vehículo: " + vehiculo.equipo,
+                                  term: _vehiculo.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: SubstringHighlight(
+                                  text: "Serie: " + vehiculo.serie,
+                                  term: _vehiculo.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(vehiculo.id.toString());
+                                },
+                              );
+                            },
+                            itemCount: vehiculos.length,
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione el cliente",
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteVehiculo.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final vehiculo = vehiculos[index];
-                            return ListTile(
-                              title: SubstringHighlight(
-                                text: "Vehículo: " + vehiculo.equipo,
-                                term: _vehiculo.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              subtitle: SubstringHighlight(
-                                text: "Serie: " + vehiculo.serie,
-                                term: _vehiculo.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              onTap: () {
-                                onSelected(vehiculo.id.toString());
-                              },
-                            );
-                          },
-                          itemCount: vehiculos.length,
-                        ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._vehiculo = controller;
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._vehiculo = controller;
 
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione el vehiculo",
+                            prefixIcon: Icon(Icons.search),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione el vehiculo",
-                          prefixIcon: Icon(Icons.search),
-                        ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _cilindros,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Cilindros",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                        );
+                      },
                     ),
-                  ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteCondicion.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final condicion = condiciones[index];
-                            return ListTile(
-                              //title: Text(option.toString()),
-                              title: SubstringHighlight(
-                                text: condicion.descripcion,
-                                term: _condicionventa.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              //subtitle: Text("Esto es un subtitulo"),
-                              onTap: () {
-                                onSelected(condicion.id.toString());
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(),
-                          itemCount: condiciones.length,
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _cilindros,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
                         ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._condicionventa = controller;
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Cilindros",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteCondicion.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final condicion = condiciones[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: condicion.descripcion,
+                                  term: _condicionventa.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                //subtitle: Text("Esto es un subtitulo"),
+                                onTap: () {
+                                  onSelected(condicion.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: condiciones.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._condicionventa = controller;
 
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione la condicion de venta",
+                            prefixIcon: Icon(Icons.search),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione la condicion de venta",
-                          prefixIcon: Icon(Icons.search),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Text(
+                      "Urgencia Inicial:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    DropdownButton<String>(
+                      value: urgenciainicial,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 2,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          urgenciainicial = value;
+                        });
+                      },
+                      items: <String>['Baja', 'Media', 'Alta']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    //Nombre del chofer
+                    Text(
+                      "Atencion:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: _atencion,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
                         ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Urgencia Inicial:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  DropdownButton<String>(
-                    value: urgenciainicial,
-                    icon: const Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    elevation: 16,
-                    isExpanded: true,
-                    underline: Container(
-                      height: 2,
-                      color: Colors.grey,
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        urgenciainicial = value;
-                      });
-                    },
-                    items: <String>['Baja', 'Media', 'Alta']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  //Nombre del chofer
-                  Text(
-                    "Atencion:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    controller: _atencion,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Atención",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Trabajo realizado:",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    controller: _trabajo,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Trabajo realizado",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteCosto.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final costo = costos[index];
-                            return ListTile(
-                              //title: Text(option.toString()),
-                              title: SubstringHighlight(
-                                text: costo.descripcion,
-                                term: _centrocosto.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              onTap: () {
-                                onSelected(costo.id.toString());
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) => Divider(),
-                          itemCount: costos.length,
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
                         ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._centrocosto = controller;
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Atención",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Text(
+                      "Trabajo realizado:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: _trabajo,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Trabajo realizado",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteCosto.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final costo = costos[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: costo.descripcion,
+                                  term: _centrocosto.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(costo.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: costos.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._centrocosto = controller;
 
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione el centro costo",
+                            prefixIcon: Icon(Icons.search),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Text(
+                      "Inventario del vehiculo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Placas",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        Checkbox(
+                            value: placas,
+                            onChanged: (value) {
+                              setState(() {
+                                placas = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Ceniceros",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
                           ),
-                          hintText: "Seleccione el centro costo",
-                          prefixIcon: Icon(Icons.search),
                         ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Inventario del vehiculo",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                        Checkbox(
+                            value: ceniceros,
+                            onChanged: (value) {
+                              setState(() {
+                                ceniceros = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Placas",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Cristales rotos",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      Checkbox(
-                          value: placas,
-                          onChanged: (value) {
-                            setState(() {
-                              placas = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Ceniceros",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: ceniceros,
-                          onChanged: (value) {
-                            setState(() {
-                              ceniceros = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Cristales rotos",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: cristalesrotos,
-                          onChanged: (value) {
-                            setState(() {
-                              cristalesrotos = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Quemacocos",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: quemacocos,
-                          onChanged: (value) {
-                            setState(() {
-                              quemacocos = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Espejo izquierdo",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: espejoizq,
-                          onChanged: (value) {
-                            setState(() {
-                              espejoizq = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Espejo derecho",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: espejoder,
-                          onChanged: (value) {
-                            setState(() {
-                              espejoder = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Espejo interior",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: espejosint,
-                          onChanged: (value) {
-                            setState(() {
-                              espejosint = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Tapon",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: tapon,
-                          onChanged: (value) {
-                            setState(() {
-                              tapon = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Antena",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: antena,
-                          onChanged: (value) {
-                            setState(() {
-                              antena = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Tapetes",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: tapetes,
-                          onChanged: (value) {
-                            setState(() {
-                              tapetes = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Varilla",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: varilla,
-                          onChanged: (value) {
-                            setState(() {
-                              varilla = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Reloj",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: reloj,
-                          onChanged: (value) {
-                            setState(() {
-                              reloj = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Manija",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: manija,
-                          onChanged: (value) {
-                            setState(() {
-                              manija = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Radio",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: radio,
-                          onChanged: (value) {
-                            setState(() {
-                              radio = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Gato",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: gato,
-                          onChanged: (value) {
-                            setState(() {
-                              gato = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Extinguidor",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: extinguidor,
-                          onChanged: (value) {
-                            setState(() {
-                              extinguidor = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Emblemas",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: emblemas,
-                          onChanged: (value) {
-                            setState(() {
-                              emblemas = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Encendedor",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: encendedor,
-                          onChanged: (value) {
-                            setState(() {
-                              encendedor = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "Llanta",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Checkbox(
-                          value: llanta,
-                          onChanged: (value) {
-                            setState(() {
-                              llanta = value;
-                            });
-                          }),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  ),
-                  Divider(height: 5),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Estado del vehiculo",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                        Checkbox(
+                            value: cristalesrotos,
+                            onChanged: (value) {
+                              setState(() {
+                                cristalesrotos = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _km,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Kilometraje",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Quemacocos",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: quemacocos,
+                            onChanged: (value) {
+                              setState(() {
+                                quemacocos = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.number,
-                    controller: _combustible,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Nivel de combustible",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Espejo izquierdo",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: espejoizq,
+                            onChanged: (value) {
+                              setState(() {
+                                espejoizq = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    controller: _transmision,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Transmisión",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Espejo derecho",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: espejoder,
+                            onChanged: (value) {
+                              setState(() {
+                                espejoder = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    keyboardType: TextInputType.text,
-                    controller: _vestiduras,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Vestiduras",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Espejo interior",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: espejosint,
+                            onChanged: (value) {
+                              setState(() {
+                                espejosint = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  ElevatedButton(
-                    child: Text('Registrar orden',
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.indigo,
-                      onPrimary: Colors.grey[900],
-                      shadowColor: Colors.black,
-                      elevation: 5,
-                      minimumSize: Size(150, 40),
-                      alignment: Alignment.center,
-                      shape: StadiumBorder(),
-                      side: BorderSide(color: Colors.indigo[600], width: 2),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Tapon",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: tapon,
+                            onChanged: (value) {
+                              setState(() {
+                                tapon = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     ),
-                    onPressed: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Antena",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: antena,
+                            onChanged: (value) {
+                              setState(() {
+                                antena = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Tapetes",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: tapetes,
+                            onChanged: (value) {
+                              setState(() {
+                                tapetes = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Varilla",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: varilla,
+                            onChanged: (value) {
+                              setState(() {
+                                varilla = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Reloj",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: reloj,
+                            onChanged: (value) {
+                              setState(() {
+                                reloj = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Manija",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: manija,
+                            onChanged: (value) {
+                              setState(() {
+                                manija = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Radio",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: radio,
+                            onChanged: (value) {
+                              setState(() {
+                                radio = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Gato",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: gato,
+                            onChanged: (value) {
+                              setState(() {
+                                gato = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Extinguidor",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: extinguidor,
+                            onChanged: (value) {
+                              setState(() {
+                                extinguidor = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Emblemas",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: emblemas,
+                            onChanged: (value) {
+                              setState(() {
+                                emblemas = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Encendedor",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: encendedor,
+                            onChanged: (value) {
+                              setState(() {
+                                encendedor = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "Llanta",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Checkbox(
+                            value: llanta,
+                            onChanged: (value) {
+                              setState(() {
+                                llanta = value;
+                              });
+                            }),
+                      ],
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    Divider(height: 5),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    Text(
+                      "Estado del vehiculo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _km,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Kilometraje",
+                        helperText: "Número con decimales",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _combustible,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Nivel de combustible",
+                        helperText: "Número con decimales",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: _transmision,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Transmisión",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: _vestiduras,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Vestiduras",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    ElevatedButton(
+                      child: Text('Registrar orden',
+                          style: TextStyle(color: Colors.white, fontSize: 18)),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.indigo,
+                        onPrimary: Colors.grey[900],
+                        shadowColor: Colors.black,
+                        elevation: 5,
+                        minimumSize: Size(150, 40),
+                        alignment: Alignment.center,
+                        shape: StadiumBorder(),
+                        side: BorderSide(color: Colors.indigo[600], width: 2),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
 
-                      await Future.delayed(Duration(seconds: 1));
-                      Fluttertoast.showToast(msg: "Registro en proceso...");
-                      final fecha = DateTime.now();
-                      final vendedor = _tecnico.text;
-                      final cliente = int.parse(_cliente.text);
-                      final vehiculo = int.parse(_vehiculo.text);
-                      final cilindros = _cilindros.text;
-                      final condicionventa = int.parse(_condicionventa.text);
-                      final urgenciainicial1 = urgenciainicial;
-                      final atencion = _atencion.text;
-                      final trabajo = _trabajo.text;
-                      final centrocosto = int.parse(_centrocosto.text);
-                      final placa1 = placas.toString();
-                      final ceniceros1 = ceniceros.toString();
-                      final cristalesRotos1 = cristalesrotos.toString();
-                      final quemacocos1 = quemacocos.toString();
-                      final espejoIzq1 = espejoizq.toString();
-                      final espejoDer1 = espejoder.toString();
-                      final tapon1 = tapon.toString();
-                      final antena1 = antena.toString();
-                      final tapetes1 = tapetes.toString();
-                      final varilla1 = varilla.toString();
-                      final radio1 = radio.toString();
-                      final espejoInt1 = espejosint.toString();
-                      final gato1 = gato.toString();
-                      final extinguidor1 = extinguidor.toString();
-                      final emblemas1 = emblemas.toString();
-                      final encendedor1 = encendedor.toString();
-                      final llanta1 = llanta.toString();
-                      final km = double.parse(_km.text);
-                      final combustible = double.parse(_combustible.text);
-                      final transmision = _transmision.text;
-                      final vestiduras = _vestiduras.text;
-
-                      final Orden orden = await crearOrden(
-                        fecha,
-                        vendedor,
-                        cliente,
-                        vehiculo,
-                        cilindros,
-                        condicionventa,
-                        urgenciainicial1,
-                        atencion,
-                        trabajo,
-                        centrocosto,
-                        placa1,
-                        ceniceros1,
-                        cristalesRotos1,
-                        quemacocos1,
-                        espejoIzq1,
-                        espejoDer1,
-                        tapon1,
-                        antena1,
-                        tapetes1,
-                        varilla1,
-                        radio1,
-                        espejoInt1,
-                        gato1,
-                        extinguidor1,
-                        emblemas1,
-                        encendedor1,
-                        llanta1,
-                        km,
-                        combustible,
-                        transmision,
-                        vestiduras,
-                      );
-                      setState(() {
-                        _orden = orden;
-                      });
-                      if (_orden == null) {
-                        isLoading = false;
-                        _showAlertError(context);
-                      } else {
                         await Future.delayed(Duration(seconds: 1));
-                        Fluttertoast.showToast(msg: "Registro exitosamente");
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                ],
+                        Fluttertoast.showToast(msg: "Registro en proceso...");
+
+                        final fecha = DateTime.now();
+                        String vendedor;
+                        if (_tecnico.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'vendedor');
+                          });
+                        } else {
+                          vendedor = _tecnico.text;
+                        }
+                        int cliente;
+                        if (_cliente.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'cliente');
+                          });
+                        } else {
+                          cliente = int.parse(_cliente.text);
+                        }
+                        int vehiculo;
+                        if (_vehiculo.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'vehiculo');
+                          });
+                        } else {
+                          vehiculo = int.parse(_vehiculo.text);
+                        }
+                        String cilindros;
+                        if (_cilindros.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'cilindros');
+                          });
+                        } else {
+                          cilindros = _cilindros.text;
+                        }
+                        int condicionventa;
+                        if (_condicionventa.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'condicion de venta');
+                          });
+                        } else {
+                          condicionventa = int.parse(_condicionventa.text);
+                        }
+                        final urgenciainicial1 = urgenciainicial;
+                        String atencion;
+                        if (_atencion.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'atención');
+                          });
+                        } else {
+                          atencion = _atencion.text;
+                        }
+                        String trabajo;
+                        if (_trabajo.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'trabajo');
+                          });
+                        } else {
+                          trabajo = _trabajo.text;
+                        }
+                        int centrocosto;
+                        if (_centrocosto.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'centro costo');
+                          });
+                        } else {
+                          centrocosto = int.parse(_centrocosto.text);
+                        }
+                        final placa1 = placas.toString();
+                        final ceniceros1 = ceniceros.toString();
+                        final cristalesRotos1 = cristalesrotos.toString();
+                        final quemacocos1 = quemacocos.toString();
+                        final espejoIzq1 = espejoizq.toString();
+                        final espejoDer1 = espejoder.toString();
+                        final tapon1 = tapon.toString();
+                        final antena1 = antena.toString();
+                        final tapetes1 = tapetes.toString();
+                        final varilla1 = varilla.toString();
+                        final radio1 = radio.toString();
+                        final espejoInt1 = espejosint.toString();
+                        final gato1 = gato.toString();
+                        final extinguidor1 = extinguidor.toString();
+                        final emblemas1 = emblemas.toString();
+                        final encendedor1 = encendedor.toString();
+                        final llanta1 = llanta.toString();
+                        double km;
+                        if (_km.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'kilometros');
+                          });
+                        } else {
+                          km = double.parse(_km.text);
+                        }
+                        double combustible;
+                        if (_combustible.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'combustible');
+                          });
+                        } else {
+                          combustible = double.parse(_combustible.text);
+                        }
+                        String transmision;
+                        if (_transmision.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'transmisión');
+                          });
+                        } else {
+                          transmision = _transmision.text;
+                        }
+                        String vestiduras;
+                        if (_vestiduras.text.isEmpty) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlert(context, 'vestiduras');
+                          });
+                        } else {
+                          vestiduras = _vestiduras.text;
+                        }
+
+                        final Orden orden = await crearOrden(
+                          fecha,
+                          vendedor,
+                          cliente,
+                          vehiculo,
+                          cilindros,
+                          condicionventa,
+                          urgenciainicial1,
+                          atencion,
+                          trabajo,
+                          centrocosto,
+                          placa1,
+                          ceniceros1,
+                          cristalesRotos1,
+                          quemacocos1,
+                          espejoIzq1,
+                          espejoDer1,
+                          tapon1,
+                          antena1,
+                          tapetes1,
+                          varilla1,
+                          radio1,
+                          espejoInt1,
+                          gato1,
+                          extinguidor1,
+                          emblemas1,
+                          encendedor1,
+                          llanta1,
+                          km,
+                          combustible,
+                          transmision,
+                          vestiduras,
+                        );
+                        setState(() {
+                          _orden = orden;
+                        });
+                        if (_orden == null) {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'Verifique que los campos estén llenos o sean correctos.');
+                        } else {
+                          await Future.delayed(Duration(seconds: 1));
+                          Fluttertoast.showToast(msg: "Registro exitosamente");
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
     );
   }
 }
 
-void _showAlertError(BuildContext context) {
+void _showAlert(BuildContext context, msg) {
   showDialog(
       barrierDismissible: false,
       context: context,
       builder: (_) => new AlertDialog(
             title: Text('¡Problemas en el registro!'),
             content:
-                Text('Verifique que los campos estén llenos o sean correctos.'),
+                Text('El campo $msg es obligatorio, por favor escriba el $msg'),
+            actions: [
+              TextButton(
+                child: Text('Aceptar'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ));
+}
+
+void _showAlertError(BuildContext context, msg) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) => new AlertDialog(
+            title: Text('¡Problemas en el registro!'),
+            content: Text(msg),
             actions: [
               TextButton(
                 child: Text('Aceptar'),

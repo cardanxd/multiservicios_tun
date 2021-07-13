@@ -83,6 +83,7 @@ class _RvehiculoState extends State<Rvehiculo> {
   final _serie = TextEditingController();
   final _economico = TextEditingController();
   final _placa = TextEditingController();
+  var _keyForm = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -102,270 +103,335 @@ class _RvehiculoState extends State<Rvehiculo> {
             )
           : Padding(
               padding: const EdgeInsets.all(20.0),
-              child: ListView(
-                children: <Widget>[
-                  Autocomplete(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      } else {
-                        return autoCompleteClient.where((word) => word
-                            .toLowerCase()
-                            .contains(textEditingValue.text.toLowerCase()));
-                      }
-                    },
-                    optionsViewBuilder:
-                        (context, Function(String) onSelected, options) {
-                      return Material(
-                        elevation: 4,
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          itemBuilder: (context, index) {
-                            final cliente = clientes[index];
-                            return ListTile(
-                              title: SubstringHighlight(
-                                text: cliente.nombre,
-                                term: _cliente.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              subtitle: SubstringHighlight(
-                                text: cliente.email,
-                                term: _cliente.text,
-                                textStyleHighlight:
-                                    TextStyle(fontWeight: FontWeight.w700),
-                              ),
-                              onTap: () {
-                                onSelected(cliente.id.toString());
-                              },
-                            );
+              child: Form(
+                key: _keyForm,
+                child: ListView(
+                  children: <Widget>[
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteClient.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final cliente = clientes[index];
+                              return ListTile(
+                                title: SubstringHighlight(
+                                  text: cliente.nombre,
+                                  term: _cliente.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: SubstringHighlight(
+                                  text: cliente.email,
+                                  term: _cliente.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(cliente.id.toString());
+                                },
+                              );
+                            },
+                            itemCount: clientes.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._cliente = controller;
+
+                        return TextFormField(
+                          validator: (cliente) {
+                            if (cliente.isEmpty) {
+                              return 'Campo obligatorio';
+                            }
+                            return null;
                           },
-                          itemCount: clientes.length,
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione el cliente",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      validator: (equipo) {
+                        if (equipo.isEmpty) {
+                          return 'Campo obligatorio';
+                        }
+                        return null;
+                      },
+                      controller: _equipo,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
                         ),
-                      );
-                    },
-                    onSelected: (selectedString) {
-                      print(selectedString);
-                    },
-                    fieldViewBuilder:
-                        (context, controller, focusNode, onEditingComplete) {
-                      this._cliente = controller;
-
-                      return TextField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide(color: Colors.grey[300]),
-                          ),
-                          hintText: "Seleccione el cliente",
-                          prefixIcon: Icon(Icons.search),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
                         ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    controller: _equipo,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Tipo de equipo",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Tipo de equipo",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    controller: _marca,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Marca",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    SizedBox(
+                      height: 10.0,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    controller: _modelo,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
+                    TextFormField(
+                      validator: (marca) {
+                        if (marca.isEmpty) {
+                          return 'Campo obligatorio';
+                        }
+                        return null;
+                      },
+                      controller: _marca,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Marca",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Modelo",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    controller: _serie,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Número de serie",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    SizedBox(
+                      height: 10.0,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    controller: _economico,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
+                    TextFormField(
+                      validator: (modelo) {
+                        if (modelo.isEmpty) {
+                          return 'Campo obligatorio';
+                        }
+                        return null;
+                      },
+                      controller: _modelo,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Modelo",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Número económico",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextField(
-                    controller: _placa,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey[300]),
-                      ),
-                      hintText: "Placas",
-                      prefixIcon: Icon(Icons.arrow_right_outlined),
+                    SizedBox(
+                      height: 10.0,
                     ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  ElevatedButton(
-                    child: Text('Registrar vehiculo',
-                        style: TextStyle(color: Colors.white, fontSize: 18)),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.indigo,
-                      onPrimary: Colors.grey[900],
-                      shadowColor: Colors.black,
-                      elevation: 5,
-                      minimumSize: Size(150, 40),
-                      alignment: Alignment.center,
-                      shape: StadiumBorder(),
-                      side: BorderSide(color: Colors.indigo[600], width: 2),
+                    TextFormField(
+                      validator: (serie) {
+                        if (serie.isEmpty) {
+                          return 'Campo obligatorio';
+                        }
+                        return null;
+                      },
+                      controller: _serie,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Número de serie",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
                     ),
-                    onPressed: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      await Future.delayed(Duration(seconds: 1));
-                      Fluttertoast.showToast(msg: "Registro en proceso...");
-                      final cliente = int.parse(_cliente.text);
-                      final equipo = _equipo.text;
-                      final marca = _marca.text;
-                      final modelo = _modelo.text;
-                      final serie = _serie.text;
-                      final economico = _economico.text;
-                      final placa = _placa.text;
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      validator: (eco) {
+                        if (eco.isEmpty) {
+                          return 'Campo obligatorio';
+                        }
+                        return null;
+                      },
+                      controller: _economico,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Número económico",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      validator: (placa) {
+                        if (placa.isEmpty) {
+                          return 'Campo obligatorio';
+                        }
+                        return null;
+                      },
+                      controller: _placa,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Placas",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    ElevatedButton(
+                      child: Text('Registrar vehiculo',
+                          style: TextStyle(color: Colors.white, fontSize: 18)),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.indigo,
+                        onPrimary: Colors.grey[900],
+                        shadowColor: Colors.black,
+                        elevation: 5,
+                        minimumSize: Size(150, 40),
+                        alignment: Alignment.center,
+                        shape: StadiumBorder(),
+                        side: BorderSide(color: Colors.indigo[600], width: 2),
+                      ),
+                      onPressed: () async {
+                        if (_keyForm.currentState.validate()) {
+                          setState(() {
+                            isLoading = true;
+                          });
 
-                      final Vehiculo vehiculo = await crearVehiculo(cliente,
-                          equipo, marca, modelo, serie, economico, placa);
-                      setState(() {
-                        _vehiculo = vehiculo;
-                      });
-                      if (_vehiculo == null) {
-                        isLoading = false;
-                        _showAlertError(context);
-                      } else {
-                        await Future.delayed(Duration(seconds: 1));
-                        Fluttertoast.showToast(msg: "Registro exitosamente");
-                        Navigator.pop(context);
-                      }
-                    },
-                  )
-                ],
+                          await Future.delayed(Duration(seconds: 1));
+                          Fluttertoast.showToast(msg: "Registro en proceso");
+
+                          /*final snack = SnackBar(
+                              content: Text('Registro en proceso'),
+                              action: SnackBarAction(
+                                label: 'Undo',
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ));
+
+                          ScaffoldMessenger.of(context).showSnackBar(snack);*/
+
+                          final cliente = int.parse(_cliente.text);
+                          final equipo = _equipo.text;
+                          final marca = _marca.text;
+                          final modelo = _modelo.text;
+                          final serie = _serie.text;
+                          final economico = _economico.text;
+                          final placa = _placa.text;
+
+                          final Vehiculo vehiculo = await crearVehiculo(cliente,
+                              equipo, marca, modelo, serie, economico, placa);
+                          setState(() {
+                            _vehiculo = vehiculo;
+                          });
+                          if (_vehiculo == null) {
+                            isLoading = false;
+                            _showAlertError(context,
+                                'Verifique que los campos estén llenos o sean correctos.');
+                          } else {
+                            await Future.delayed(Duration(seconds: 1));
+                            Fluttertoast.showToast(
+                                msg: "Registro exitosamente");
+                            Navigator.pop(context);
+                          }
+                        } else {
+                          await Future.delayed(Duration(seconds: 1));
+                          _showAlertError(context,
+                              'Verifique que los campos estén llenos o sean correctos.');
+                        }
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
     );
   }
 }
 
-void _showAlertError(BuildContext context) {
+void _showAlertError(BuildContext context, msg) {
   showDialog(
       barrierDismissible: false,
       context: context,
       builder: (_) => new AlertDialog(
             title: Text('¡Problemas en el registro!'),
-            content:
-                Text('Verifique que los campos estén llenos o sean correctos.'),
+            content: Text(msg),
             actions: [
               TextButton(
                 child: Text('Aceptar'),

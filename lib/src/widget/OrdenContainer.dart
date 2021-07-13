@@ -26,7 +26,7 @@ class OrdenContainer extends StatelessWidget {
             colorBlendMode: BlendMode.darken,
             semanticLabel: '¿Desear realizar un nuevo registro?',
           ),
-          Divider(endIndent: 50.0),
+          Divider(endIndent: 30.0),
           new Container(
               child: new Column(children: <Widget>[
             Divider(height: 40),

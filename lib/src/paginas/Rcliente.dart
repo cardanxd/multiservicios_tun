@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:email_validator/email_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +63,9 @@ Future<Cliente> createCliente(
 
 class _RclienteState extends State<Rcliente> {
   bool isLoading = false;
+  Random random = new Random();
+  bool isValid;
+  //final bool isValid = EmailValidator.validate(email);
   Cliente _cliente;
   final _nombre = TextEditingController();
   final _razon = TextEditingController();
@@ -106,7 +111,7 @@ class _RclienteState extends State<Rcliente> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _nombre,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -121,14 +126,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Nombre completo",
+                      labelText: "Nombre completo",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _razon,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -143,14 +149,14 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Razón social",
+                      labelText: "Razón social",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _rfc,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -165,14 +171,14 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "RFC",
+                      labelText: "RFC",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     controller: _email,
                     decoration: InputDecoration(
@@ -188,9 +194,13 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Correo electrónico",
+                      labelText: "Correo electrónico",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
+                    onChanged: (value) {
+                      isValid = EmailValidator.validate(value);
+                    },
                   ),
                   SizedBox(
                     height: 30.0,
@@ -205,7 +215,7 @@ class _RclienteState extends State<Rcliente> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _year,
                     decoration: InputDecoration(
@@ -221,14 +231,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Seleccione el año (2021)",
+                      labelText: "Seleccione el año",
+                      helperText: "Cuatro dígitos",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _month,
                     decoration: InputDecoration(
@@ -244,14 +255,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Seleccione el mes (05)",
+                      labelText: "Seleccione el mes",
+                      helperText: "Dos dígitos",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _day,
                     decoration: InputDecoration(
@@ -267,7 +279,8 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Seleccione el día (04)",
+                      labelText: "Seleccione el día",
+                      helperText: "Dos dígitos",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -284,7 +297,7 @@ class _RclienteState extends State<Rcliente> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _calle,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -299,14 +312,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Calle",
+                      labelText: "Calle",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _exterior,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -321,14 +335,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Número exterior",
+                      labelText: "Número exterior",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _interior,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -343,14 +358,14 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Número interior",
+                      labelText: "Número interior",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _ecalle,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -365,14 +380,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Entre calle",
+                      labelText: "Entre calle",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _ycalle,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -387,14 +403,14 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Y la calle",
+                      labelText: "Y la calle",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _colonia,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -409,14 +425,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Colonia",
+                      labelText: "Colonia",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _postal,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -431,14 +448,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Código postal",
+                      labelText: "Código postal",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _ciudad,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -453,14 +471,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Ciudad",
+                      labelText: "Ciudad",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _estado,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -475,14 +494,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Estado",
+                      labelText: "Estado",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     controller: _pais,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -497,7 +517,8 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "País",
+                      labelText: "País",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -514,7 +535,7 @@ class _RclienteState extends State<Rcliente> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _particular,
                     decoration: InputDecoration(
@@ -530,14 +551,15 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Número particular",
+                      labelText: "Número particular",
+                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _oficina,
                     decoration: InputDecoration(
@@ -553,14 +575,14 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Número de oficina",
+                      labelText: "Número de oficina",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
                   SizedBox(
                     height: 10.0,
                   ),
-                  TextField(
+                  TextFormField(
                     keyboardType: TextInputType.number,
                     controller: _movil,
                     decoration: InputDecoration(
@@ -576,7 +598,7 @@ class _RclienteState extends State<Rcliente> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
-                      hintText: "Número móvil",
+                      labelText: "Número móvil",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -604,30 +626,196 @@ class _RclienteState extends State<Rcliente> {
                       await Future.delayed(Duration(seconds: 1));
                       Fluttertoast.showToast(msg: "Registro en proceso");
 
-                      final nombre = _nombre.text;
-                      final razon = _razon.text;
-                      final rfc = _rfc.text;
-                      final email = _email.text;
-                      final calle = _calle.text;
-                      final exterior = _exterior.text;
-                      final interior = _interior.text;
-                      final ecalle = _ecalle.text;
-                      final ycalle = _ycalle.text;
-                      final colonia = _colonia.text;
-                      final postal = _postal.text;
-                      final ciudad = _ciudad.text;
-                      final estado = _estado.text;
-                      final pais = _pais.text;
-                      final particular = _particular.text;
-                      final oficina = _oficina.text;
-                      final movil = _movil.text;
-                      final date = _year.text +
-                          "-" +
-                          _month.text +
-                          "-" +
-                          _day.text +
-                          " " +
-                          "00:00:00";
+                      int randomNumber = random.nextInt(1000000);
+
+                      String nombre;
+                      if (_nombre.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo nombre es obligatorio, por favor escriba el nombre');
+                        });
+                      } else {
+                        nombre = _nombre.text;
+                      }
+                      String razon;
+                      if (_razon.text.isEmpty) {
+                        razon = "Sin razón social";
+                      } else {
+                        razon = _razon.text;
+                      }
+                      String rfc;
+                      if (_rfc.text.isEmpty) {
+                        rfc = "Sin RFC - $randomNumber";
+                      } else {
+                        rfc = _rfc.text;
+                      }
+                      String email;
+                      if (_email.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo email es obligatorio, por favor escriba el email');
+                        });
+                      } else {
+                        if (isValid == false) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlertError(context,
+                                'El campo email es inválido, por favor escriba correctamente el email');
+                          });
+                        } else {
+                          email = _email.text;
+                        }
+                      }
+
+                      String calle;
+                      if (_calle.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo calle es obligatorio, por favor escriba la calle');
+                        });
+                      } else {
+                        calle = _calle.text;
+                      }
+                      String exterior;
+                      if (_exterior.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo número exterior es obligatorio, por favor escriba el número exterior');
+                        });
+                      } else {
+                        exterior = _exterior.text;
+                      }
+                      String interior;
+                      if (_interior.text.isEmpty) {
+                        interior = "Sin número interior";
+                      } else {
+                        interior = _interior.text;
+                      }
+                      String ecalle;
+                      if (_ecalle.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo entre calle es obligatorio, por favor escriba la calle');
+                        });
+                      } else {
+                        ecalle = _ecalle.text;
+                      }
+                      String ycalle;
+                      if (_ycalle.text.isEmpty) {
+                        ycalle = "Sin calle";
+                      } else {
+                        ycalle = _ycalle.text;
+                      }
+                      String colonia;
+                      if (_colonia.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo colonia es obligatoria, por favor escriba la colonia');
+                        });
+                      } else {
+                        colonia = _colonia.text;
+                      }
+                      String postal;
+                      if (_postal.text.isEmpty) {
+                        postal = "97000";
+                      } else {
+                        postal = _postal.text;
+                      }
+                      String ciudad;
+                      if (_ciudad.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo ciudad es obligatorio, por favor escriba la ciudad');
+                        });
+                      } else {
+                        ciudad = _ciudad.text;
+                      }
+                      String estado;
+                      if (_estado.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo Estado es obligatorio, por favor escriba el Estado');
+                        });
+                      } else {
+                        estado = _estado.text;
+                      }
+                      String pais;
+                      if (_pais.text.isEmpty) {
+                        pais = "México";
+                      } else {
+                        pais = _pais.text;
+                      }
+                      String particular;
+                      if (_particular.text.isEmpty) {
+                        setState(() {
+                          isLoading = false;
+                          _showAlertError(context,
+                              'El campo número particular es obligatorio, por favor escriba el número particular');
+                        });
+                      } else {
+                        particular = _particular.text;
+                      }
+                      String oficina;
+                      if (_oficina.text.isEmpty) {
+                        oficina = "Sin número - $randomNumber";
+                      } else {
+                        oficina = _oficina.text;
+                      }
+                      String movil;
+                      if (_movil.text.isEmpty) {
+                        movil = "Sin número - $randomNumber";
+                      } else {
+                        movil = _movil.text;
+                      }
+
+                      String date;
+                      if (_year.text.isEmpty ||
+                          _month.text.isEmpty ||
+                          _day.text.isEmpty) {
+                        date = "1994-09-14 00:00:00";
+                      } else {
+                        String year;
+                        if (_year.text.length < 4 || _year.text.length > 4) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlertError(
+                                context, 'El año debe tener cuatro dígitos');
+                          });
+                        } else {
+                          year = _year.text;
+                        }
+                        String month;
+                        if (_month.text.length < 2 || _month.text.length > 2) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlertError(
+                                context, 'El mes debe tener dos digitos');
+                          });
+                        } else {
+                          month = _month.text;
+                        }
+                        String day;
+                        if (_day.text.length < 2 || _day.text.length > 2) {
+                          setState(() {
+                            isLoading = false;
+                            _showAlertError(
+                                context, 'El día debe tener dos digitos');
+                          });
+                        } else {
+                          day = _day.text;
+                        }
+                        date =
+                            year + "-" + month + "-" + day + " " + "00:00:00";
+                      }
+
                       final birthday = DateTime.parse(date);
 
                       final Cliente cliente = await createCliente(
@@ -654,7 +842,8 @@ class _RclienteState extends State<Rcliente> {
                       });
                       if (_cliente == null) {
                         isLoading = false;
-                        _showAlertError(context);
+                        _showAlertError(context,
+                            'Verifique que los campos estén llenos o sean correctos.');
                       } else {
                         await Future.delayed(Duration(seconds: 1));
                         Fluttertoast.showToast(msg: "Registro exitosamente");
@@ -669,14 +858,13 @@ class _RclienteState extends State<Rcliente> {
   }
 }
 
-void _showAlertError(BuildContext context) {
+void _showAlertError(BuildContext context, String msg) {
   showDialog(
       barrierDismissible: false,
       context: context,
       builder: (_) => new AlertDialog(
             title: Text('¡Problemas en el registro!'),
-            content:
-                Text('Verifique que los campos estén llenos o sean correctos.'),
+            content: Text(msg),
             actions: [
               TextButton(
                 child: Text('Aceptar'),
