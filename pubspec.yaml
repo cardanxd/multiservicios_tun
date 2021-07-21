@@ -17,6 +17,7 @@ dependencies:
   substring_highlight: ^1.0.33
   fluttertoast: ^8.0.7
   email_validator: ^2.0.1
+  flutter_bloc: ^7.0.1
 
 dev_dependencies:
   flutter_test:
