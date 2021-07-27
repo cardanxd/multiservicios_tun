@@ -13,7 +13,7 @@ class OrdenContainer extends StatelessWidget {
         height: 200,
         alignment: Alignment.center,
         margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(30.0),
+        padding: EdgeInsets.zero,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10), color: Colors.grey),
         child: Row(children: <Widget>[
@@ -29,12 +29,12 @@ class OrdenContainer extends StatelessWidget {
           Divider(endIndent: 30.0),
           new Container(
               child: new Column(children: <Widget>[
-            Divider(height: 40),
+            Divider(height: 30),
             Text(
-              "Registrar orden",
+              "Ordenes",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 22,
+                fontSize: 40,
                 color: Colors.white,
               ),
             ),

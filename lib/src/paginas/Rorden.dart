@@ -357,251 +357,6 @@ class _RordenState extends State<Rorden> {
                       ),
                     ),
                     SizedBox(
-                      height: 10.0,
-                    ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteClient.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final cliente = clientes[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: cliente.nombre,
-                                  term: _cliente.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                subtitle: SubstringHighlight(
-                                  text: cliente.email,
-                                  term: _cliente.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    clienteId = cliente.id.toString();
-                                    fetchAutoCompleteVehiculo();
-                                    getRequestVehiculo();
-                                  });
-                                  onSelected(cliente.id.toString());
-                                },
-                              );
-                            },
-                            itemCount: clientes.length,
-                          ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._cliente = controller;
-
-                        return TextFormField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            labelText: "Seleccione el cliente",
-                            prefixIcon: Icon(Icons.search),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteVehiculo.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final vehiculo = vehiculos[index];
-                              return ListTile(
-                                title: SubstringHighlight(
-                                  text: "Vehículo: " + vehiculo.equipo,
-                                  term: _vehiculo.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                subtitle: SubstringHighlight(
-                                  text: "Serie: " + vehiculo.serie,
-                                  term: _vehiculo.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                onTap: () {
-                                  onSelected(vehiculo.id.toString());
-                                },
-                              );
-                            },
-                            itemCount: vehiculos.length,
-                          ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._vehiculo = controller;
-
-                        return TextFormField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            labelText: "Seleccione el vehiculo",
-                            prefixIcon: Icon(Icons.search),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: _cilindros,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey[300]),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey[300]),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: Colors.grey[300]),
-                        ),
-                        labelText: "Cilindros",
-                        prefixIcon: Icon(Icons.arrow_right_outlined),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteCondicion.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final condicion = condiciones[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: condicion.descripcion,
-                                  term: _condicionventa.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                //subtitle: Text("Esto es un subtitulo"),
-                                onTap: () {
-                                  onSelected(condicion.id.toString());
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: condiciones.length,
-                          ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._condicionventa = controller;
-
-                        return TextFormField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            labelText: "Seleccione la condicion de venta",
-                            prefixIcon: Icon(Icons.search),
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(
                       height: 30.0,
                     ),
                     Text(
@@ -703,75 +458,6 @@ class _RordenState extends State<Rorden> {
                         labelText: "Trabajo realizado",
                         prefixIcon: Icon(Icons.arrow_right_outlined),
                       ),
-                    ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Autocomplete(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        } else {
-                          return autoCompleteCosto.where((word) => word
-                              .toLowerCase()
-                              .contains(textEditingValue.text.toLowerCase()));
-                        }
-                      },
-                      optionsViewBuilder:
-                          (context, Function(String) onSelected, options) {
-                        return Material(
-                          elevation: 4,
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            itemBuilder: (context, index) {
-                              final costo = costos[index];
-                              return ListTile(
-                                //title: Text(option.toString()),
-                                title: SubstringHighlight(
-                                  text: costo.descripcion,
-                                  term: _centrocosto.text,
-                                  textStyleHighlight:
-                                      TextStyle(fontWeight: FontWeight.w700),
-                                ),
-                                onTap: () {
-                                  onSelected(costo.id.toString());
-                                },
-                              );
-                            },
-                            separatorBuilder: (context, index) => Divider(),
-                            itemCount: costos.length,
-                          ),
-                        );
-                      },
-                      onSelected: (selectedString) {
-                        print(selectedString);
-                      },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
-                        this._centrocosto = controller;
-
-                        return TextFormField(
-                          controller: controller,
-                          focusNode: focusNode,
-                          onEditingComplete: onEditingComplete,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide(color: Colors.grey[300]),
-                            ),
-                            labelText: "Seleccione el centro costo",
-                            prefixIcon: Icon(Icons.search),
-                          ),
-                        );
-                      },
                     ),
                     SizedBox(
                       height: 30.0,
@@ -1187,6 +873,320 @@ class _RordenState extends State<Rorden> {
                     Divider(height: 5),
                     SizedBox(
                       height: 30.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteClient.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final cliente = clientes[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: cliente.nombre,
+                                  term: _cliente.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: SubstringHighlight(
+                                  text: cliente.email,
+                                  term: _cliente.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    clienteId = cliente.id.toString();
+                                    fetchAutoCompleteVehiculo();
+                                    getRequestVehiculo();
+                                  });
+                                  onSelected(cliente.id.toString());
+                                },
+                              );
+                            },
+                            itemCount: clientes.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._cliente = controller;
+
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione el cliente",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteVehiculo.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final vehiculo = vehiculos[index];
+                              return ListTile(
+                                title: SubstringHighlight(
+                                  text: "Vehículo: " + vehiculo.equipo,
+                                  term: _vehiculo.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                subtitle: SubstringHighlight(
+                                  text: "Serie: " + vehiculo.serie,
+                                  term: _vehiculo.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(vehiculo.id.toString());
+                                },
+                              );
+                            },
+                            itemCount: vehiculos.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._vehiculo = controller;
+
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione el vehiculo",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _cilindros,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: Colors.grey[300]),
+                        ),
+                        labelText: "Cilindros",
+                        prefixIcon: Icon(Icons.arrow_right_outlined),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteCondicion.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final condicion = condiciones[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: condicion.descripcion,
+                                  term: _condicionventa.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                //subtitle: Text("Esto es un subtitulo"),
+                                onTap: () {
+                                  onSelected(condicion.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: condiciones.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._condicionventa = controller;
+
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione la condicion de venta",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Autocomplete(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        } else {
+                          return autoCompleteCosto.where((word) => word
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase()));
+                        }
+                      },
+                      optionsViewBuilder:
+                          (context, Function(String) onSelected, options) {
+                        return Material(
+                          elevation: 4,
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              final costo = costos[index];
+                              return ListTile(
+                                //title: Text(option.toString()),
+                                title: SubstringHighlight(
+                                  text: costo.descripcion,
+                                  term: _centrocosto.text,
+                                  textStyleHighlight:
+                                      TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                onTap: () {
+                                  onSelected(costo.id.toString());
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: costos.length,
+                          ),
+                        );
+                      },
+                      onSelected: (selectedString) {
+                        print(selectedString);
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        this._centrocosto = controller;
+
+                        return TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onEditingComplete: onEditingComplete,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            labelText: "Seleccione el centro costo",
+                            prefixIcon: Icon(Icons.search),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 16,
                     ),
                     Text(
                       "Estado del vehiculo",
