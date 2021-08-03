@@ -65,7 +65,7 @@ class _RclienteState extends State<Rcliente> {
   bool isLoading = false;
   Random random = new Random();
   bool isValid;
-  //final bool isValid = EmailValidator.validate(email);
+  DateTime now = DateTime.now();
   Cliente _cliente;
   final _nombre = TextEditingController();
   final _razon = TextEditingController();
@@ -313,7 +313,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "Calle",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -336,7 +335,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "Número exterior",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -381,7 +379,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "Entre calle",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -426,7 +423,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "Colonia",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -449,7 +445,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "Código postal",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -472,7 +467,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "Ciudad",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -495,7 +489,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "Estado",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -518,7 +511,6 @@ class _RclienteState extends State<Rcliente> {
                         borderSide: BorderSide(color: Colors.grey[300]),
                       ),
                       labelText: "País",
-                      helperText: "Campo obligatorio",
                       prefixIcon: Icon(Icons.arrow_right_outlined),
                     ),
                   ),
@@ -646,7 +638,7 @@ class _RclienteState extends State<Rcliente> {
                       }
                       String rfc;
                       if (_rfc.text.isEmpty) {
-                        rfc = "Sin RFC - $randomNumber";
+                        rfc = "Sin RFC - Folio $randomNumber";
                       } else {
                         rfc = _rfc.text;
                       }
@@ -671,79 +663,55 @@ class _RclienteState extends State<Rcliente> {
 
                       String calle;
                       if (_calle.text.isEmpty) {
-                        setState(() {
-                          isLoading = false;
-                          _showAlertError(context,
-                              'El campo calle es obligatorio, por favor escriba la calle');
-                        });
+                        calle = "NA";
                       } else {
                         calle = _calle.text;
                       }
                       String exterior;
                       if (_exterior.text.isEmpty) {
-                        setState(() {
-                          isLoading = false;
-                          _showAlertError(context,
-                              'El campo número exterior es obligatorio, por favor escriba el número exterior');
-                        });
+                        exterior = "NA";
                       } else {
                         exterior = _exterior.text;
                       }
                       String interior;
                       if (_interior.text.isEmpty) {
-                        interior = "Sin número interior";
+                        interior = "NA";
                       } else {
                         interior = _interior.text;
                       }
                       String ecalle;
                       if (_ecalle.text.isEmpty) {
-                        setState(() {
-                          isLoading = false;
-                          _showAlertError(context,
-                              'El campo entre calle es obligatorio, por favor escriba la calle');
-                        });
+                        ecalle = "NA";
                       } else {
                         ecalle = _ecalle.text;
                       }
                       String ycalle;
                       if (_ycalle.text.isEmpty) {
-                        ycalle = "Sin calle";
+                        ycalle = "NA";
                       } else {
                         ycalle = _ycalle.text;
                       }
                       String colonia;
                       if (_colonia.text.isEmpty) {
-                        setState(() {
-                          isLoading = false;
-                          _showAlertError(context,
-                              'El campo colonia es obligatoria, por favor escriba la colonia');
-                        });
+                        colonia = "NA";
                       } else {
                         colonia = _colonia.text;
                       }
                       String postal;
                       if (_postal.text.isEmpty) {
-                        postal = "97000";
+                        postal = "NA";
                       } else {
                         postal = _postal.text;
                       }
                       String ciudad;
                       if (_ciudad.text.isEmpty) {
-                        setState(() {
-                          isLoading = false;
-                          _showAlertError(context,
-                              'El campo ciudad es obligatorio, por favor escriba la ciudad');
-                        });
+                        ciudad = "NA";
                       } else {
                         ciudad = _ciudad.text;
                       }
                       String estado;
                       if (_estado.text.isEmpty) {
-                        setState(() {
-                          isLoading = false;
-                          _showAlertError(context,
-                              'El campo Estado es obligatorio, por favor escriba el Estado');
-                        });
+                        estado = "NA";
                       } else {
                         estado = _estado.text;
                       }
@@ -765,13 +733,13 @@ class _RclienteState extends State<Rcliente> {
                       }
                       String oficina;
                       if (_oficina.text.isEmpty) {
-                        oficina = "Sin número - $randomNumber";
+                        oficina = "Sin número - Folio $randomNumber";
                       } else {
                         oficina = _oficina.text;
                       }
                       String movil;
                       if (_movil.text.isEmpty) {
-                        movil = "Sin número - $randomNumber";
+                        movil = "Sin número - Folio $randomNumber";
                       } else {
                         movil = _movil.text;
                       }
@@ -780,7 +748,7 @@ class _RclienteState extends State<Rcliente> {
                       if (_year.text.isEmpty ||
                           _month.text.isEmpty ||
                           _day.text.isEmpty) {
-                        date = "1994-09-14 00:00:00";
+                        date = now.toIso8601String();
                       } else {
                         String year;
                         if (_year.text.length < 4 || _year.text.length > 4) {
